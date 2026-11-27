@@ -13,9 +13,11 @@
     "test:assets": "node scripts/check-assets.mjs",
     "test:services": "node scripts/test-services.mjs",
     "test:security": "node scripts/test-security.mjs",
-    "test:firewall": "node scripts/test-security.mjs"
+    "test:firewall": "node scripts/test-security.mjs",
+    "test:postgres": "node scripts/test-postgres.mjs"
   },
   "dependencies": {
+    "pg": "^8.23.1",
     "three": "^0.158.0"
   },
   "devDependencies": {

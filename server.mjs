@@ -14,6 +14,7 @@
 
 import http from 'node:http';
 import { createServices } from './server-services.mjs';
+import { openPostgres, serialExecutor } from './server-persistence.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -26,10 +27,15 @@ const ROOT_DIR = __dirname;
 const FRONTEND_DIR = ROOT_DIR;
 // Almacenamiento privado vacío por defecto. La base histórica de raíz no se importa automáticamente.
 const DATA_FILE = path.resolve(process.env.VITARA_REQUESTS_FILE || path.join(process.env.VITARA_DATA_DIR || path.join(ROOT_DIR, 'data'), 'solicitudes.json'));
-fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true, mode: 0o700 });
+// Render no debe arrancar por accidente con archivos que se pierden al reiniciar.
+if (process.env.RENDER === 'true' && !process.env.DATABASE_URL) { console.error('Falta DATABASE_URL privada: no se habilita almacenamiento efímero en Render.'); process.exit(1); }
+let persistence = null;
+try { persistence = await openPostgres({ testLocal: process.env.VITARA_PG_LOCAL_TEST === '1' }); }
+catch { console.error('No se pudo abrir PostgreSQL. Revisa DATABASE_URL, TLS y permisos en el panel privado del alojamiento. No se usará JSON como sustituto.'); process.exit(1); }
+if (!persistence) fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true, mode: 0o700 });
 
 const PORT = process.env.PORT || 3000;
-const services = createServices({ root: ROOT_DIR, onParticipationChange: () => setImmediate(() => emitirEvento('participacion_actualizada', { changed: true })) });
+const services = createServices({ root: ROOT_DIR, persistence, onParticipationChange: () => setImmediate(() => emitirEvento('participacion_actualizada', { changed: true })) });
 const DIAS_RETENCION = Number(process.env.DIAS_RETENCION || 30);
 const MAX_SOLICITUDES = 5000;
 const MAX_SSE = 80;
@@ -40,19 +46,20 @@ if (!Number.isInteger(DIAS_RETENCION) || DIAS_RETENCION < 1 || DIAS_RETENCION > 
 const INLINE_HASHES = ['index.html', 'admin.html'].flatMap(name => [...fs.readFileSync(path.join(ROOT_DIR, name), 'utf8').matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].filter(match => match[1].trim()).map(match => `'sha256-${crypto.createHash('sha256').update(match[1]).digest('base64')}'`));
 
 // Asegurar directorio data y archivo de almacenamiento inicial
-if (!fs.existsSync(path.join(ROOT_DIR, 'data'))) {
+if (!persistence && !fs.existsSync(path.join(ROOT_DIR, 'data'))) {
   fs.mkdirSync(path.join(ROOT_DIR, 'data'), { recursive: true });
 }
 
-if (!fs.existsSync(DATA_FILE)) {
+if (!persistence && !fs.existsSync(DATA_FILE)) {
   const seedInicial = []; // Sin solicitudes inventadas al crear un almacenamiento nuevo.
   fs.writeFileSync(DATA_FILE, JSON.stringify(seedInicial, null, 2), { mode: 0o600 });
 }
 
 // Fallar cerrado si el disco está corrupto; nunca sustituir registros silenciosamente.
-let solicitudes = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+let solicitudes = persistence ? persistence.current('requests') : JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
 if (!Array.isArray(solicitudes)) throw new Error('Almacenamiento de solicitudes inválido. Recupera un respaldo privado.');
-function guardarSolicitudesEnDisco(next = solicitudes) {
+async function guardarSolicitudesEnDisco(next = solicitudes) {
+  if (persistence) { await persistence.save('requests', next); solicitudes = next; return; }
   const tempFile = `${DATA_FILE}.tmp.${crypto.randomBytes(8).toString('hex')}`;
   try {
     fs.writeFileSync(tempFile, JSON.stringify(next, null, 2), { mode: 0o600 });
@@ -147,14 +154,15 @@ function obtenerIPLocal() {
 }
 
 // Lector de body JSON (límite estricto y errores con código HTTP)
-function leerBodyJSON(req) {
+function leerBodyJSON(req, maxBytes = 1e6) {
+  if (req.vitaraBody !== undefined) return Promise.resolve(req.vitaraBody);
   return new Promise((resolve, reject) => {
     let body = '';
     let total = 0;
     req.on('data', chunk => {
       total += chunk.length;
-      if (total > 1e6) { // 1 MB límite
-        const err = new Error('Payload demasiado grande (máximo 1 MB)');
+      if (total > maxBytes) { // 1 MB solicitudes / 16 KiB participación
+        const err = new Error('Payload demasiado grande');
         err.statusCode = 413;
         reject(err);
         return;
@@ -360,7 +368,7 @@ function sanearRegistro(s) {
 }
 
 // Retención de datos: las solicitudes con más de DIAS_RETENCION días se eliminan.
-function purgarSolicitudesExpiradas() {
+async function purgarSolicitudesExpiradas() {
   const limite = Date.now() - DIAS_RETENCION * 86400000;
   const antes = solicitudes.length;
   const vigentes = solicitudes.filter((s) => {
@@ -368,12 +376,25 @@ function purgarSolicitudesExpiradas() {
     return !Number.isFinite(t) || t >= limite;
   });
   if (vigentes.length !== antes) {
-    guardarSolicitudesEnDisco(vigentes);
+    await guardarSolicitudesEnDisco(vigentes);
     console.log(`[Privacidad] Purgadas ${antes - solicitudes.length} solicitudes con más de ${DIAS_RETENCION} días.`);
   }
 }
-purgarSolicitudesExpiradas();
-setInterval(() => { try { purgarSolicitudesExpiradas(); } catch { console.error('No se pudo completar la retención; revisar almacenamiento.'); } }, 6 * 60 * 60 * 1000).unref?.();
+const runExclusive = serialExecutor();
+async function withPersistentState(operation) {
+  return runExclusive(async () => {
+    await persistence.refresh();
+    solicitudes = persistence.current('requests'); services.refreshState();
+    return operation();
+  });
+}
+try { await purgarSolicitudesExpiradas(); if (persistence) await services.prune(); }
+catch { console.error('No se pudo validar la retención al iniciar. Revisa el almacenamiento privado.'); await persistence?.close(); process.exit(1); }
+setInterval(() => {
+  const operation = async () => { await purgarSolicitudesExpiradas(); if (persistence) await services.prune(); };
+  (persistence ? withPersistentState(operation) : operation()).catch(() => console.error('No se pudo completar la retención; revisar el almacenamiento privado.'));
+}, persistence ? 3600000 : 6 * 60 * 60 * 1000).unref?.();
+let shuttingDown = false;
 
 // Servidor principal
 const server = http.createServer(async (req, res) => {
@@ -415,6 +436,30 @@ const server = http.createServer(async (req, res) => {
   try { urlParsed = new URL(req.url, `http://${req.headers.host || 'localhost'}`); } catch { res.writeHead(400); res.end('Ruta no válida'); return; }
   const pathname = urlParsed.pathname;
   if (pathname.startsWith('/api/')) res.setHeader('Cache-Control', 'no-store');
+  if (shuttingDown) { res.writeHead(503, { 'Retry-After': '10' }); res.end('Servidor reiniciando. Reintenta.'); return; }
+  // Un solo ejecutor por proceso mantiene coherentes las instantáneas de ambos documentos.
+  // Cada guardado usa revisión CAS en SQL: otra instancia nunca se sobrescribe a ciegas.
+  const stateful = /^\/api\/(?:admin(?:\/|$)|auth(?:\/|$)|perfil(?:es)?$|perfil\/|solicitudes(?:\/|$)|exportar-backup$|importar-backup$)/.test(pathname);
+  try {
+    if (persistence && stateful) {
+      // Leer cuerpos fuera de la cola para que un cliente lento no bloquee a los demás.
+      if (['POST','PATCH'].includes(req.method)) {
+        if (!exigirJSON(req, res)) return;
+        req.vitaraBody = await leerBodyJSON(req, pathname.startsWith('/api/solicitudes') || pathname === '/api/importar-backup' ? 1e6 : 16384);
+        if (!pathname.startsWith('/api/solicitudes') && pathname !== '/api/importar-backup' && Buffer.byteLength(JSON.stringify(req.vitaraBody)) > 16384) { res.writeHead(413); res.end(JSON.stringify({ ok: false, error: 'Solicitud demasiado grande.' })); return; }
+      }
+      await withPersistentState(() => { if (!res.destroyed) return routeRequest(req, res, urlParsed); });
+    } else await routeRequest(req, res, urlParsed);
+  } catch (error) {
+    if (res.headersSent) { res.destroy(); return; }
+    res.writeHead(error.statusCode || 503, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    const message = ({ 400: 'JSON inválido.', 413: 'Solicitud demasiado grande.', 409: 'Otra instancia actualizó estos datos. Reintenta; no se han sobrescrito registros.' })[error.statusCode];
+    res.end(JSON.stringify({ ok: false, error: message || 'El almacenamiento no está disponible temporalmente. No se han confirmado cambios; reintenta.' }));
+  }
+});
+
+async function routeRequest(req, res, urlParsed) {
+  const pathname = urlParsed.pathname;
   if (await services.handle(req, res, pathname)) return;
 
   // =========================================================================
@@ -423,11 +468,13 @@ const server = http.createServer(async (req, res) => {
 
   // 1. Salud del servidor (Health Check)
   if (req.method === 'GET' && pathname === '/api/salud') {
+    if (persistence) await persistence.check();
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
       estado: 'operativo',
       servidor: 'Node.js nativo Grupo 3',
-      modo: 'offline_local_ready',
+      modo: persistence ? 'publico_postgres' : 'offline_local_ready',
+      almacenamiento: persistence ? 'postgres' : 'json-local',
       ods: [3, 9, 10],
       clientesConectadosSSE: clientesSSE.size,
       totalSolicitudes: solicitudes.length,
@@ -478,7 +525,7 @@ const server = http.createServer(async (req, res) => {
         retencionSolicitudesDias: DIAS_RETENCION,
         purgaAutomatica: true,
         almacenamientoNavegador: 'Preferencias, perfil y clave de acceso de este dispositivo; perfil y actividad solo se sincronizan con consentimiento',
-        servidor: 'Node.js · solicitudes separadas de perfiles consentidos · escritura atómica',
+        servidor: persistence ? 'Node.js · PostgreSQL privado · solicitudes y perfiles separados' : 'Node.js · JSON privado · solicitudes y perfiles separados',
         perfiles: 'Nombre, correo, rol, territorio opcional y actividad: máximo 7 perfiles, retención 30 días, eliminación desde el perfil o administración',
         fechaConsulta: new Date().toISOString()
       }
@@ -642,7 +689,7 @@ const server = http.createServer(async (req, res) => {
         idempotencyHash
       };
 
-      guardarSolicitudesEnDisco([nuevaSolicitud, ...solicitudes]);
+      await guardarSolicitudesEnDisco([nuevaSolicitud, ...solicitudes]);
 
       // Transmitir en tiempo real al panel administrador
       emitirEvento('nueva_solicitud', { changed: true, timestamp: Date.now() });
@@ -680,6 +727,7 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
+      const body = await leerBodyJSON(req);
       const original = solicitudes.find(s => s.codigo.toUpperCase() === codigo);
       const solicitud = original ? { ...original } : null;
       if (!solicitud) {
@@ -688,7 +736,6 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
-      const body = await leerBodyJSON(req);
       const tipoMalicioso = detectarPatronMalicioso(JSON.stringify(body));
       if (tipoMalicioso) { bloquearPayloadMalicioso(res, tipoMalicioso); return; }
 
@@ -709,7 +756,7 @@ const server = http.createServer(async (req, res) => {
         }
       }
 
-      guardarSolicitudesEnDisco(solicitudes.map(s => s.codigo === codigo ? solicitud : s));
+      await guardarSolicitudesEnDisco(solicitudes.map(s => s.codigo === codigo ? solicitud : s));
 
       // Notificar a todos los paneles conectados
       emitirEvento('actualizacion_solicitud', { changed: true, timestamp: Date.now() });
@@ -790,7 +837,7 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
-      guardarSolicitudesEnDisco(limpias);
+      await guardarSolicitudesEnDisco(limpias);
 
       emitirEvento('restauracion_backup', { total: solicitudes.length, timestamp: Date.now() });
 
@@ -882,7 +929,8 @@ const server = http.createServer(async (req, res) => {
     stream.on('error', () => { try { res.destroy(); } catch { /* cierre seguro */ } });
     stream.pipe(res);
   });
-});
+
+}
 
 server.maxConnections = 200;
 server.keepAliveTimeout = 5000;
@@ -910,4 +958,13 @@ server.listen(PORT, '0.0.0.0', () => {
      (Meta: probar ≥ 7 dispositivos físicos; no confundir con clientes automatizados).
 ===============================================================================
   `);
+});
+
+// Render envía SIGTERM al reemplazar una instancia. Cerrar canales y pool sin publicar secretos.
+for (const signal of ['SIGTERM','SIGINT']) process.on(signal, () => {
+  if (shuttingDown) return; shuttingDown = true;
+  for (const response of clientesSSE) response.end();
+  server.close(async () => { try { await persistence?.close(); } finally { process.exit(0); } });
+  server.closeIdleConnections?.();
+  setTimeout(() => process.exit(1), 20000).unref();
 });

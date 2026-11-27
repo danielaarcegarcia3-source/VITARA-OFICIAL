@@ -1,6 +1,20 @@
 # VITARA · Activos, territorios y participación
 
-## Revisión vigente · equipo, entrada multicolor y panel automático
+## Revisión vigente · PostgreSQL opcional y preparación Render + Neon
+
+27/11/2026. El propietario creó el proyecto Neon VITARA Free. **No se ha conectado esta sesión a su base ni desplegado Render; no existe una nueva URL pública comprobada.** Guía paso a paso: `DESPLEGAR-RENDER-NEON.md`. No se pidieron ni publicaron contraseñas o cadenas de conexión.
+
+- Adaptador `pg` opcional con TLS de certificado verificado y parámetros de URL sin posibilidad de sustituir SSL/host. La excepción sin TLS exige simultáneamente entorno test, autorización explícita, loopback y no estar en Render. No se usa la excepción en despliegue.
+- Dos documentos JSONB privados en PostgreSQL, inicialización transaccional, copia de estado aislada, cola acotada de operaciones y revisión SQL optimista. Se espera confirmación antes de responder éxito o emitir eventos. Conflictos de otra instancia producen 409; los errores no cambian a JSON ni se muestran como registros guardados.
+- Sin `DATABASE_URL`, se conserva el almacenamiento JSON privado local y las funciones previas. Render se niega a iniciar sin conexión PostgreSQL; evita perder registros por su disco efímero. Las bases local y nube no se sincronizan ni importan archivos automáticamente.
+- Refresco del estado antes de operaciones persistentes, límites de cuerpo conservados (16 KiB participación / 1 MB solicitudes y respaldo), comprobación de salud SQL y cierre de conexiones en SIGTERM. Sesiones y SSE siguen por proceso: recomendado un único servicio; reiniciar requiere relogin administrativo.
+- Nuevo test PostgreSQL crea y elimina su propia base aleatoria exclusivamente en un servidor local de pruebas. GitHub Actions incorpora PostgreSQL desechable, no credenciales de Neon. No se incluyen binarios, bases ni participantes de ensayo en el repositorio.
+
+**Resultados locales de esta revisión:** 63 comprobaciones PostgreSQL aprobadas (persistencia tras reinicios Node, actividad, siete clientes concurrentes, capacidad, idempotencia, respuesta, respaldo/restauración, eliminación, hash administrativo persistido, conflictos, fallos sin fallback, salud y SSL obligatorio); 34 de servicios y 96 de seguridad aprobadas en JSON local. **24/24 pruebas UI aprobadas** (Chromium, un worker, 5,2 min). Inventario de 61 activos y 25 hashes de texturas, build, sintaxis y diff aprobados; npm audit: 0 vulnerabilidades conocidas. Son pruebas locales, no una auditoría de la infraestructura de Neon/Render ni siete dispositivos físicos.
+
+Pendiente: introducir secretos solo en Render, desplegar esta rama, verificar HTTPS/conexión real, reinicio y recuperación del alojamiento, enlace con laptop apagada, ensayo LAN sin WAN y siete dispositivos físicos. Respaldo de solicitudes no incluye participación: la recuperación integral PostgreSQL exige un respaldo privado separado y un ensayo de restauración. No se han cambiado facturación, firewall Windows ni router; no se ha configurado IA externa. Licencias originales intactas.
+
+## Revisión anterior · equipo, entrada multicolor y panel automático
 
 Petición del usuario: incorporar nombres, ampliar animaciones, reforzar protecciones y revisar solicitudes/panel antes de volver a subir.
 

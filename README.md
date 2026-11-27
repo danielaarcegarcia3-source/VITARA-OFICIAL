@@ -1,3 +1,5 @@
+> **Publicación con la laptop apagada:** adaptador PostgreSQL opcional implementado y probado localmente; ruta elegida Render Free + Neon Free. La cuenta Neon está creada, pero **la URL pública y la conexión a esa cuenta siguen pendientes de configuración**. Pasos y límites en [DESPLEGAR-RENDER-NEON.md](DESPLEGAR-RENDER-NEON.md). Sin `DATABASE_URL` continúa el modo local JSON; las bases local y nube no se sincronizan automáticamente.
+
 > **Ampliación:** equipo identificado, entrada multicolor y actualizaciones de participación por eventos. Protección de red y configuración del anfitrión: [RED-SEGURA-CONCURSO.md](RED-SEGURA-CONCURSO.md).
 
 > **Código subido a GitHub (27/11/2026):** rama `arena/ccf66afb-vitara-oficial`, [pull request #1](https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/pull/1) abierto, sin fusionar `main`. Esto no es un despliegue de la aplicación. Consulta [PUBLICAR-VITARA.md](PUBLICAR-VITARA.md) antes de publicar. El panel, registro y chat necesitan Node; Pages/Hosting estático solo sirve la parte visual.

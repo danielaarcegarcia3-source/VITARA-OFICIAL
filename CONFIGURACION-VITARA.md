@@ -1,5 +1,9 @@
 # VITARA · Conexión y participación
 
+## Publicación independiente de la laptop
+
+Guía vigente: [DESPLEGAR-RENDER-NEON.md](DESPLEGAR-RENDER-NEON.md). Con `DATABASE_URL` privada, el backend utiliza PostgreSQL con TLS verificado, conserva los datos fuera de Render y no escribe participación ni solicitudes en el disco efímero. Si la conexión falla, no sustituye los datos por JSON. Sin esta variable se mantiene el modo local descrito abajo; Render exige PostgreSQL para arrancar. Nube y local son almacenamientos independientes, no sincronizados. La cuenta Neon está creada; la conexión y el despliegue públicos todavía requieren configuración y comprobación por el propietario.
+
 ## Ejecutar
 
 Desde la raíz que contiene `index.html`:

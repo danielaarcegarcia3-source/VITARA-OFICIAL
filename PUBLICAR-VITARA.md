@@ -1,5 +1,7 @@
 # Publicar VITARA: qué está listo y qué falta
 
+> **Ruta elegida (27/11/2026): Render Web Service Free + Neon PostgreSQL Free.** El propietario ya creó Neon; el adaptador PostgreSQL está implementado y probado localmente, pero la conexión a su cuenta y la URL pública siguen pendientes. Seguir [DESPLEGAR-RENDER-NEON.md](DESPLEGAR-RENDER-NEON.md), que detalla rama, comandos, secretos privados, verificación y contingencia en Windows. No usar el túnel como solución permanente ni JSON sobre disco efímero.
+
 ## Estado comprobado en esta sesión
 
 **Subida comprobada el 27/11/2026:** commit de implementación `07b7f3043744e60bd9d59df684fdc7e2158cc961` en `origin/arena/ccf66afb-vitara-oficial`. Pull request abierto y fusionable: **https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/pull/1**. Los cambios de documentación posteriores se entregan en la misma rama. No se ha fusionado ni modificado `main`. Las comprobaciones automáticas de GitHub se iniciaron; consultar su resultado en el PR, sin confundirlo con las pruebas locales aprobadas.
@@ -31,7 +33,13 @@ Publicar **el contenido de `dist/frontend`**, cuyo `index.html` está en la raí
 
 En esta modalidad funcionan navegación, mapas, ilustraciones, filtros, comparaciones y modelos locales. No hay un servidor Node que atienda las API de registro, administración o chat. El frontend muestra esa limitación, no simula datos o acceso. Si quieres todas las funciones, usa la modalidad siguiente. No basta con habilitar GitHub Pages o Firebase Hosting estático.
 
-### Plataforma completa (Node con volumen persistente)
+### Plataforma completa elegida: Node + PostgreSQL externo
+
+Con `DATABASE_URL` privada, Node guarda solicitudes y participación en PostgreSQL mediante TLS con certificado verificado; no importa automáticamente archivos locales. Las escrituras esperan confirmación SQL y rechazan conflictos de revisión. En Render, la aplicación exige esta variable y no acepta JSON efímero como sustituto. Ver los pasos completos y los límites gratuitos en [DESPLEGAR-RENDER-NEON.md](DESPLEGAR-RENDER-NEON.md). El sitio y todas sus API usan el mismo dominio HTTPS; no hay que configurar CORS abierto.
+
+### Alternativa: Node con volumen persistente o instalación local
+
+Sin `DATABASE_URL`, se conserva el modo JSON para la contingencia local o un alojamiento que realmente tenga volumen persistente. No es la configuración elegida para Render Free.
 
 Elegir un alojamiento que permita un proceso Node, HTTPS y almacenamiento persistente. No se ha contratado ni configurado un proveedor desde esta sesión; sus condiciones y costos deben verificarse por separado.
 
@@ -80,7 +88,9 @@ CHROMIUM_PATH=/tmp/chromium LD_LIBRARY_PATH=/tmp/chromium-libs/lib npm test
 
 Ver `CONFIGURACION-VITARA.md` para el acceso administrativo y `AUDITORIA-VITARA.md` para los resultados y límites de cada revisión.
 
-## 5. Opción técnica para el concurso: enlace temporal hacia el Node local
+## 5. Alternativa histórica, no elegida: enlace temporal hacia el Node local
+
+**No satisface el requisito actual de tener la laptop apagada.** Se conserva como referencia técnica opcional, no como el siguiente paso ni como sustituto del alojamiento elegido.
 
 Para conservar todas las funciones sin contratar hosting, una alternativa a validar es un túnel HTTPS hacia la computadora del equipo. Por ejemplo, el programa abierto `cloudflared` ofrece un modo de túnel rápido; **no se ha descargado, abierto ni validado ese servicio desde esta sesión**, ni se garantizan sus condiciones, duración o disponibilidad. Confirmar en el proveedor que no exige cuenta de pago, tarjeta, dominio ni plan facturable antes de usarlo. Si exige cualquiera de ellos, no continuar para esta consigna.
 

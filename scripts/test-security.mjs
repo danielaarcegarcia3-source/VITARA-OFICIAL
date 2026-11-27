@@ -16,7 +16,7 @@ const port = reservation.address().port; await new Promise(r => reservation.clos
 const base = `http://127.0.0.1:${port}`;
 const password = crypto.randomBytes(24).toString('base64url');
 const env = { ...process.env, PORT: String(port), VITARA_DATA_DIR: dir, ADMIN_USUARIO: 'operador_aislado', ADMIN_CLAVE: password };
-for (const key of ['ADMIN_TOKEN','VITARA_SETUP_KEY','VITARA_REQUESTS_FILE','VITARA_AI_ENDPOINT','VITARA_AI_MODEL','VITARA_AI_KEY']) delete env[key];
+for (const key of ['DATABASE_URL','RENDER','VITARA_PG_LOCAL_TEST','ADMIN_TOKEN','VITARA_SETUP_KEY','VITARA_REQUESTS_FILE','VITARA_AI_ENDPOINT','VITARA_AI_MODEL','VITARA_AI_KEY']) delete env[key];
 let child, output = '', count = 0;
 const streams = [];
 function check(actual, expected, label) { assert.deepEqual(actual, expected, label); count++; }

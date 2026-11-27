@@ -9,31 +9,41 @@ const equal = (a, b) => { const x = Buffer.from(String(a)), y = Buffer.from(Stri
 function error(status, message) { return Object.assign(new Error(message), { status }); }
 function clean(value, max = 80) { const text = String(value || '').trim().replace(/\s+/g, ' '); if (text.length > max || /[<>\u0000-\u001f]/.test(text)) throw error(400, 'Un campo contiene caracteres no permitidos o es demasiado largo.'); return text; }
 async function readJSON(req) {
+  if (req.vitaraBody !== undefined) return req.vitaraBody;
   if (!String(req.headers['content-type']).includes('application/json')) throw error(415, 'Se requiere JSON.');
   let text = '', size = 0;
   for await (const chunk of req) { size += chunk.length; if (size > 16384) throw error(413, 'Solicitud demasiado grande.'); text += chunk; }
   try { const value = JSON.parse(text || '{}'); if (!value || typeof value !== 'object' || Array.isArray(value)) throw error(400, 'Objeto JSON requerido.'); return value; } catch { throw error(400, 'JSON inválido.'); }
 }
-export function createServices({ root, onParticipationChange = () => {} }) {
+export function createServices({ root, onParticipationChange = () => {}, persistence = null }) {
   const dir = path.resolve(process.env.VITARA_DATA_DIR || path.join(root, 'data'));
-  fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
+  if (!persistence) fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
   const file = path.join(dir, 'participacion.json');
-  let state = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : { version: 1, admin: null, profiles: [] };
+  let state = persistence ? persistence.current('participation') : fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : { version: 1, admin: null, profiles: [] };
   if (state.version !== 1 || !Array.isArray(state.profiles)) throw new Error('El almacenamiento de participación requiere revisión. No se ha sobrescrito.');
   const sessions = new Map(), limits = new Map();
   const RETENTION = 30 * 86400000, MAX = 7;
   const envAuth = !!(process.env.ADMIN_USUARIO && process.env.ADMIN_CLAVE);
   if (envAuth && (process.env.ADMIN_CLAVE.length < 12 || process.env.ADMIN_CLAVE.length > 128)) throw new Error('ADMIN_CLAVE requiere de 12 a 128 caracteres.');
   if (process.env.ADMIN_TOKEN && process.env.ADMIN_TOKEN.length < 32) throw new Error('ADMIN_TOKEN requiere al menos 32 caracteres aleatorios.');
-  function save(next) {
+  async function save(next) {
+    if (persistence) {
+      await persistence.save('participation', next);
+      const changed = next.profiles !== state.profiles; state = next;
+      if (changed) onParticipationChange();
+      return;
+    }
     const temporary = file + '.tmp';
     fs.writeFileSync(temporary, JSON.stringify(next, null, 2), { mode: 0o600 });
     fs.renameSync(temporary, file);
     const changed = next.profiles !== state.profiles; state = next;
     if (changed) onParticipationChange();
   }
-  function prune() { const profiles = state.profiles.filter(p => Date.parse(p.updatedAt) > Date.now() - RETENTION); if (profiles.length !== state.profiles.length) save({ ...state, profiles }); }
-  prune(); const timer = setInterval(prune, 3600000); timer.unref();
+  async function prune() { const profiles = state.profiles.filter(p => Date.parse(p.updatedAt) > Date.now() - RETENTION); if (profiles.length !== state.profiles.length) await save({ ...state, profiles }); }
+  if (!persistence) {
+    prune().catch(() => console.error('No se pudo completar la retención de perfiles.'));
+    const timer = setInterval(() => prune().catch(() => console.error('No se pudo completar la retención de perfiles.')), 3600000); timer.unref();
+  }
   function rate(req, kind, max, windowMs = 60000) {
     const key = `${kind}:${req.socket.remoteAddress}`; const now = Date.now();
     let entry = limits.get(key); if (!entry || now >= entry.reset) { entry = { count: 0, reset: now + windowMs }; limits.set(key, entry); }
@@ -76,7 +86,7 @@ export function createServices({ root, onParticipationChange = () => {} }) {
         const username = clean(body.usuario, 60); const password = String(body.contrasena || '');
         if (username.length < 3 || password.length < 12 || password.length > 128) throw error(400, 'Usa un usuario de al menos 3 caracteres y una contraseña de 12 a 128 caracteres.');
         const salt = crypto.randomBytes(16).toString('hex');
-        save({ ...state, admin: { username, salt, passwordHash: crypto.scryptSync(password, salt, 64).toString('hex') } });
+        await save({ ...state, admin: { username, salt, passwordHash: crypto.scryptSync(password, salt, 64).toString('hex') } });
         reply(res, 201, { ok: true }); return true;
       }
       if (pathname === '/api/auth/login' && req.method === 'POST') {
@@ -92,15 +102,15 @@ export function createServices({ root, onParticipationChange = () => {} }) {
       }
       if (pathname === '/api/auth/logout' && req.method === 'POST') { sessions.delete(hash(bearer(req))); reply(res, 200, { ok: true }); return true; }
       if (pathname === '/api/admin/usuarios' && req.method === 'GET') {
-        requireAdmin(req); prune();
+        requireAdmin(req); await prune();
         reply(res, 200, { ok: true, capacity: MAX, retentionDays: 30, users: state.profiles.map(publicProfile), active: state.profiles.filter(p => Date.parse(p.lastSeen) > Date.now() - 90000).length }); return true;
       }
       if (pathname.startsWith('/api/admin/usuarios/') && req.method === 'DELETE') {
         requireAdmin(req); const id = pathname.slice('/api/admin/usuarios/'.length);
-        save({ ...state, profiles: state.profiles.filter(p => p.id !== id) }); reply(res, 200, { ok: true }); return true;
+        await save({ ...state, profiles: state.profiles.filter(p => p.id !== id) }); reply(res, 200, { ok: true }); return true;
       }
       if (pathname === '/api/perfiles' && req.method === 'POST') {
-        rate(req, 'profile', 20); prune(); const body = await readJSON(req);
+        rate(req, 'profile', 20); await prune(); const body = await readJSON(req);
         const nombre = clean(body.nombre), email = clean(body.email, 254).toLowerCase(), distrito = clean(body.distrito, 80), rol = String(body.rol || 'CIU');
         if (nombre.length < 2 || /^\d{8}$/.test(nombre) || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !['CIU','POSTA','AGC'].includes(rol)) throw error(400, 'Revisa nombre, correo y rol. No uses tu DNI como nombre.');
         if (body.consent !== true) throw error(400, 'Necesitamos tu consentimiento para guardar el perfil y compartir la actividad con administración.');
@@ -109,11 +119,11 @@ export function createServices({ root, onParticipationChange = () => {} }) {
         if (!previous && state.profiles.length >= MAX) throw error(409, 'Las 7 plazas de participación están ocupadas. El administrador puede liberar una plaza. Puedes continuar sin sincronizar tus datos.');
         const token = previous ? bearer(req) : crypto.randomBytes(32).toString('base64url'); const now = new Date().toISOString();
         const profile = { id: previous?.id || crypto.randomUUID(), nombre, email, distrito, rol, consentVersion: '2026-11-participacion-v1', consentAt: previous?.consentAt || now, createdAt: previous?.createdAt || now, updatedAt: now, lastSeen: now, interactions: previous?.interactions || [], tokenHash: hash(token), tokenExpires: new Date(Date.now() + RETENTION).toISOString() };
-        save({ ...state, profiles: [...state.profiles.filter(p => p.id !== profile.id), profile] });
+        await save({ ...state, profiles: [...state.profiles.filter(p => p.id !== profile.id), profile] });
         reply(res, previous ? 200 : 201, { ok: true, token, profile: publicProfile(profile) }); return true;
       }
-      if (pathname === '/api/perfil' && req.method === 'GET') { prune(); reply(res, 200, { ok: true, profile: publicProfile(profileFor(req)) }); return true; }
-      if (pathname === '/api/perfil' && req.method === 'DELETE') { const p = profileFor(req); save({ ...state, profiles: state.profiles.filter(item => item.id !== p.id) }); reply(res, 200, { ok: true }); return true; }
+      if (pathname === '/api/perfil' && req.method === 'GET') { await prune(); reply(res, 200, { ok: true, profile: publicProfile(profileFor(req)) }); return true; }
+      if (pathname === '/api/perfil' && req.method === 'DELETE') { const p = profileFor(req); await save({ ...state, profiles: state.profiles.filter(item => item.id !== p.id) }); reply(res, 200, { ok: true }); return true; }
       if (pathname === '/api/perfil/interacciones' && req.method === 'POST') {
         rate(req, 'interaction', 150); const body = await readJSON(req), p = profileFor(req);
         const kind = String(body.tipo || ''), value = String(body.valor || '');
@@ -121,7 +131,7 @@ export function createServices({ root, onParticipationChange = () => {} }) {
         const now = new Date().toISOString();
         const interaction = { tipo: kind, valor: value, fecha: now };
         const updated = { ...p, updatedAt: now, lastSeen: now, tokenExpires: new Date(Date.now() + RETENTION).toISOString(), interactions: kind === 'presencia' ? p.interactions : [...p.interactions, interaction].slice(-200) };
-        save({ ...state, profiles: state.profiles.map(item => item.id === p.id ? updated : item) }); reply(res, 200, { ok: true }); return true;
+        await save({ ...state, profiles: state.profiles.map(item => item.id === p.id ? updated : item) }); reply(res, 200, { ok: true }); return true;
       }
       if (pathname === '/api/orientacion/estado' && req.method === 'GET') { reply(res, 200, { aiConfigured: aiConfigured(), mode: aiConfigured() ? 'opcional' : 'local', storesMessages: false }); return true; }
       if (pathname === '/api/orientacion' && req.method === 'POST') {
@@ -143,7 +153,7 @@ export function createServices({ root, onParticipationChange = () => {} }) {
       reply(res, 405, { ok: false, error: 'Método no permitido.' }); return true;
     } catch (err) { reply(res, err.status || 503, { ok: false, error: err.status ? err.message : 'El servicio no está disponible temporalmente. No se han simulado resultados.' }); return true; }
   }
-  return { handle, isAdmin };
+  return { handle, isAdmin, prune, refreshState() { if (persistence) state = persistence.current('participation'); } };
 }
 function localAnswer(message) {
   const q = message.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();

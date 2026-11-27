@@ -14,7 +14,7 @@ test.beforeAll(async()=>{
   fs.writeFileSync(path.join(dir,'solicitudes.json'),JSON.stringify([{codigo:'G3-ABCDEF',item:'<img src=x onmouseover="window.inyectado=true">',alias:'Equipo de prueba',sede:'Sede de prueba',estado:'recibida',fecha:new Date().toISOString()}]));
   const reservation=http.createServer();reservation.listen(0,'127.0.0.1');await once(reservation,'listening');const port=reservation.address().port;await new Promise(r=>reservation.close(r));base=`http://127.0.0.1:${port}`;
   const env={...process.env,PORT:String(port),VITARA_DATA_DIR:dir,ADMIN_USUARIO:'operador_pruebas',ADMIN_CLAVE:password};
-  for(const key of ['VITARA_REQUESTS_FILE','ADMIN_TOKEN','VITARA_SETUP_KEY'])delete env[key];
+  for(const key of ['DATABASE_URL','RENDER','VITARA_PG_LOCAL_TEST','VITARA_REQUESTS_FILE','ADMIN_TOKEN','VITARA_SETUP_KEY'])delete env[key];
   child=spawn(process.execPath,['server.mjs'],{env,stdio:['ignore','pipe','pipe']});
   await new Promise((resolve,reject)=>{let output='';const timer=setTimeout(()=>reject(new Error(output)),10000);const log=chunk=>{output+=chunk;if(output.includes('Servidor HTTP & SSE')){clearTimeout(timer);resolve();}};child.stdout.on('data',log);child.stderr.on('data',log);child.once('exit',()=>{clearTimeout(timer);reject(new Error(output));});});
 });
