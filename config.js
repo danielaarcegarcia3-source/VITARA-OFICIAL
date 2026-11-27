@@ -1,3 +1,5 @@
+// MÓDULO HISTÓRICO INACTIVO: el sistema vigente usa server.mjs y server-services.mjs.
+// No se cargan los SDK Firebase. Firestore está cerrado por defecto; no habilitarlo sin pruebas propias.
 /**
  * firebase/config.js — Configuración base de Firebase para el proyecto.
  *

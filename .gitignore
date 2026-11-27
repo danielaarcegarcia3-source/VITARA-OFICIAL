@@ -40,3 +40,20 @@ backend/data/db.json.bak
 
 # Tests
 coverage/
+
+# Browser verification artifacts
+.arena/
+test-results/
+playwright-report/
+
+# Perfiles y claves privadas de participación
+data/
+.env.*
+!.env.example
+
+# Nunca versionar solicitudes, respaldos ni claves de despliegue
+solicitudes.json
+solicitudes.json.tmp.*
+backup*.json
+*.pem
+*.key

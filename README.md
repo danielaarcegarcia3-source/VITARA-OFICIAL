@@ -1,3 +1,7 @@
+> **Entrega para GitHub:** rama `arena/ccf66afb-vitara-oficial`, mediante subida explícita y pull request; no es un despliegue automático. Consulta [PUBLICAR-VITARA.md](PUBLICAR-VITARA.md) antes de publicar. El panel, registro y chat necesitan Node; Pages/Hosting estático solo sirve la parte visual.
+
+> **Actualización vigente (27/11/2026):** nuevo estudio de dispositivos y proveedores con ilustraciones IA, comparación y fichas; Canales y Fuentes interactivos; acceso guiado a administración; mapas de Perú y La Libertad con polígonos extruidos, bienvenida con logo de partículas, base blanca conmutable, participación consentida de hasta 7 usuarios y orientación integrada. Configuración privada de administración e IA en [CONFIGURACION-VITARA.md](CONFIGURACION-VITARA.md). No hay credenciales demo; los apartados históricos de cumplimiento no sustituyen las pruebas actuales de [AUDITORIA-VITARA.md](AUDITORIA-VITARA.md).
+
 # Ecosistema Digital de Acceso a la Salud
 ## El "Google de la Salud Peruana" por Microrred
 ### Concurso Final Code Battle 2026 · Club Tech-Masters
@@ -13,10 +17,10 @@
 
 | Integrante | Rol Oficial | Responsabilidades Clave |
 |:---|:---|:---|
-| **Integrante 1** | **Gestión y Requisitos** | Definición de las 168 funciones del catálogo, investigación de cifras reales (INEI, DIGEMID, RENIPRESS), cronograma y documentación técnica. |
-| **Integrante 2** | **Frontend y UI/UX** | Diseño visual responsive, buscador "Google Salud", réplica del Tablero InfoSismedLL, motor 3D interactivo Three.js y vistas de accesibilidad (WCAG AAA). |
-| **Integrante 3** | **Backend e Integración** | Servidor HTTP nativo en Node.js, comunicación en tiempo real vía Server-Sent Events (SSE), almacenamiento atómico y gestión de concurrencia. |
-| **Integrante 4** | **QA, Pruebas e Integración** | Batería de pruebas de concurrencia multiusuario (≥ 7 dispositivos), matriz de Verificación y Validación (V&V), seguridad y recuperación ante fallos. |
+| **Integrante 1 (nombre autorizado pendiente)** | **Gestión y Requisitos** | Definición de las 168 funciones del catálogo, investigación de cifras reales (INEI, DIGEMID, RENIPRESS), cronograma y documentación técnica. |
+| **Integrante 2 (nombre autorizado pendiente)** | **Frontend y UI/UX** | Diseño visual responsive, buscador "Google Salud", réplica del Tablero InfoSismedLL, motor 3D interactivo Three.js y opciones de accesibilidad (sin certificación WCAG). |
+| **Integrante 3 (nombre autorizado pendiente)** | **Backend e Integración** | Servidor HTTP nativo en Node.js, comunicación en tiempo real vía Server-Sent Events (SSE), almacenamiento atómico y gestión de concurrencia. |
+| **Integrante 4 (nombre autorizado pendiente)** | **QA, Pruebas e Integración** | Batería de pruebas de concurrencia multiusuario (≥ 7 dispositivos), matriz de Verificación y Validación (V&V), seguridad y recuperación ante fallos. |
 
 ---
 
@@ -71,7 +75,7 @@ La brecha real no es de aseguramiento; es de **certeza de acceso**.
 - **Principio de Equivalencia:** Conmutador a plano arquitectónico 2D (Blueprint) con exactamente los mismos datos del modelo 3D.
 
 ### 3.5 Canales Oficiales y Reales de Emergencia y Ayuda Médica (#canales-ayuda)
-- Conexiones y enlaces 100% operativos y directos:
+- Canales de referencia; confirmar vigencia y cobertura antes de usarlos:
   - **Línea 113 MINSA Salud Gratuita:** Enlace `tel:113` con popup interactivo del árbol oficial de opciones 1 a 6 (Dengue, Salud Mental, Afiliación SIS, Nutrición, Vacunas, Violencia intrafamiliar).
   - **Teleatiendo MINSA:** Citas virtuales gratuitas en `https://teleatiendo.minsa.gob.pe/`.
   - **Central SAMU 106:** Ambulancias de emergencia con enlace directo `tel:106`.
@@ -98,7 +102,7 @@ La brecha real no es de aseguramiento; es de **certeza de acceso**.
 - **Panel de privacidad en la aplicación:** resumen de lo guardado en el navegador, exportación JSON, borrado total y depuración automática de búsquedas e interacciones con más de 30 días.
 
 ### 3.8 Panel Administrador Protegido en Tiempo Real (Consignas 5.2, 9 y 13)
-- Pantalla de control separada con credenciales protegidas (`admin_g3` / `Salud2026!`).
+- Pantalla de control separada con credenciales privadas del operador, sin acceso de demostración.
 - **Server-Sent Events (SSE) nativo:** Las solicitudes enviadas por los visitantes de los otros 7 equipos se actualizan al instante sin recargar la página.
 - Publicación de respuestas oficiales de farmacia que se reflejan inmediatamente en el rastreador ciudadano.
 - Monitor de concurrencia en vivo.
@@ -116,7 +120,7 @@ flowchart TD
         ADM["Administrador / Jurado"]
     end
 
-    subgraph Backend ["Servidor Node.js Nativo (backend/server.mjs)"]
+    subgraph Backend ["Servidor Node.js Nativo (server.mjs)"]
         HTTP["HTTP Router (Costo $0)"]
         VAL["Validador de Privacidad (Bloqueo DNI)"]
         IDEM["Motor de Idempotencia (SHA-256)"]
@@ -125,18 +129,18 @@ flowchart TD
 
     subgraph Persistencia ["Almacenamiento Persistente"]
         DISK["data/solicitudes.json (Escritura Atómica)"]
-        MEM["Catálogo Autorizado (datos-reales-peru.js)"]
-        LOCAL["LocalStorage (Fallback 100% Offline)"]
+        MEM["Catálogo local de referencia (datos-reales-peru.js)"]
+        LOCAL["LocalStorage (preferencias; no sustituye API)"]
     end
 
     U1 -->|1. Búsqueda y Creación| HTTP
     U2 -->|2. Rastrear G3-XXXXXX| HTTP
     HTTP --> VAL --> IDEM --> DISK
     DISK -->|3. Actualización Atómica| SSE
-    SSE -->|4. Push en Tiempo Real (< 20ms)| ADM
-    ADM -->|5. PATCH Respuesta Médica| HTTP
+    SSE -->|4. Aviso sin datos privados; consulta autenticada| ADM
+    ADM -->|5. PATCH respuesta de demostración| HTTP
     HTTP --> SSE
-    SSE -->|6. Respuesta en Vivo| U2
+    HTTP -->|6. Consulta con código privado| U2
 ```
 
 ---
@@ -146,18 +150,21 @@ flowchart TD
 El proyecto está diseñado para funcionar de inmediato sin configuraciones complejas ni instalaciones de bases de datos pesadas.
 
 ### Requisitos Previos
-- Node.js versión 18 o superior instalado en el equipo anfitrión.
+- Node.js 22 LTS o superior instalado en el equipo anfitrión.
 
 ### Paso 1: Clonar o abrir la carpeta del proyecto
 ```bash
-cd c:\Users\danie\OneDrive\Escritorio\ecosistemadigital
+git clone https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL.git
+cd VITARA-OFICIAL
+# Elegir en GitHub la rama revisada o integrar su PR antes de clonar para la entrega.
+npm ci
 ```
 
 ### Paso 2: Iniciar el servidor local
 ```bash
 npm start
 ```
-*(O de manera directa: `node backend/server.mjs`)*
+*(O de manera directa desde la raíz: `node server.mjs`)*
 
 ### Paso 3: Acceder desde los navegadores
 - **Portal Público (Ciudadanos y Evaluadores):**
@@ -165,41 +172,36 @@ npm start
   - Desde los otros 7 equipos en la red Wi-Fi: `http://<IP_LOCAL>:3000` *(La IP exacta se imprime automáticamente en la consola al iniciar el servidor)*.
 - **Panel Administrador:**
   - `http://localhost:3000/admin.html`
-  - Usuario: `admin_g3`
-  - Contraseña: `Salud2026!`
+  - Configura `ADMIN_USUARIO` y `ADMIN_CLAVE`, o el alta inicial con `VITARA_SETUP_KEY`, antes de arrancar. Ver `CONFIGURACION-VITARA.md` y usar Node 22.
 
 ---
 
-## 🧪 6. Suite de Pruebas de Concurrencia y V&V (Consignas 7, 14 y 18.45)
+## 🧪 6. Pruebas vigentes y cumplimiento
 
-Para verificar el cumplimiento de los **≥ 7 dispositivos simultáneos**, la idempotencia y la política de privacidad, ejecuta el comando de pruebas automatizado:
-
-```bash
+```sh
+npm ci
+npm run test:services
+npm run test:security
+npm run test:assets
+npm run build
+npx playwright install chromium
 npm test
-```
-*(Ejecuta `node tests/ejecutar-concurrencia-completo.mjs`)*
-
-### Resultados de la Batería de Pruebas Automatizadas:
-```text
-✅ [V&V-01] Servidor HTTP y Estado Operativo: PASS (Memoria: 9MB)
-✅ [V&V-02] Acceso Simultáneo Concurrente (12 Dispositivos): PASS (Meta oficial ≥ 7 superada)
-✅ [V&V-03] Procesamiento Simultáneo de Solicitudes: PASS (12 tickets en 116ms / 10ms por req)
-✅ [V&V-04] Prevención de Registros Duplicados: PASS (Idempotencia SHA-256)
-✅ [V&V-05] Política Estricta de Privacidad: PASS (DNI de 8 dígitos bloqueado con código 400)
-✅ [V&V-06] Respuesta Oficial del Administrador: PASS (Ticket respondido vía PATCH)
-✅ [V&V-07] Persistencia Atómica y Respaldo JSON: PASS (15 registros guardados en data/solicitudes.json)
+npm audit --audit-level=low
 ```
 
----
+- `test:security` ejecuta el servidor real en puerto y carpeta temporales: siete clientes SSE concurrentes, perfiles y solicitudes, privacidad, permisos, borrado, respaldo/recuperación y reinicio. No contamina el portal.
+- `npm test` ejecuta Playwright; no es la herramienta histórica ni una prueba de siete dispositivos físicos.
+- Resultados y pendientes: [V_AND_V_MATRIZ.md](V_AND_V_MATRIZ.md), [CONSIGNA-CUMPLIMIENTO.md](CONSIGNA-CUMPLIMIENTO.md), [SEGURIDAD.md](SEGURIDAD.md).
+- Pendientes para cumplimiento completo: cuatro nombres autorizados, permisos de medios aportados, ensayo físico LAN/WAN y enlace público gratuito con el servidor completo.
 
 ## 🔄 7. Procedimiento de Recuperación ante Interrupciones (Consignas 10.3 y 18.46)
 
-1. **Modo Autónomo Local (100% Offline):**
-   Si se corta el suministro de Internet en el local del concurso, la aplicación continúa funcionando plenamente gracias a que todos los catálogos y modelos 3D están empaquetados localmente.
+1. **Modo local de las funciones principales:**
+   Si se corta el suministro de Internet en el local del concurso, la aplicación continúa permitiendo sus funciones principales con el Node local activo. Catálogos y modelos se sirven localmente; los enlaces oficiales y la IA externa no funcionan sin WAN.
 2. **Escritura Atómica en Disco:**
-   Cada nueva solicitud se escribe primero en un archivo temporal (`data/solicitudes.json.tmp.<timestamp>`) y luego se renombra atómicamente, garantizando que un corte de energía o reinicio abrupto jamás corrompa la base de datos.
+   Cada nueva solicitud se escribe primero en un archivo temporal (`data/solicitudes.json.tmp.<timestamp>`) y luego se renombra atómicamente, reduciendo el riesgo de escritura parcial. No garantiza supervivencia ante fallo de disco o corte eléctrico; mantener respaldos y ensayar recuperación.
 3. **Copia de Respaldo y Restauración en 1 Clic:**
-   Desde el panel de administración, el evaluador o administrador puede presionar **"Exportar Copia de Respaldo JSON"** para descargar el archivo de datos actual. En caso de desastre, basta con subir dicho archivo en **"Restaurar Respaldo JSON"** para recuperar el 100% del estado en milisegundos.
+   Desde el panel de administración, el evaluador o administrador puede presionar **"Exportar Copia de Respaldo JSON"** para descargar el archivo de datos actual. En caso de desastre, basta con subir dicho archivo en **"Restaurar Respaldo JSON"** para recuperar las solicitudes válidas del respaldo. No incluye perfiles ni configuración administrativa; estos requieren una copia privada del directorio con el servidor detenido. Ver CONSIGNA-CUMPLIMIENTO.md.
 
 ---
 
@@ -208,11 +210,11 @@ npm test
 | Recurso | Servicio / Tecnología | Costo Mensual | Justificación |
 |:---|:---|:---:|:---|
 | **Servidor y API** | Node.js Nativo (`node:http`, `node:fs`) | **$0.00** | Cero pago de licencias o servidores dedicados. |
-| **Persistencia** | Almacenamiento JSON Atómico / Firestore Spark | **$0.00** | Plan gratuito Spark de Google sin requerimiento de tarjeta de crédito. |
-| **Mapas Cartográficos** | SVGs Vectoriales Interactivos a Medida | **$0.00** | Evita las cuotas de pago de Mapbox y Google Maps. |
-| **Motor Gráfico 3D** | Three.js (r158) vía CDN libre | **$0.00** | Biblioteca de código abierto sin licencias comerciales. |
-| **Dominio y Red** | Red Local Wi-Fi del Concurso / Subdominio Firebase | **$0.00** | Cero compra de dominios de pago. |
-| **TOTAL** | — | **$0.00** | **100% Gratuito y de Acceso Abierto** |
+| **Persistencia** | Almacenamiento JSON atómico local | **$0.00** | Sin base de datos de pago; Firestore no se usa y sus reglas se cierran por defecto. |
+| **Mapas Cartográficos** | GeoJSON MPL 2.0, Three.js y alternativa SVG | **$0.00** | Evita las cuotas de pago de Mapbox y Google Maps. |
+| **Motor Gráfico 3D** | Three.js (r158) y Draco locales | **$0.00** | Biblioteca de código abierto sin licencias comerciales. |
+| **Dominio y Red** | Red local Wi-Fi del concurso | **$0.00** | Sin compra de dominio. Acceso público completo pendiente de configurar y validar. |
+| **TOTAL** | — | **$0.00** | **Sin pagos activados; verificar el acceso público elegido** |
 
 ---
 

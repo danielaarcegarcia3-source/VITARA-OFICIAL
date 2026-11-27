@@ -1,3 +1,5 @@
+> DOCUMENTO HISTÓRICO. No es evidencia de cumplimiento actual ni una guía de credenciales. Ver CONSIGNA-CUMPLIMIENTO.md y SEGURIDAD.md.
+
 # MEMORIA DEL PROYECTO ECOSISTEMA DIGITAL
 ## CLUB TECH-MASTERS 2026 · PROYECTO FINAL: CODE BATTLE
 **Ecosistema Digital de Acceso a la Salud y Recursos por Microrred (Perú & La Libertad)**  
@@ -189,7 +191,7 @@ Cada dato mostrado en pantalla lleva su **fuente y fecha de corte oficial**, nun
   * `CIU`: Ciudadano con Cuenta (gestión con Alias, sin DNI).
   * `AGC`: Agente Comunitario (Modo acompañamiento para atención en caseríos sin pedir datos sensibles).
   * `POSTA`: Personal Autorizado de Sede I-1 a I-4 (auditoría de stock local y cadena de frío).
-  * `ADM`: Administrador Regional (ingreso seguro con clave `Salud2026!` al Centro de Mando).
+  * `ADM`: Administrador Regional (ingreso seguro con clave `[CLAVE DEMO RETIRADA: NO VÁLIDA]` al Centro de Mando).
 - **Canales Reales y Operativos de Ayuda (Sección #canales-ayuda)**:
   * **Línea 113 MINSA**: `tel:113` con popup interactivo del árbol oficial de opciones 1 a 6.
   * **Teleatiendo MINSA**: Enlace directo a `https://teleatiendo.minsa.gob.pe/`.
@@ -199,7 +201,7 @@ Cada dato mostrado en pantalla lleva su **fuente y fecha de corte oficial**, nun
   * **Observatorio DIGEMID**: Fiscalización de precios en `https://opm.digemid.minsa.gob.pe/`.
 
 ### 🔐 G. Panel Administrador y Supervisión en Tiempo Real (admin.html)
-- **Login Guard con Autenticación (Consigna 5.2 y 13)**: Usuario `admin_g3` y contraseña `Salud2026!`.
+- **Login Guard con Autenticación (Consigna 5.2 y 13)**: Usuario `[USUARIO HISTÓRICO]` y contraseña `[CLAVE DEMO RETIRADA: NO VÁLIDA]`.
 - **Server-Sent Events (SSE) nativo**: Transmisión instantánea de eventos de red a `/api/eventos`.
 - **Monitor de Concurrencia en Vivo**: Medidor visual de dispositivos concurrentes (probado con 12 clientes simultáneos, meta ≥ 7 superada).
 - **Bandeja de Respuestas**: Permite a la sede cambiar el estado a `respondido` o `en_revision` y adjuntar nota oficial de stock.
@@ -214,7 +216,7 @@ Cada dato mostrado en pantalla lleva su **fuente y fecha de corte oficial**, nun
 | 31 | Enlace público de la aplicación web | ✅ 100% | Despliegue listo para Firebase Hosting (`firebase.json`, `firebase/config.js`) |
 | 32 | Aplicación web funcional | ✅ 100% | `frontend/index.html` con buscador Google Salud, tablero y mapas |
 | 33 | Panel administrador funcional | ✅ 100% | `frontend/admin.html` con gestión de tickets y tiempo real |
-| 34 | Procedimiento de acceso al panel privado | ✅ 100% | Pantalla de login: `admin_g3` / `Salud2026!` documentado |
+| 34 | Procedimiento de acceso al panel privado | ✅ 100% | Pantalla de login: `[USUARIO HISTÓRICO]` / `[CLAVE DEMO RETIRADA: NO VÁLIDA]` documentado |
 | 35 | Código fuente completo | ✅ 100% | Código modular limpio en `/frontend/`, `/backend/`, `/tests/` |
 | 36 | Repositorio GitHub | ✅ 100% | Estructura preparada con `.gitignore`, `README.md` y `CLAUDE.md` |
 | 37 | Backend o mecanismo de procesamiento | ✅ 100% | `backend/server.mjs` con HTTP, REST y Server-Sent Events (SSE) |
@@ -247,8 +249,8 @@ npm test
 
 # 4. Acceder al Panel Administrador Privado:
 # http://localhost:3000/admin.html
-# Usuario: admin_g3
-# Contraseña: Salud2026!
+# Usuario: [USUARIO HISTÓRICO]
+# Contraseña: [CLAVE DEMO RETIRADA: NO VÁLIDA]
 ```
 
 ---

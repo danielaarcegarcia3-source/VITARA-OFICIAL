@@ -10,6 +10,7 @@
   /* ================= SOLICITUDES ================= */
   const RECENT_KEY = 'g3.solicitudes';
   let formBind = false;
+  let pendingRequest = null;
 
   function sedes() {
     return (D.ipress || []).slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
@@ -91,7 +92,14 @@
       toast('El filtro de privacidad bloquea números de 8 dígitos. Quita cualquier documento del texto.', 'warn', 7000);
       return;
     }
-    const payload = { item, categoria, sede, alias, esAcompanamiento };
+    const fields = { item, categoria, sede, alias, esAcompanamiento };
+    const signature = JSON.stringify(fields);
+    if (!pendingRequest || pendingRequest.signature !== signature) {
+      const bytes = new Uint8Array(16); crypto.getRandomValues(bytes);
+      const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+      pendingRequest = { signature, key: `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}` };
+    }
+    const payload = { ...fields, idempotencyKey: pendingRequest.key };
     if (btn) { btn.disabled = true; btn.dataset.txt = btn.innerHTML; btn.innerHTML = 'Enviando…'; }
     try {
       const res = await fetch('/api/solicitudes', {
@@ -100,6 +108,7 @@
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) throw new Error(data.error || 'El servidor rechazó la solicitud.');
       const s = data.solicitud;
+      pendingRequest = null;
       codeBox(s);
       guardarReciente(s);
       renderRecientes();
@@ -248,7 +257,7 @@
       titulo: 'Para jóvenes',
       intro: 'Información directa para decidir sin mitos y sin exponer tus datos personales en línea.',
       cards: [
-        ['Salud mental', 'La Línea 113, opción 3, brinda soporte emocional y prevención del suicidio. Es gratuita y confidencial.', ['canales', 'Abrir canales']],
+        ['Salud mental', 'La Línea 113, opción 5, brinda orientación en salud mental y psicología. Es gratuita y confidencial.', ['canales', 'Abrir canales']],
         ['Derecho a genéricos', 'La Ley 32033 refuerza la entrega de medicamentos genéricos. Puedes preguntar por el precio del genérico en la farmacia.', ['buscar', 'Comparar precios', 'atorvastatina']],
         ['Teleconsulta', 'Teleatiendo permite solicitar una consulta remota con un profesional del MINSA. No reemplaza una emergencia.', ['canales', 'Ver Teleatiendo']],
         ['Emergencias', 'Si hay riesgo de vida, llama al SAMU 106. No esperes a que la aplicación responda.', ['canales', 'Llamar al 106']]

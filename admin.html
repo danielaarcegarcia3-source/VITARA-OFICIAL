@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panel de Supervisión y Administración · Red Salud Grupo 3</title>
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/tablero-sismed.css">
+  <link rel="stylesheet" href="./tokens.css">
+  <link rel="stylesheet" href="./base.css">
+  <link rel="stylesheet" href="./tablero-sismed.css">
   <style>
     body {
       background: #040810;
@@ -435,6 +435,8 @@
       gap: 12px;
     }
   </style>
+<link rel="stylesheet" href="./admin-participacion.css">
+<script src="./admin-participacion.js" defer></script>
 </head>
 <body>
 
@@ -450,23 +452,17 @@
           <span>Red Salud · Panel de Supervisión</span>
         </div>
       </div>
-      <h2>Acceso Administrativo</h2>
-      <p>Panel reservado para personal autorizado de postas, DIRESA La Libertad y evaluadores del jurado.</p>
+      <h2>Tu centro de control</h2>
+      <p>Panel de VITARA para el operador autorizado. Configurar este acceso no acredita vinculación con MINSA, DIRESA ni ninguna entidad pública.</p>
 
       <form class="login-form" id="formLogin">
-        <input type="text" id="loginUsuario" placeholder="Usuario (ej. admin_g3)" autocomplete="username" required>
-        <input type="password" id="loginClave" placeholder="Contraseña de acceso" autocomplete="current-password" required>
-        <input type="text" id="loginNombre" placeholder="Nombre del personal (opcional)" autocomplete="name">
-        <input type="email" id="loginCorreo" placeholder="Correo institucional (opcional)" autocomplete="email">
+        <input type="text" id="loginUsuario" placeholder="Usuario autorizado" aria-label="Usuario autorizado" autocomplete="username" required>
+        <input aria-label="Contraseña de acceso" type="password" id="loginClave" placeholder="Contraseña de acceso" autocomplete="current-password" required>
         <button type="submit" class="btn-login" id="btnLogin">Ingresar al Panel</button>
       </form>
 
-      <div class="credenciales-demo">
-        <strong>Credenciales para el jurado (Club Tech-Masters 2026):</strong><br>
-        • Usuario: <code style="color:#fff; font-weight:700;">admin_g3</code><br>
-        • Contraseña: <code style="color:#fff; font-weight:700;">Salud2026!</code><br>
-        <small style="opacity:0.8; display:block; margin-top:4px;">Cumple con la Consigna 13: Protección de acceso y separación de operaciones.</small>
-      </div>
+      <p id="admin-config-status" role="status">Comprobando la configuración del servidor…</p>
+      <details id="admin-setup" hidden><summary>Configurar el primer administrador</summary><p>En esta vista previa usa la clave privada del archivo de acceso que recibiste. Después elige tu propio usuario y una contraseña de al menos 12 caracteres. No necesitas otra aplicación. En tu instalación local la clave se define mediante VITARA_SETUP_KEY.</p><form class="login-form" id="admin-setup-form"><input name="setupKey" type="password" autocomplete="off" required placeholder="Clave privada de configuración" aria-label="Clave privada de configuración"><input name="usuario" minlength="3" maxlength="60" autocomplete="username" required placeholder="Nuevo usuario" aria-label="Nuevo usuario"><input name="contrasena" type="password" minlength="12" maxlength="128" autocomplete="new-password" required placeholder="Contraseña de al menos 12 caracteres" aria-label="Nueva contraseña"><button class="btn-login">Crear administrador</button></form></details>
 
       <p style="margin-top: 16px; font-size: 11px;">
         <a href="index.html" style="color: #38bdf8; text-decoration: none;">← Volver al portal público</a>
@@ -507,26 +503,25 @@
           <span style="font-size:10px; background:#10b981; color:#042f2c; padding:2px 8px; border-radius:99px; font-weight:700;">ACTIVO</span>
         </h4>
         <p>
-          Las interacciones de los otros 7 equipos visitantes en la red local se reflejan aquí en directo sin recargar.
+          Perfiles e interacciones consentidas se consultan abajo. Las conexiones de eventos no equivalen a personas únicas.
         </p>
       </div>
 
       <div class="concurrencia-barra-wrap">
         <div>
           <div style="font-size: 11px; color: #94a3b8; text-align: right; margin-bottom: 3px;">
-            Dispositivos concurrentes: <strong id="lbl-concurrencia-num" style="color: #38bdf8; font-size: 14px;">1</strong> / 7 (Meta)
+            Conexiones al canal de eventos: <strong id="lbl-concurrencia-num" style="color: #38bdf8; font-size: 14px;">0</strong> / 7 (referencia de conexión)
           </div>
           <div class="concurrencia-barra">
-            <div class="concurrencia-progreso" id="barra-concurrencia" style="width: 14%;"></div>
+            <div class="concurrencia-progreso" id="barra-concurrencia" style="width: 0%;"></div>
           </div>
         </div>
-        <button id="btn-simular-concurrencia" style="background:#0284c7; color:#fff; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">
-          + Simular Dispositivo
-        </button>
+
       </div>
     </div>
 
     <!-- TARJETAS DE KPIS PRINCIPALES -->
+    <section class="admin-test-guide"><strong>PRUÉBALO CON ACTIVIDAD REAL</strong><h2>De tu pantalla al panel, en tres pasos.</h2><ol><li><b>1. Abre el portal</b><span>En otra pestaña, completa un perfil de prueba con correo y marca «Sincronizar».</span></li><li><b>2. Explora</b><span>Visita mapas, dispositivos o canales. No necesitas enviar datos clínicos ni crear solicitudes.</span></li><li><b>3. Comprueba</b><span>Actualiza Participación y abre el perfil. Verás sus visitas reales. Puedes eliminarlo al terminar.</span></li></ol><a href="./index.html" target="_blank" rel="noopener noreferrer">Abrir portal para probar ↗</a></section>
     <div class="admin-kpis">
       <div class="admin-kpi-card" style="--kpi-color: #0284c7;">
         <div class="admin-kpi-card__num" id="kpi-total-sol">0</div>
@@ -628,11 +623,11 @@
             <h3>
               <span>🛡️</span> Firewall WAF & Seguridad
             </h3>
-            <span style="font-size: 10px; color: #10b981; font-weight: 700;">BLINDAJE ACTIVO</span>
+            <span style="font-size: 10px; color: #10b981; font-weight: 700;">FILTRO HTTP ACTIVO</span>
           </div>
 
           <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 12px;">
-            Mitigación en tiempo real contra inyecciones SQL, ataques XSS, path traversal y filtración de DNI.
+            Filtros HTTP, límites de peticiones, validación, escape de salida y permisos del servidor. No sustituye al firewall del equipo ni garantiza protección DDoS.
           </p>
 
           <div style="background:#040810; border:1px solid #1e293b; border-radius:8px; padding:10px; font-size:11px; margin-bottom:12px;">
@@ -641,12 +636,12 @@
               <strong id="waf-peticiones" style="color:#38bdf8; font-family:var(--fuente-mono);">0</strong>
             </div>
             <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-              <span style="color:#94a3b8;">Amenazas neutralizadas:</span>
+              <span style="color:#94a3b8;">Peticiones bloqueadas:</span>
               <strong id="waf-amenazas" style="color:#10b981; font-family:var(--fuente-mono);">0</strong>
             </div>
             <div style="display:flex; justify-content:space-between;">
-              <span style="color:#94a3b8;">Filtro DNI estricto:</span>
-              <strong style="color:#34d399;">100% ACTIVO</strong>
+              <span style="color:#94a3b8;">Filtro de 8 dígitos:</span>
+              <strong style="color:#34d399;">HABILITADO</strong>
             </div>
           </div>
 
@@ -723,7 +718,7 @@
 
       let solicitudes = [];
       let filtroActual = 'todas';
-      let dispositivoConcurrenteSimulado = 1;
+
       let solicitudSeleccionada = null;
       let eventSource = null;
 
@@ -746,16 +741,16 @@
         configurarLogin();
         configurarFiltros();
         configurarBackup();
-        configurarBotonSimular();
+
       });
 
-      function verificarSesion() {
-        if (adminToken) {
-          loginOverlay.style.display = 'none';
-          iniciarOperaciones();
-        } else {
-          loginOverlay.style.display = 'grid';
-        }
+      async function verificarSesion() {
+        if (!adminToken) { loginOverlay.style.display = 'grid'; return; }
+        try {
+          const response = await fetch('/api/admin/usuarios', { headers: { Authorization: `Bearer ${adminToken}` } });
+          if (!response.ok) throw new Error();
+          loginOverlay.style.display = 'none'; iniciarOperaciones();
+        } catch { sessionStorage.removeItem(TOKEN_STORAGE_KEY); adminToken = null; loginOverlay.style.display = 'grid'; }
       }
 
       function configurarLogin() {
@@ -780,21 +775,13 @@
               iniciarOperaciones();
               return;
             }
-          } catch (err) {
-            // Si el backend no está corriendo (modo archivo estático puro), autenticar localmente con las credenciales oficiales
-            if (u === 'admin_g3' && p === 'Salud2026!') {
-              adminToken = 'Salud2026!';
-              sessionStorage.setItem(TOKEN_STORAGE_KEY, adminToken);
-              loginOverlay.style.display = 'none';
-              iniciarOperaciones();
-              return;
-            }
-          }
-
-          alert('Credenciales incorrectas. Verifique el usuario y la clave demo proporcionados.');
+          } catch (err) { document.getElementById('admin-config-status').textContent = 'No se pudo conectar con el servidor. No hay acceso administrativo en modo estático.'; return; }
+          document.getElementById('admin-config-status').textContent = 'Credenciales incorrectas o demasiados intentos. No hay claves demo.';
         });
 
         btnCerrarSesion.addEventListener('click', () => {
+          fetch('/api/auth/logout', { method: 'POST', headers: { Authorization: `Bearer ${adminToken}` } }).catch(() => {});
+          window.dispatchEvent(new Event('vitara:admin-logout'));
           sessionStorage.removeItem(TOKEN_STORAGE_KEY);
           adminToken = null;
           if (eventSource) eventSource.close();
@@ -803,6 +790,7 @@
       }
 
       function iniciarOperaciones() {
+        window.dispatchEvent(new Event('vitara:admin-ready'));
         cargarSolicitudes();
         conectarSSE();
         detectarEntorno();
@@ -828,12 +816,8 @@
             throw new Error('Respuesta no exitosa');
           }
         } catch {
-          // Fallback a LocalStorage si no hay backend activo
-          try {
-            solicitudes = JSON.parse(localStorage.getItem('g3-solicitudes') || '[]');
-          } catch {
-            solicitudes = [];
-          }
+          solicitudes = [];
+          agregarFeed('conn', 'No se pudieron consultar las solicitudes del servidor; no se sustituyen por datos locales.');
         }
         actualizarKPIs();
         renderizarSolicitudes();
@@ -851,6 +835,7 @@
         document.getElementById('kpi-respondidas').textContent = respondidas;
       }
 
+      const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
       function renderizarSolicitudes() {
         const filtradas = filtroActual === 'todas'
           ? solicitudes
@@ -874,22 +859,22 @@
           return `
             <div class="solicitud-item">
               <div class="solicitud-item__top">
-                <span class="solicitud-item__codigo">${s.codigo}</span>
+                <span class="solicitud-item__codigo">${escapeHTML(s.codigo)}</span>
                 <span class="badge-nivel badge-nivel--${badgeClass}" style="font-size:10px;">${badgeTexto}</span>
               </div>
-              <div class="solicitud-item__titulo">${s.item}</div>
+              <div class="solicitud-item__titulo">${escapeHTML(s.item)}</div>
               <div class="solicitud-item__meta">
-                <span>📍 ${s.sede || 'C.S. MOCHE'}</span>
-                <span>👤 ${s.alias || 'Anónimo'} ${s.esAcompanamiento ? '· <strong style="color:#38bdf8;">Acompañante</strong>' : ''}</span>
+                <span>📍 ${escapeHTML(s.sede || 'C.S. MOCHE')}</span>
+                <span>👤 ${escapeHTML(s.alias || 'Anónimo')} ${s.esAcompanamiento ? '· <strong style="color:#38bdf8;">Acompañante</strong>' : ''}</span>
                 <span>🕒 ${new Date(s.fecha).toLocaleTimeString()}</span>
               </div>
               ${s.respuesta ? `
                 <div class="solicitud-item__respuesta">
-                  <strong>Respuesta oficial de la sede:</strong> ${s.respuesta}
+                  <strong>Respuesta oficial de la sede:</strong> ${escapeHTML(s.respuesta)}
                   <div style="font-size:10px; opacity:0.8; margin-top:2px;">Fecha respuesta: ${new Date(s.fechaRespuesta || s.fecha).toLocaleTimeString()}</div>
                 </div>
               ` : ''}
-              <button class="solicitud-item__btn-acc btn-abrir-resp" data-codigo="${s.codigo}">
+              <button class="solicitud-item__btn-acc btn-abrir-resp" data-codigo="${escapeHTML(s.codigo)}">
                 ${s.respuesta ? 'Editar Respuesta' : 'Responder Solicitud'}
               </button>
             </div>
@@ -933,40 +918,27 @@
             actualizarBarraConcurrencia(data.clientesConectados);
           });
 
-          eventSource.addEventListener('nueva_solicitud', (e) => {
-            const nueva = JSON.parse(e.data);
-            solicitudes.unshift(nueva);
-            actualizarKPIs();
-            renderizarSolicitudes();
-            agregarFeed('nueva', `Nueva solicitud recibida: ${nueva.codigo} · ${nueva.item} (${nueva.alias})`);
-          });
-
-          eventSource.addEventListener('actualizacion_solicitud', (e) => {
-            const mod = JSON.parse(e.data);
-            const idx = solicitudes.findIndex(s => s.codigo === mod.codigo);
-            if (idx !== -1) {
-              solicitudes[idx] = mod;
-            } else {
-              solicitudes.unshift(mod);
-            }
-            actualizarKPIs();
-            renderizarSolicitudes();
-            agregarFeed('update', `Solicitud actualizada: ${mod.codigo} · Estado: ${mod.estado}`);
-          });
+          // El stream público solo invalida: volver a consultar con Authorization.
+          for (const type of ['nueva_solicitud', 'actualizacion_solicitud', 'restauracion_backup']) {
+            eventSource.addEventListener(type, () => {
+              cargarSolicitudes();
+              agregarFeed('update', 'Cambios recibidos; consultando registros privados con sesión autenticada.');
+            });
+          }
 
           eventSource.onerror = () => {
             // Si SSE falla por desconexión de red, mantener el fallback
             console.warn('SSE desconectado, esperando reintento automático.');
           };
         } catch (e) {
-          console.warn('No se pudo establecer EventSource, usando modo autónomo local:', e);
+          console.warn('No se pudo establecer EventSource; el panel necesita conexión al servidor:', e);
         }
       }
 
       function agregarFeed(tipo, texto) {
         const entrada = document.createElement('div');
         entrada.className = `feed-entry feed-entry--${tipo}`;
-        entrada.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${texto}`;
+        entrada.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${escapeHTML(texto)}`;
         feedEventos.prepend(entrada);
         while (feedEventos.children.length > 25) {
           feedEventos.removeChild(feedEventos.lastChild);
@@ -974,7 +946,7 @@
       }
 
       function actualizarBarraConcurrencia(n) {
-        const val = Math.max(n, dispositivoConcurrenteSimulado);
+        const val = Number.isFinite(Number(n)) ? Number(n) : 0;
         lblConcurrencia.textContent = val;
         const porcentaje = Math.min(100, Math.round((val / 7) * 100));
         barraConcurrencia.style.width = `${porcentaje}%`;
@@ -984,14 +956,6 @@
         } else {
           barraConcurrencia.style.background = '#38bdf8';
         }
-      }
-
-      function configurarBotonSimular() {
-        document.getElementById('btn-simular-concurrencia')?.addEventListener('click', () => {
-          dispositivoConcurrenteSimulado = Math.min(12, dispositivoConcurrenteSimulado + 1);
-          actualizarBarraConcurrencia(dispositivoConcurrenteSimulado);
-          agregarFeed('conn', `Dispositivo simulado agregado. Total concurrentes: ${dispositivoConcurrenteSimulado} (Meta: ≥7 superada)`);
-        });
       }
 
       // Responder a Solicitud
@@ -1037,20 +1001,8 @@
             renderizarSolicitudes();
             return;
           }
-        } catch {
-          // Fallback local
-        }
-
-        solicitudSeleccionada.estado = estado;
-        solicitudSeleccionada.respuesta = respuesta;
-        solicitudSeleccionada.fechaRespuesta = new Date().toISOString();
-        try {
-          localStorage.setItem('g3-solicitudes', JSON.stringify(solicitudes));
-        } catch {}
-
-        modalResponder.hidden = true;
-        actualizarKPIs();
-        renderizarSolicitudes();
+        } catch { /* No confirmar una respuesta que el servidor no guardó. */ }
+        alert('La respuesta no se guardó en el servidor. Verifica tu sesión y vuelve a intentarlo.');
       });
 
       // Procedimiento de Respaldo y Recuperación (Consigna 8 & 18.46)

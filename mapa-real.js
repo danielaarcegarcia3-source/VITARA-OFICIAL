@@ -1,122 +1,56 @@
-/**
- * mapa-real.js — T-08 · Mapa real de disponibilidad por departamento
- * Polígonos del GeoJSON frontend/assets/geo/departamentos.geojson (derivados
- * de DEPARTAMENTOS_PERU, sin coordenadas oficiales — distribución conceptual).
- * Coloreado por dispoSismed (datos reales de DatosSaludPeru), tooltip en hover,
- * clic → panel a la derecha. Sin WebGL: tabla equivalente.
- */
-(async function () {
+/** Atlas de activos originales. No coloca coordenadas sobre imágenes sin georreferencia. */
+(function () {
   'use strict';
-  const $ = (sel, raiz = document) => raiz.querySelector(sel);
-
-  const raiz = $('#mapa-real');
-  if (!raiz) return;
-
-  const geojson = await fetch('/assets/geo/departamentos.geojson', { cache: 'no-store' }).then((r) => r.json());
-  const props = geojson.features.map((f) => f.properties).filter((p) => p.nombre);
-
-  // Tabla equivalente (sin WebGL / sin dispositivo)
-  const tabla = $('#mapa-real__tabla');
-  if (tabla) {
-    tabla.innerHTML = `
-      <table class="tabla-sismed">
-        <thead><tr><th>Departamento</th><th>Disponibilidad informada (SISMED)</th><th>Rango de color</th></tr></thead>
-        <tbody>
-          ${props.map((p) => `<tr><td>${p.nombre}</td><td>${p.dispoSismed}%</td><td class="mapa-real__rango rango-${p.dispoSismed >= 70 ? 'ok' : p.dispoSismed >= 40 ? 'aviso' : p.dispoSismed >= 20 ? 'neut' : 'err'}"></td></tr>`).join('')}
-        </tbody>
-      </table>`;
-  }
-
-  if (typeof THREE === 'undefined') return;
-
-  const canvas = document.createElement('canvas');
-  canvas.className = 'mapa-real__3d';
-  raiz.appendChild(canvas);
-
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x060c13);
-
-  const scene = new THREE.Scene();
-  const camara = new THREE.PerspectiveCamera(42, 1.35, 0.1, 200);
-  camara.position.set(0, 9, 14);
-  camara.lookAt(0, 0, 0);
-
-  scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-  const luzP = new THREE.DirectionalLight(0xffffff, 1);
-  luzP.position.set(5, 12, 7);
-  scene.add(luzP);
-
-  const durante = performance.now();
-  const esferas = props.map((p, i) => {
-    const ang = (i / Math.max(1, props.length - 1)) * Math.PI * 1.6;
-    const mat = new THREE.MeshPhongMaterial({
-      color: new THREE.Color().lerpColors(new THREE.Color(0x334155), new THREE.Color(0x22c55e), Math.min(1, p.dispoSismed / 100)),
-      emissive: new THREE.Color(0x050a11), shininess: 30
-    });
-    const esf = new THREE.Mesh(new THREE.SphereGeometry(0.55, 10, 8), mat);
-    esf.position.set(Math.cos(ang) * 9, Math.sin(ang) * 3.5, Math.cos(ang) * 3);
-    esf.userData.nombre = p.nombre;
-    scene.add(esf);
-    const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ color: 0x38bdf8 }));
-    sprite.scale.set(6, 1.7, 1);
-    sprite.visible = false;
-    sprite.material.map = null;
-    sprite.material.color.set('#38bdf8');
-    sprite.userData = { texto: `${p.nombre} · Disponibilidad SISMED ${p.dispoSismed}%` };
-    esf.userData.sprite = sprite;
-    scene.add(sprite);
-    return esf;
-  });
-
-  const raycaster = new THREE.Raycaster();
-  const pixelRatio = renderer.getPixelRatio();
-  const mouse = new THREE.Vector2();
-
-  function transformarPunto(evento, raizCanvas) {
-    const rect = raizCanvas.getBoundingClientRect();
-    mouse.x = ((evento.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((evento.clientY - rect.top) / rect.height) * 2 + 1;
-  }
-
-  canvas.addEventListener('pointermove', (e) => {
-    transformarPunto(e, canvas);
-    raycaster.setFromCamera(mouse, camara);
-    const hits = raycaster.intersectObjects(esferas);
-    let sel = null;
-    for (const esf of esferas) esf.material.emissiveIntensity = 0;
-    for (const h of hits) {
-      const esf = h.object;
-      if (esf.userData.sprite) esf.userData.sprite.visible = true;
-      esf.material.emissiveIntensity = 0.7;
-      sel = esf;
+  const V = window.Vitara;
+  const root = document.getElementById('mapa-real');
+  if (!V || !root) return;
+  const { esc } = V;
+  const places = V.D.ipress || [];
+  let mode = 'peru', zoom = 1, x = 0, y = 0;
+  root.innerHTML = `<div class="atlas-toolbar"><div class="seg"><button type="button" data-atlas="peru" aria-pressed="true">Perú</button><button type="button" data-atlas="ll" aria-pressed="false">La Libertad</button></div><div class="atlas-zoom"><button type="button" data-zoom="in" aria-label="Acercar mapa">+</button><button type="button" data-zoom="out" aria-label="Alejar mapa">−</button><button type="button" data-zoom="reset">Reencuadrar</button></div></div>
+  <div class="atlas-layout"><div class="atlas-image" tabindex="0" role="region" aria-label="Ilustración territorial. Arrastra para inspeccionar; usa más y menos para zoom."><img src="./mapadelperu3d.png" alt="Mapa ilustrado 3D del Perú" draggable="false"><span>ILUSTRACIÓN ORIGINAL · NO GEORREFERENCIADA</span></div>
+  <aside class="atlas-directory"><h3>Establecimientos en la base local</h3><label for="atlas-district">Distrito</label><select id="atlas-district"><option value="">Todos los distritos</option>${[...new Set(places.map(p => p.distrito).filter(Boolean))].sort().map(d => `<option>${esc(d)}</option>`).join('')}</select><label for="atlas-type">Tipo de establecimiento</label><select id="atlas-type"><option value="">Todos los tipos</option><option value="hospital">Hospitales</option><option value="centro">Centros de salud</option><option value="posta">Puestos de salud</option></select><p class="source">Directorio local · no equivale a cobertura completa ni stock en tiempo real.</p><div id="atlas-results" aria-live="polite"></div></aside></div>`;
+  const image = root.querySelector('.atlas-image img');
+  const stage = image.parentElement;
+  function transform() { image.style.transform = `translate(${x}px, ${y}px) scale(${zoom})`; }
+  function scale(factor) { zoom = Math.max(1, Math.min(3, zoom * factor)); if (zoom === 1) x = y = 0; transform(); }
+  root.querySelectorAll('[data-atlas]').forEach(button => button.addEventListener('click', () => {
+    mode = button.dataset.atlas;
+    root.querySelectorAll('[data-atlas]').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
+    image.src = mode === 'll' ? './MAPADELALIBERTAD3D.png' : './mapadelperu3d.png';
+    image.alt = mode === 'll' ? 'Mapa ilustrado 3D de La Libertad' : 'Mapa ilustrado 3D del Perú';
+    zoom = 1; x = y = 0; transform();
+  }));
+  root.querySelectorAll('[data-zoom]').forEach(button => button.addEventListener('click', () => {
+    if (button.dataset.zoom === 'reset') { zoom = 1; x = y = 0; transform(); }
+    else scale(button.dataset.zoom === 'in' ? 1.2 : 1 / 1.2);
+  }));
+  stage.addEventListener('keydown', e => {
+    if (['+', '=', '-'].includes(e.key)) { e.preventDefault(); scale(e.key === '-' ? 1 / 1.2 : 1.2); }
+    if (e.key.startsWith('Arrow')) {
+      e.preventDefault();
+      x += e.key === 'ArrowLeft' ? 20 : e.key === 'ArrowRight' ? -20 : 0;
+      y += e.key === 'ArrowUp' ? 20 : e.key === 'ArrowDown' ? -20 : 0;
+      transform();
     }
-    document.body.style.cursor = sel ? 'pointer' : '';
   });
-
-  canvas.addEventListener('pointerleave', () => { esferas.forEach((e) => { if (e.userData.sprite) e.userData.sprite.visible = false; }); });
-
-  canvas.addEventListener('click', (e) => {
-    transformarPunto(e, canvas);
-    raycaster.setFromCamera(mouse, camara);
-    const hits = raycaster.intersectObjects(esferas);
-    const esf = hits[0]?.object;
-    if (!esf || !esf.userData.nombre) return;
-    const p = props.find((x) => x.nombre === esf.userData.nombre);
-    document.querySelector('#mapa-real__panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-
-  function animar() {
-    requestAnimationFrame(animar);
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
-    if (w && h && (w !== renderer.domElement.width / renderer.getPixelRatio() || h !== renderer.domElement.height / renderer.getPixelRatio())) {
-      renderer.setSize(w, h, false);
-      camara.aspect = w / Math.max(1, h);
-      camara.updateProjectionMatrix();
-    }
-    renderer.render(scene, camara);
+  let drag;
+  stage.addEventListener('pointerdown', e => { drag = [e.clientX - x, e.clientY - y]; stage.setPointerCapture(e.pointerId); });
+  stage.addEventListener('pointermove', e => { if (!drag) return; x = Math.max(-stage.clientWidth, Math.min(stage.clientWidth, e.clientX - drag[0])); y = Math.max(-stage.clientHeight, Math.min(stage.clientHeight, e.clientY - drag[1])); transform(); });
+  stage.addEventListener('pointerup', () => { drag = null; });
+  stage.addEventListener('pointercancel', () => { drag = null; });
+  function directory() {
+    const district = root.querySelector('#atlas-district').value;
+    const type = root.querySelector('#atlas-type').value;
+    const list = places.filter(p => (!district || district === p.distrito) && (!type || (type === 'hospital' ? /HOSPITAL/i.test(p.nombre) : type === 'centro' ? /^C\.S\./i.test(p.nombre) : /^P\.S\./i.test(p.nombre))));
+    root.querySelector('#atlas-results').innerHTML = list.length ? list.map(p => `<button class="atlas-place" type="button" data-place="${esc(p.cod)}"><strong>${esc(p.nombre)}</strong><span>${esc(p.distrito)} · ${esc(p.categoria)} <b>↗</b></span></button>`).join('') : '<p class="empty">No hay establecimientos de este tipo en el distrito seleccionado.</p>';
+    root.querySelectorAll('[data-place]').forEach(button => button.addEventListener('click', () => {
+      const p = places.find(p => p.cod === button.dataset.place);
+      if (!p) return;
+      V.abrirInspector('Directorio territorial', `<h3>${esc(p.nombre)}</h3><dl class="kv"><dt>Distrito</dt><dd>${esc(p.distrito)}</dd><dt>Categoría</dt><dd>${esc(p.categoria)}</dd><dt>Horario registrado</dt><dd>${esc(p.horario || 'Sin información')}</dd><dt>Teléfono registrado</dt><dd>${esc(p.telefono || 'Sin información')}</dd></dl><p>Confirma en la sede antes de desplazarte.</p><p class="source">${esc(V.SRC.renipress.texto)} · ${esc(V.SRC.renipress.fecha)}</p>`);
+    }));
   }
-  animar();
+  root.querySelectorAll('select').forEach(select => select.addEventListener('change', directory));
+  directory();
+  V.onView('mapas', () => requestAnimationFrame(() => window.dispatchEvent(new Event('resize'))));
 })();

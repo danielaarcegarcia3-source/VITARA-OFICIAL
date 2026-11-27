@@ -1,6 +1,6 @@
 /**
  * vitara-home.js — hélice de ADN 3D, dianas moleculares y panel lateral.
- * Usa el GLB local y, si no está disponible, construye una hélice ilustrativa.
+ * Usa exclusivamente el GLB real; conserva información accesible si WebGL falla.
  */
 (function () {
   'use strict';
@@ -142,7 +142,7 @@
     const cont = $('#dna-targets');
     if (!cont) return;
     cont.innerHTML = TARGETS.map((t) => `
-      <button class="dna-target" type="button" data-target="${t.id}" aria-pressed="false" aria-controls="dna-panel">
+      <button class="dna-target" type="button" aria-label="${t.label}" title="${t.label}" data-target="${t.id}" aria-pressed="false" aria-controls="dna-panel">
         <span class="dna-target__n">${t.n}</span><span>${t.label}</span><span class="dna-target__dot" aria-hidden="true"></span>
       </button>`).join('');
     cont.addEventListener('click', (e) => {
@@ -245,54 +245,15 @@
     });
   }
 
-  function construirRespaldo() {
-    const grupo = new THREE.Group();
-    const alto = 8.2;
-    const radio = 1.18;
-    const vueltas = 3.1;
-    const pasos = 120;
-    const colores = [0xF09A8B, 0xF0C46A, 0x7AC9A9, 0x86B7E8];
-    const esferas = [];
-    for (let hebra = 0; hebra < 2; hebra++) {
-      for (let i = 0; i <= pasos; i++) {
-        const t = i / pasos;
-        const ang = t * Math.PI * 2 * vueltas + hebra * Math.PI;
-        const geo = new THREE.SphereGeometry(0.085, 10, 8);
-        const mat = new THREE.MeshStandardMaterial({ color: colores[(i + hebra) % 4], roughness: .35, metalness: .04 });
-        const s = new THREE.Mesh(geo, mat);
-        s.position.set(Math.cos(ang) * radio, -alto / 2 + t * alto, Math.sin(ang) * radio);
-        grupo.add(s);
-        esferas.push(s);
-      }
-    }
-    // puentes
-    for (let i = 6; i < pasos; i += 8) {
-      const t = i / pasos;
-      const a1 = t * Math.PI * 2 * vueltas;
-      const a2 = a1 + Math.PI;
-      const p1 = new THREE.Vector3(Math.cos(a1) * radio, -alto / 2 + t * alto, Math.sin(a1) * radio);
-      const p2 = new THREE.Vector3(Math.cos(a2) * radio, -alto / 2 + t * alto, Math.sin(a2) * radio);
-      const dir = p2.clone().sub(p1);
-      const geo = new THREE.CylinderGeometry(0.022, 0.022, dir.length(), 6);
-      const mat = new THREE.MeshStandardMaterial({ color: 0xBBD7C9, roughness: .5, transparent: true, opacity: .65 });
-      const c = new THREE.Mesh(geo, mat);
-      c.position.copy(p1.clone().add(p2).multiplyScalar(0.5));
-      c.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
-      grupo.add(c);
-    }
-    grupo.userData.fallback = true;
-    return grupo;
-  }
-
   function iniciarEscena() {
     const canvas = $('#dna-canvas');
     const stage = $('#dna-stage');
     if (!canvas || !stage) return;
     stage?.addEventListener('pointerenter', () => { state.hover = true; });
     stage?.addEventListener('pointerleave', () => { state.hover = false; });
+    const fallo = () => { stage.classList.add('is-unavailable'); $('#dna-loader')?.classList.add('is-hidden'); $('#dna-fallback')?.removeAttribute('hidden'); };
     if (!window.THREE) {
-      $('#dna-loader')?.classList.add('is-hidden');
-      $('#dna-fallback')?.removeAttribute('hidden');
+      fallo();
       return;
     }
     try {
@@ -307,6 +268,7 @@
       camera.position.set(0, 0, 14);
       state.camera = camera;
       iluminar();
+      scene.add(new THREE.AmbientLight(0xffffff, 0.7));
 
       const pivot = new THREE.Group();
       scene.add(pivot);
@@ -316,7 +278,7 @@
         let modelo;
         try {
           if (!window.VitaraGLB) throw new Error('Sin cargador GLB');
-          const r = await window.VitaraGLB.load('assets/3d/adn.glb');
+          const r = await window.VitaraGLB.load('./adn.glb');
           modelo = r.group;
           pivot.add(modelo);
           // Encuadre
@@ -325,7 +287,7 @@
           pivot.add(contenedor);
           state.model = contenedor;
           state.modelEscala = contenedor.scale.x;
-          contenedor.scale.setScalar(0.9);
+          contenedor.scale.setScalar(state.modelEscala * 0.9);
           prepararDesdoblamiento(contenedor);
           const caja = new THREE.Box3().setFromObject(contenedor);
           const tam = caja.getSize(new THREE.Vector3());
@@ -342,20 +304,15 @@
           scene.add(base);
           state.baseRing = base;
         } catch (err) {
-          console.warn('[VITARA] GLB no disponible, usando hélice ilustrativa.', err);
-          state.fallback = true;
-          modelo = construirRespaldo();
-          pivot.add(modelo);
-          state.model = modelo;
-          pivot.add(anillos(8.2, 1.35));
-          state.particles = particulas(8.2, 1.5);
-          scene.add(state.particles);
-          const aviso = document.createElement('div');
-          aviso.className = 'toast toast--warn';
-          aviso.innerHTML = '<svg class="i i--sm"><use href="#i-info"/></svg><span>Modelo 3D no disponible. Se muestra una hélice ilustrativa con las mismas dianas.</span>';
-          $('#toasts')?.appendChild(aviso);
-          setTimeout(() => aviso.remove(), 6500);
+          console.warn('[VITARA] No se pudo cargar ADN.', err);
+          fallo();
+          const button = document.createElement('button');
+          button.className = 'btn btn--ghost btn--sm'; button.type = 'button'; button.textContent = 'Reintentar modelo';
+          button.addEventListener('click', () => { button.remove(); $('#dna-fallback').hidden = true; $('#dna-loader').classList.remove('is-hidden'); cargar(); }, { once: true });
+          $('#dna-fallback')?.appendChild(button);
+          return;
         }
+        stage.classList.remove('is-unavailable');
         state.ready = true;
         $('#dna-loader')?.classList.add('is-hidden');
         if (state.fallback) $('#dna-fallback')?.setAttribute('hidden', '');
@@ -381,9 +338,10 @@
       let t = 0;
       const animar = () => {
         state.raf = requestAnimationFrame(animar);
-        t += 0.016;
+        const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.movimiento === 'reducido';
+        if (!reduced) t += 0.016;
         // desdoblamiento suave
-        state.unzip += (state.unzipTarget - state.unzip) * 0.08;
+        state.unzip += (state.unzipTarget - state.unzip) * (reduced ? 1 : 0.08);
         if (state.meshes.length) {
           const desplazamiento = state.unzipOffset || 0.72;
           state.meshes.forEach((m) => {
@@ -404,7 +362,7 @@
           state.baseRing.material.opacity += (objetivoBase - state.baseRing.material.opacity) * 0.06;
         }
         if (state.particles) {
-          state.particles.rotation.y -= 0.0007;
+          if (!reduced) state.particles.rotation.y -= 0.0007;
           const mat = state.particles.material;
           const base = typeof mat.opacity === 'number' ? mat.opacity : 0.55;
           mat.opacity += ((base + intensidadHover) - mat.opacity) * 0.06;
@@ -420,15 +378,25 @@
         if (state.model) {
           const objetivoEscala = state.modelEscala != null ? state.modelEscala : 1;
           const escalaActual = state.model.scale.x;
-          state.model.scale.setScalar(escalaActual + (objetivoEscala - escalaActual) * 0.07);
+          state.model.scale.setScalar(escalaActual + (objetivoEscala - escalaActual) * (reduced ? 1 : 0.07));
         }
-        renderer.render(scene, camera);
+        if (state.ready) {
+          pivot.updateMatrixWorld(true);
+          document.querySelectorAll('.dna-target').forEach((button, index) => {
+            const angle = index * 1.8;
+            const point = new THREE.Vector3(Math.cos(angle) * 1.2, 3.1 - index * 1.55, Math.sin(angle) * 1.2);
+            point.applyMatrix4(pivot.matrixWorld).project(camera);
+            button.style.left = `${(point.x * 0.5 + 0.5) * 100}%`;
+            button.style.top = `${(-point.y * 0.5 + 0.5) * 100}%`;
+            button.style.visibility = Math.abs(point.x) < 0.9 && Math.abs(point.y) < 0.85 && point.z < 1 ? 'visible' : 'hidden';
+          });
+        }
+        if (!document.hidden && canvas.getClientRects().length && !document.body.classList.contains('access-locked')) renderer.render(scene, camera);
       };
       animar();
     } catch (err) {
       console.warn('[VITARA] WebGL no disponible.', err);
-      $('#dna-loader')?.classList.add('is-hidden');
-      $('#dna-fallback')?.removeAttribute('hidden');
+      fallo();
     }
 
     const controles = () => {

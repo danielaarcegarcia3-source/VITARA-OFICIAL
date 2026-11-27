@@ -164,79 +164,45 @@
     if (v >= 60) return '#E0A18E';
     return '#CF7A8C';
   }
-  const PERU_PATH = 'M128,66 L196,58 L268,92 L344,104 L414,148 L468,214 L520,286 L548,366 L532,446 L494,516 L462,586 L424,646 L388,690 L352,700 L330,664 L318,612 L296,552 L286,490 L268,430 L250,366 L228,300 L202,244 L166,196 L136,150 L118,104 Z';
-  const LL_PATH = 'M92,88 L196,64 L300,96 L396,138 L470,196 L482,286 L452,380 L394,462 L312,516 L226,536 L152,504 L112,438 L92,352 L84,246 L82,158 Z';
-
   function pintarMapa() {
-    const wrap = $('#mapa-svg-wrap');
-    if (!wrap) return;
-    const esPeru = MAP_STATE.modo === 'peru';
-    const bbox = esPeru ? [-81.5, -18.7, -68.5, 0.2] : [-79.85, -8.95, -77.0, -6.85];
-    const W = 620, H = 760, PAD = 54;
-    const nodos = esPeru
-      ? DEPTS.map((d) => {
-          const g = DEP_GEO[d.dep] || [-75, -10];
-          const [x, y] = proyectar(g[0], g[1], bbox, W, H, PAD);
-          return { id: d.dep, nombre: d.dep, x, y, v: d.dispoSismed, dato: d };
-        })
-      : REDES.map((r) => {
-          const g = RED_GEO[r.nombre] || [-78.5, -8];
-          const [x, y] = proyectar(g[0], g[1], bbox, W, H, PAD);
-          return { id: r.nombre, nombre: r.nombre.replace(/^RED /, ''), x, y, v: r.dispo, dato: r };
-        });
-    const activo = esPeru ? MAP_STATE.dep : MAP_STATE.red;
-    wrap.innerHTML = `<svg class="map-svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="${esPeru ? 'Mapa esquemático del Perú con 26 departamentos' : 'Mapa esquemático de las 12 redes de La Libertad'}">
-      <defs><linearGradient id="mapaFondo" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#F7FCF9"/><stop offset="100%" stop-color="#E7F5EE"/></linearGradient></defs>
-      <path d="${esPeru ? PERU_PATH : LL_PATH}" fill="url(#mapaFondo)" stroke="#B9D9CA" stroke-width="1.5"/>
-      <g opacity=".32" stroke="#CFE5DA" stroke-width=".7">
-        ${Array.from({ length: 7 }, (_, i) => `<line x1="${60 + i * 80}" y1="50" x2="${60 + i * 80}" y2="${H - 50}"/>`).join('')}
-        ${Array.from({ length: 9 }, (_, i) => `<line x1="50" y1="${60 + i * 80}" x2="${W - 50}" y2="${60 + i * 80}"/>`).join('')}
-      </g>
-      ${nodos.map((n) => {
-        const sel = n.id === activo;
-        const r = esPeru ? Math.max(5, Math.min(11, 4 + (n.dato.ipress || 0) / 60)) : 9;
-        return `<g class="nodo-mapa" data-nodo="${esc(n.id)}" tabindex="0" role="button" aria-pressed="${sel}" aria-label="${esc(n.nombre)}: ${pct(n.v)} de disponibilidad">
-          ${sel ? `<circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${r + 7}" fill="none" stroke="#0B7A62" stroke-width="1.4" opacity=".55"/>` : ''}
-          <circle cx="${n.x.toFixed(1)}" cy="${n.y.toFixed(1)}" r="${r}" fill="${colorDispo(n.v)}" stroke="#fff" stroke-width="2" style="cursor:pointer"/>
-          <text x="${n.x.toFixed(1)}" y="${(n.y - r - 5).toFixed(1)}" text-anchor="middle" font-size="${esPeru ? 9 : 10}" font-weight="700" fill="#2A4A3D" pointer-events="none">${esc(n.nombre)}</text>
-        </g>`;
-      }).join('')}
-    </svg>`;
-    const leyenda = $('#mapa-leyenda');
-    if (leyenda) {
-      leyenda.innerHTML = `<span><i style="background:#4FB58C"></i> ≥ 95%</span><span><i style="background:#8ACCAF"></i> 90–94.9%</span><span><i style="background:#E5C27C"></i> 80–89.9%</span><span><i style="background:#CF7A8C"></i> < 80%</span><span>${esPeru ? 'Tamaño = IPRESS' : '12 redes de salud'}</span>`;
-    }
-    wrap.querySelectorAll('[data-nodo]').forEach((g) => {
-      const abrir = () => {
-        if (esPeru) MAP_STATE.dep = g.dataset.nodo; else MAP_STATE.red = g.dataset.nodo;
-        pintarMapa();
-        pintarPanel();
-      };
-      g.addEventListener('click', abrir);
-      g.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(); } });
+    if (!window.VitaraTerritory) return;
+    const national = MAP_STATE.modo === 'peru';
+    window.VitaraTerritory.show(national ? 'peru' : 'll', national ? MAP_STATE.dep : MAP_STATE.red.replace(/^RED /, ''), (name) => {
+      if (national) {
+        const department = DEPTS.find(item => V.norm(item.dep) === V.norm(name));
+        MAP_STATE.dep = department ? department.dep : name;
+      } else {
+        const network = REDES.find(item => V.norm(item.nombre.replace(/^RED /, '')) === V.norm(name));
+        MAP_STATE.red = network ? network.nombre : 'RED ' + name;
+      }
+      pintarPanel();
     });
+    const legend = $('#mapa-leyenda');
+    if (legend) legend.innerHTML = '<span>Colores por territorio · no representan disponibilidad sanitaria.</span>';
   }
 
   function pintarPanel() {
     const panel = $('#mapa-panel');
     if (!panel) return;
     if (MAP_STATE.modo === 'peru') {
-      const d = DEPTS.find((x) => x.dep === MAP_STATE.dep) || DEPTS[0];
+      const d = DEPTS.find((x) => x.dep === MAP_STATE.dep);
+      if (!d) { panel.innerHTML = `<h3>${esc(MAP_STATE.dep)}</h3><p>No hay datos sanitarios asociados a este territorio en la base local.</p>`; return; }
       if (!d) return;
       panel.innerHTML = `<p class="eyebrow eyebrow--muted">Departamento</p><h3>${esc(d.dep)}</h3>
         <p class="map-panel__val">${pct(d.dispoSismed)} <small>disponibilidad</small></p>
         <p class="source">${esc(SRC.sismed.texto)} · referencia departamental · ${esc(FECHA)}</p>
         <dl class="kv"><dt>Población</dt><dd>${num(d.pob)}</dd><dt>Aseguramiento</dt><dd>${pct(d.sisAseg)} SIS</dd><dt>Brecha infra.</dt><dd>${pct(d.brechaInfra)}</dd><dt>IPRESS</dt><dd>${num(d.ipress)}</dd><dt>Hospitales</dt><dd>${num(d.hosp)}</dd><dt>Camas / 10k</dt><dd>${num(d.camas10k, 1)}</dd><dt>Riesgo dengue</dt><dd><span class="tag ${d.riesgoDengue === 'ALTO' ? 'tag--err' : d.riesgoDengue === 'MEDIO' ? 'tag--warn' : 'tag--grey'}">${esc(d.riesgoDengue)}</span></dd></dl>
-        <p class="map-note">La disponibilidad es una referencia consolidada, no un acta por departamento. La brecha de infraestructura proviene del Informe 243 de la Defensoría. Los límites del esquema no son oficiales.</p>`;
+        <p class="map-note">La disponibilidad es una referencia consolidada, no un acta por departamento. La brecha de infraestructura proviene del Informe 243 de la Defensoría. Los polígonos son una referencia simplificada; no acreditan límites legales actualizados.</p>`;
     } else {
-      const r = REDES.find((x) => x.nombre === MAP_STATE.red) || REDES[0];
+      const r = REDES.find((x) => x.nombre === MAP_STATE.red);
+      if (!r) { panel.innerHTML = `<h3>${esc(MAP_STATE.red.replace(/^RED /, ''))}</h3><p>Provincia seleccionada. No hay una red sanitaria asociada en la base local.</p>`; return; }
       if (!r) return;
       panel.innerHTML = `<p class="eyebrow eyebrow--muted">Red de salud</p><h3>${esc(r.nombre)}</h3>
         <p class="map-panel__val">${pct(r.dispo)} <small>disponibilidad</small></p>
         <p class="source">${esc(SRC.sismed.texto)} · ${esc(FECHA)}</p>
         <dl class="kv"><dt>IPRESS</dt><dd>${num(r.ipressCount)}</dd><dt>Normostock</dt><dd>${pct(r.normo)}</dd><dt>Sobrestock</dt><dd>${pct(r.sobre)}</dd><dt>Substock</dt><dd>${pct(r.sub)}</dd><dt>Desabastecido</dt><dd>${pct(r.desab)}</dd><dt>Sin rotación</dt><dd>${num(r.sinRotacion)} productos</dd></dl>
         <div class="red-list">${REDES.slice().sort((a, b) => b.dispo - a.dispo).map((x) => `<div class="red-row"><strong>${esc(x.nombre.replace(/^RED /, ''))}</strong><span>${pct(x.dispo)}</span></div>`).join('')}</div>
-        <p class="map-note">Esquema referencial de las 12 redes. La posición de los nodos es aproximada y no representa límites distritales oficiales.</p>`;
+        <p class="map-note">El mapa muestra provincias. Esta ficha asocia la red sanitaria por su nombre; provincia y red no son necesariamente límites equivalentes.</p>`;
     }
   }
 

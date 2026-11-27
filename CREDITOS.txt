@@ -1,0 +1,63 @@
+VITARA — CRÉDITOS Y PERMISOS DE TERCEROS
+Revisión: 27/11/2026. Uso previsto: demostración educativa sin explotación comercial.
+Este aviso no concede una licencia global sobre el proyecto ni sobre medios sin permiso identificado.
+
+MODELOS 3D: metadatos leídos de los GLB originales; geometría y texturas preservadas.
+
+1. ADN — admin09 (https://sketchfab.com/admin09)
+   https://sketchfab.com/3d-models/adn-8a5eb1205658466f9d5ac0b497b54941
+   CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+   Archivo adn.glb. Visualización/hotspots educativos añadidos por VITARA, sin alterar el GLB.
+
+2. Low Poly Hospital — AlessioPassera (https://sketchfab.com/AlessioPassera)
+   https://sketchfab.com/3d-models/low-poly-hospital-738972de7752491382457c068ab0a6ac
+   CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+   low_poly_hospital.glb y fuente scene.gltf/bin. Atribución original también en license.txt.
+   Visualización y anotaciones de VITARA no son certificación arquitectónica.
+
+3. Hospital operating room — Chenchanchong (https://sketchfab.com/Chenchanchong)
+   https://sketchfab.com/3d-models/hospital-operating-room-a27400a73f4a43fbb1dda30031cb91c2
+   CC BY 4.0 — https://creativecommons.org/licenses/by/4.0/
+   hospital_operating_room.glb. Anotaciones añadidas por VITARA; archivo original sin modificar.
+
+4. Charité University Hospital – Operating Room — ChrisRE (https://sketchfab.com/ChrisRE)
+   https://sketchfab.com/3d-models/charite-university-hospital-operating-room-9ec46c4d615a4581a235eebfb162f574
+   CC BY-NC 4.0 — https://creativecommons.org/licenses/by-nc/4.0/
+   modelodehosipitalvisitaVR3D.glb. SOLO USO NO COMERCIAL salvo permiso adicional del autor.
+   No es una habitación de hospitalización ni una aplicación WebXR certificada.
+   VITARA añade controles, anotaciones y miniaturas derivadas; conservar atribución y condición NC.
+
+Las miniaturas de assets/previews derivan de los respectivos modelos y mantienen sus condiciones.
+No se afirma respaldo, patrocinio ni relación con los autores u hospitales representados.
+
+GEOMETRÍA
+juaneladio/peru-geojson, commit 3213eeb1bbe537f88dead45a2aadaa276fa9451d.
+https://github.com/juaneladio/peru-geojson
+Mozilla Public License 2.0. Licencia íntegra y notas de derivación en assets/geo/.
+Los GeoJSON fuente/derivados se distribuyen en formato legible. Colores/volumen de VITARA son gráficos,
+no datos clínicos ni límites legales certificados.
+
+SOFTWARE
+Three.js: MIT, Copyright 2010–2023 Three.js Authors; texto en vendor/THREE-LICENSE.txt.
+Draco: Copyright 2016 The Draco Authors, Apache License 2.0; vendor/draco/LICENSE-DRACO.txt.
+Los tres archivos decodificadores coinciden con examples/jsm/libs/draco/gltf de three 0.158.0.
+Dependencias de desarrollo conservan las licencias de sus respectivos paquetes npm.
+
+ILUSTRACIONES IA
+assets/devices/monitor.png, ultrasound.png, infusion.png y defibrillator.png son ilustraciones
+sintéticas genéricas creadas para este proyecto, no fotos de productos oficiales ni modelos concretos.
+No permiten inferir especificaciones clínicas, marcas, stock o disponibilidad de compra.
+Fuentes de las fichas y proveedores: assets/devices/README.md. Los enlaces no implican asociación.
+
+MEDIOS APORTADOS POR EL USUARIO / REPOSITORIO ORIGINAL
+Logo VITARA, imágenes decorativas y mapas raster, música y videos proceden del material aportado.
+assets/welcome/globo-referencia.png corresponde a image-2.png aportada por el usuario.
+No se halló un permiso externo verificable para todos estos medios. El propietario debe confirmar
+autoría/licencia y autorización de publicación; aportar un archivo no demuestra titularidad.
+No se declaran de dominio público ni se les aplica automáticamente una licencia del código.
+Si falta permiso, no habilitar una publicación pública de esos medios hasta resolverlo.
+
+DATOS Y ALCANCE SANITARIO
+Las fuentes/fechas de la base histórica se conservan en la interfaz. Las cifras no se han revalidado
+contra todos los documentos oficiales en esta revisión. No son stock en vivo, prescripción ni garantía
+de atención. No hay acuerdo institucional que convierta las respuestas de esta demo en atención oficial.

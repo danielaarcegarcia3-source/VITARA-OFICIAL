@@ -1,0 +1,6 @@
+# Bundle generado por esbuild: conserva los literales GLSL del proveedor.
+# No aplicar reglas de espacios de código escrito a esos shaders incrustados.
+vendor/vitara-three.js -whitespace linguist-generated=true
+*.glb binary
+*.mp4 binary
+*.wasm binary

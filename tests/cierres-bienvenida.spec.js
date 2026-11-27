@@ -1,0 +1,23 @@
+import { test, expect } from '@playwright/test';
+async function enter(page){await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');await page.evaluate(()=>document.querySelector('#splash-skip').click());await page.locator('#access-name').fill('Prueba de cierres');await page.locator('#access-form [type=submit]').click();}
+
+test('cierres reales: inspector, buscador, pestañas, notificaciones y diálogos',async({page})=>{
+  await enter(page);await page.locator('#tabs-split').click();await expect(page.locator('#inspector')).toBeVisible();await page.locator('#inspector-close').click();await expect(page.locator('#inspector')).toBeHidden();await expect(page.locator('#workspace')).not.toHaveClass(/is-split/);
+  await page.locator('#tabs-add').click();await expect(page.locator('#palette-overlay')).toBeVisible();await page.locator('#palette-close').click();await expect(page.locator('#palette-overlay')).toBeHidden();
+  await page.locator('[data-view-link=fuentes]').click();await page.locator('[data-close=fuentes]').click();await expect(page.locator('[data-tab=fuentes]')).toHaveCount(0);await expect(page.locator('#view-inicio')).toBeVisible();
+  await page.locator('#btn-notif').click();await page.locator('[data-cerrar-pop]').click();await expect(page.locator('.popover')).toHaveCount(0);
+  await page.locator('#btn-profile').click();await page.locator('[data-perfil-edit]').click();await page.locator('#onb-correo').fill('no-guardar@example.test');const before=await page.evaluate(()=>localStorage.getItem('g3.perfil'));await page.locator('#onb-close').click();await expect(page.locator('#onboarding-overlay')).toBeHidden();expect(await page.evaluate(()=>localStorage.getItem('g3.perfil'))).toBe(before);
+  await page.locator('#participation-open').click();await expect(page.locator('.participation-dialog')).toBeVisible();await page.locator('.participation-dialog .dialog-close').click();await expect(page.locator('.participation-dialog')).toBeHidden();
+  await page.locator('#chat-open').click();await page.locator('#chat-close').click();await expect(page.locator('#orientation-chat')).toBeHidden();
+  await page.locator('[data-view-link=tecnologia]').click();await page.locator('[data-device-open=monitor]').first().click();await page.locator('.device-dialog-close').click();await expect(page.locator('.device-dialog')).toBeHidden();
+});
+
+test('menú lateral móvil: cerrar con ×, fondo y Escape; inspector sin bloqueo',async({page})=>{
+  await page.setViewportSize({width:390,height:844});await enter(page);
+  for(const method of ['close','backdrop','escape']){await page.locator('#rail-open').click();await expect(page.locator('#rail')).toHaveClass(/is-open/);if(method==='close')await page.locator('#rail-close').click();else if(method==='backdrop')await page.locator('#rail-backdrop').click({position:{x:380,y:400}});else await page.keyboard.press('Escape');await expect(page.locator('#rail')).not.toHaveClass(/is-open/);await expect(page.locator('#rail-backdrop')).toBeHidden();await expect(page.locator('#rail-open')).toHaveAttribute('aria-expanded','false');}
+  await page.locator('#tabs-split').click();await expect(page.locator('#inspector')).toHaveAttribute('aria-modal','true');await page.locator('#inspector-close').click();await expect(page.locator('#inspector')).toBeHidden();await expect(page.locator('#inspector')).not.toHaveAttribute('aria-modal','true');expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});
+
+test('logo y seis símbolos se ensamblan con partículas dentro del globo aportado',async({page,request})=>{
+  await page.goto('/');await expect(page.locator('#welcome-particles')).toHaveAttribute('data-globe','user-reference-and-projected-grid');await expect(page.locator('#welcome-particles')).toHaveAttribute('data-symbols','6');await expect(page.locator('#welcome-particles')).toHaveAttribute('data-assembly','forming');await expect(page.locator('#welcome-particles')).toHaveAttribute('data-assembly','assembled',{timeout:8000});expect(Number(await page.locator('#welcome-particles').getAttribute('data-symbol-points'))).toBeGreaterThan(100);expect(Number(await page.locator('#welcome-particles').getAttribute('data-points'))).toBeGreaterThan(3000);expect((await request.get('/assets/welcome/globo-referencia.png')).status()).toBe(200);await page.locator('#splash-skip').click();await expect(page.locator('#splash')).toBeHidden();
+});

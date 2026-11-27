@@ -26,7 +26,7 @@
     const btn = $('#btn-profile');
     if (av) av.textContent = info.letra;
     if (pr) pr.textContent = info.nombre.toUpperCase();
-    if (pn) pn.textContent = (perfil && perfil.distrito) || 'Sin personalizar';
+    if (pn) pn.textContent = (perfil && (perfil.nombre || perfil.distrito)) || 'Sin personalizar';
     if (btn) btn.setAttribute('aria-label', `Perfil: ${info.nombre}${perfil && perfil.distrito ? ' · ' + perfil.distrito : ''}. Abrir opciones.`);
   }
 
@@ -53,6 +53,7 @@
   function cerrarOnboarding() {
     const ov = $('#onboarding-overlay');
     if (ov) ov.hidden = true;
+    $('#btn-profile')?.focus({ preventScroll: true });
   }
 
   function guardarOnboarding(saltar) {
@@ -61,6 +62,8 @@
     } else {
       const rolBtn = $('#onb-roles [aria-pressed="true"]');
       perfil = {
+        ...perfil,
+        nombre: perfil?.nombre || '',
         rol: (rolBtn && rolBtn.dataset.rol) || 'CIU',
         distrito: $('#onb-distrito')?.value || null,
         contacto: { correo: $('#onb-correo')?.value?.trim() || null },
@@ -84,15 +87,18 @@
     });
     $('#onb-save')?.addEventListener('click', () => guardarOnboarding(false));
     $('#onb-skip')?.addEventListener('click', () => guardarOnboarding(true));
-    $('#onb-close')?.addEventListener('click', () => guardarOnboarding(true));
+    $('#onb-close')?.addEventListener('click', cerrarOnboarding);
     $('#onboarding-overlay')?.addEventListener('click', (e) => {
-      if (e.target.id === 'onboarding-overlay') guardarOnboarding(true);
+      if (e.target.id === 'onboarding-overlay') cerrarOnboarding();
     });
   }
 
   /* ---------- popovers ---------- */
   function cerrarPopover() {
+    const restore = popover?.contains(document.activeElement);
+    const trigger = popover?.dataset.tipo === 'notif' ? $('#btn-notif') : $('#btn-profile');
     popover?.remove();
+    if (restore) trigger?.focus({ preventScroll: true });
     popover = null;
     $('#btn-notif')?.setAttribute('aria-expanded', 'false');
     $('#btn-profile')?.setAttribute('aria-expanded', 'false');
@@ -139,10 +145,11 @@
     el.setAttribute('aria-label', 'Tu perfil y preferencias');
     el.innerHTML = `<div class="popover__head"><strong>${esc(info.nombre)}</strong><button class="icon-btn" type="button" data-cerrar-pop aria-label="Cerrar" style="width:26px;height:26px">${icon('close', 'i--sm')}</button></div>
       <div class="popover__body" style="padding:14px">
-        <dl class="kv"><dt>Perfil</dt><dd>${esc(info.nombre)}</dd><dt>Territorio</dt><dd>${esc((perfil && perfil.distrito) || 'Sin definir')}</dd><dt>Datos</dt><dd>Solo en este dispositivo</dd></dl>
+        <dl class="kv"><dt>Nombre</dt><dd>${esc(perfil?.nombre || 'Sin definir')}</dd><dt>Perfil</dt><dd>${esc(info.nombre)}</dd><dt>Territorio</dt><dd>${esc((perfil && perfil.distrito) || 'Sin definir')}</dd><dt>Datos</dt><dd>Solo en este dispositivo</dd></dl>
         <div class="inspector-actions" style="margin-top:12px">
           <button class="btn btn--soft btn--sm" type="button" data-perfil-edit>${icon('settings', 'i--sm')} Cambiar perfil y territorio</button>
           <button class="btn btn--ghost btn--sm" type="button" data-perfil-a11y>${icon('accessibility', 'i--sm')} Accesibilidad</button>
+          <button class="btn btn--ghost btn--sm" type="button" data-session-logout>Cerrar sesión local</button>
           <button class="btn btn--danger btn--sm" type="button" data-perfil-reset>${icon('close', 'i--sm')} Borrar datos locales</button>
         </div>
         <p class="source" style="margin-top:10px">No pedimos DNI, fecha de nacimiento ni diagnósticos. Puedes borrar estas preferencias en cualquier momento.</p>
@@ -152,6 +159,7 @@
     popover = el;
     ancla.setAttribute('aria-expanded', 'true');
     el.querySelector('[data-cerrar-pop]')?.addEventListener('click', cerrarPopover);
+    el.querySelector('[data-session-logout]')?.addEventListener('click', () => { cerrarPopover(); window.dispatchEvent(new Event('vitara:logout')); });
     el.querySelector('[data-perfil-edit]')?.addEventListener('click', () => { cerrarPopover(); abrirOnboarding(); });
     el.querySelector('[data-perfil-a11y]')?.addEventListener('click', () => {
       cerrarPopover();
@@ -159,7 +167,7 @@
       setTimeout(() => $('#a11y-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120);
     });
     el.querySelector('[data-perfil-reset]')?.addEventListener('click', () => {
-      if (!window.confirm('¿Borrar el perfil, las solicitudes guardadas, las búsquedas y las preferencias de este dispositivo? Esta acción no se puede deshacer.')) return;
+      if (!window.confirm('¿Borrar los datos locales? Esto NO elimina tu perfil del servidor. Usa primero Participación si quieres eliminarlo; perder la clave local requiere ayuda del administrador.')) return;
       if (typeof V.borrarDatosLocales === 'function') V.borrarDatosLocales();
       else ['g3.perfil', 'g3.a11y', 'g3.solicitudes', 'g3.busquedas', 'g3.interacciones', 'g3.rail'].forEach((k) => store.del(k));
       cerrarPopover();
@@ -291,6 +299,8 @@
     rail?.classList.toggle('is-open', on);
     if (back) back.hidden = !on;
     btn?.setAttribute('aria-expanded', String(on));
+    if (on) $('#rail-close')?.focus({ preventScroll: true });
+    else if (rail?.contains(document.activeElement)) btn?.focus({ preventScroll: true });
   }
 
   function inicializar() {
@@ -308,6 +318,9 @@
       toggleRail(false);
     }));
     $('#rail-open')?.addEventListener('click', () => toggleRail());
+    $('#rail-close')?.addEventListener('click', () => toggleRail(false));
+    $('#inspector-close')?.addEventListener('click', V.cerrarInspector);
+    $('#palette-close')?.addEventListener('click', cerrarPalette);
     $('#rail-backdrop')?.addEventListener('click', () => toggleRail(false));
     $('#rail-collapse')?.addEventListener('click', () => {
       const app = $('#app');
@@ -347,10 +360,11 @@
 
     // Atajos
     document.addEventListener('keydown', (e) => {
+      if (document.body.classList.contains('access-locked') || document.querySelector('dialog[open]')) return;
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); abrirPalette(); return; }
       if (e.key === 'Escape') {
         if (!$('#palette-overlay')?.hidden) cerrarPalette();
-        else if (!$('#onboarding-overlay')?.hidden) guardarOnboarding(true);
+        else if (!$('#onboarding-overlay')?.hidden) cerrarOnboarding();
         else if (popover) cerrarPopover();
         else if ($('#rail')?.classList.contains('is-open')) toggleRail(false);
         else V.cerrarInspector();
@@ -371,7 +385,7 @@
     });
 
     bindOnboarding();
-    if (!perfil) setTimeout(abrirOnboarding, 500);
+    window.addEventListener('vitara:session', () => { perfil = store.get(PERFIL_KEY, null); aplicarPerfil(); });
     conectar();
 
     window.addEventListener('vitara:go', (e) => {
