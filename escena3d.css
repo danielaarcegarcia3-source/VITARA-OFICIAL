@@ -1,0 +1,328 @@
+/* =========================================================================
+   ESCENA 3D · visor interactivo Three.js
+   Funciones: F-611, F-612, F-1201–F-1209
+   ========================================================================= */
+
+/* =========================================================================
+   SECCIÓN CONTENEDORA
+   ========================================================================= */
+.visor3d {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--e5);
+  align-items: start;
+  margin-top: var(--e6);
+}
+
+@media (max-width: 860px) {
+  .visor3d {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================================
+   CANVAS WRAP · contiene el canvas Three.js, el tooltip y el spinner
+   ========================================================================= */
+.visor3d__canvas-wrap {
+  position: relative;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: linear-gradient(145deg, #060e1a 0%, #0a1628 100%);
+  border: 1px solid var(--linea);
+  box-shadow:
+    0 0 0 1px rgba(34, 211, 238, 0.08),
+    0 32px 80px -24px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  min-height: 360px;
+  transition: opacity var(--dur-3);
+}
+
+.visor3d__canvas-wrap--oculto {
+  display: none;
+}
+
+/* =========================================================================
+   CANVAS
+   ========================================================================= */
+.visor3d__canvas {
+  display: block;
+  width: 100% !important;
+  height: 100%;
+  min-height: 360px;
+  cursor: grab;
+  outline: none;
+}
+
+.visor3d__canvas:active { cursor: grabbing; }
+
+.visor3d__canvas:focus-visible {
+  box-shadow: inset 0 0 0 3px var(--acento);
+}
+
+/* =========================================================================
+   SPINNER DE CARGA
+   ========================================================================= */
+.visor3d__cargando {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--e3);
+  color: var(--t3);
+  font-size: var(--t-sm);
+  background: rgba(6, 14, 26, 0.9);
+  z-index: 10;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--linea);
+  border-top-color: var(--acento);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+/* =========================================================================
+   CONTROLES DE CÁMARA (teclado/botones)
+   ========================================================================= */
+.visor3d__controles {
+  position: absolute;
+  bottom: var(--e3);
+  right: var(--e3);
+  display: flex;
+  gap: var(--e1);
+  z-index: 20;
+}
+
+.ctrl-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-xs);
+  border: 1px solid var(--linea);
+  background: rgba(10, 20, 36, 0.8);
+  color: var(--t2);
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background var(--dur-2), color var(--dur-2), transform var(--dur-2) var(--ease-muelle);
+}
+
+.ctrl-btn:hover {
+  background: rgba(34, 211, 238, 0.15);
+  color: var(--t1);
+  transform: scale(1.1);
+}
+
+.ctrl-btn:active { transform: scale(0.95); }
+
+/* =========================================================================
+   SELLO DEMO
+   ========================================================================= */
+.sello-demo {
+  position: absolute;
+  top: var(--e3);
+  left: var(--e3);
+  padding: 2px 10px;
+  border-radius: var(--r-full);
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  color: #fbbf24;
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  z-index: 20;
+  user-select: none;
+}
+
+/* =========================================================================
+   TOOLTIP FLOTANTE
+   ========================================================================= */
+.tooltip3d {
+  position: absolute;
+  top: var(--e4);
+  right: var(--e4);
+  width: 220px;
+  padding: var(--e3) var(--e4);
+  background: color-mix(in srgb, var(--panel-solido) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--linea);
+  border-radius: var(--r-md);
+  box-shadow: var(--s3);
+  z-index: 25;
+  animation: aparecerTooltip var(--dur-3) var(--ease-salida);
+}
+
+@keyframes aparecerTooltip {
+  from { opacity: 0; transform: scale(0.9) translateY(6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.tooltip3d__cab {
+  display: flex;
+  align-items: center;
+  gap: var(--e2);
+  margin-bottom: var(--e2);
+}
+
+.tooltip3d__ico   { font-size: 1.2em; }
+.tooltip3d__nombre { font-size: var(--t-sm); color: var(--t1); flex: 1; }
+.tooltip3d__estado { font-size: var(--t-xs); font-weight: 600; padding: 2px 7px; border-radius: var(--r-full); }
+.tooltip3d__desc  { font-size: var(--t-xs); color: var(--t2); margin: 0; line-height: 1.4; }
+.tooltip3d__conf  { display: block; margin-top: var(--e2); font-size: 0.7rem; color: var(--t3); }
+
+/* =========================================================================
+   LISTA LATERAL (EQUIVALENTE 2D — F-1208)
+   ========================================================================= */
+.visor3d__lista {
+  background: var(--panel);
+  border: 1px solid var(--linea);
+  border-radius: var(--r-lg);
+  padding: var(--e4);
+  backdrop-filter: blur(10px);
+}
+
+.visor3d__lista-cab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--e3);
+}
+
+.visor3d__lista-cab h3 {
+  font-size: var(--t-sm);
+  font-weight: 700;
+  color: var(--t1);
+  margin: 0;
+}
+
+.btn-toggle-3d {
+  font-size: var(--t-xs);
+  padding: var(--e1) var(--e3);
+  border-radius: var(--r-full);
+  border: 1px solid var(--linea);
+  background: transparent;
+  color: var(--t3);
+  cursor: pointer;
+  transition: background var(--dur-2), color var(--dur-2);
+}
+
+.btn-toggle-3d:hover {
+  background: rgba(34, 211, 238, 0.1);
+  color: var(--acento);
+}
+
+.btn-toggle-3d:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.lista3d {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--e2);
+}
+
+.lista3d__item {
+  display: flex;
+  align-items: center;
+  gap: var(--e3);
+  padding: var(--e3) var(--e3);
+  border-radius: var(--r-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background var(--dur-2), border-color var(--dur-2), transform var(--dur-2) var(--ease-muelle);
+}
+
+.lista3d__item:hover {
+  background: var(--panel-alto);
+  border-color: var(--linea);
+  transform: translateX(2px);
+}
+
+.lista3d__item--activo {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.35);
+}
+
+.lista3d__item:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 1px;
+}
+
+.lista3d__ico  { font-size: 1.3em; flex: none; }
+.lista3d__info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.lista3d__info strong { font-size: var(--t-xs); color: var(--t1); font-weight: 600; }
+
+.nota-fuente {
+  margin-top: var(--e3);
+  font-size: 0.68rem;
+  color: var(--t3);
+  line-height: 1.4;
+}
+
+/* =========================================================================
+   ESTADO ETIQUETAS (reutilizadas en 3D y en resultados)
+   ========================================================================= */
+.estado-etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: var(--r-full);
+  text-transform: uppercase;
+}
+
+.estado-etiqueta--ok   { background: rgba(52, 211, 153, 0.15); color: var(--ok);         border: 1px solid rgba(52, 211, 153, 0.3); }
+.estado-etiqueta--avis { background: rgba(251, 191, 36, 0.15); color: var(--aviso);       border: 1px solid rgba(251, 191, 36, 0.3); }
+.estado-etiqueta--err  { background: rgba(248, 113, 113, 0.15); color: var(--err);        border: 1px solid rgba(248, 113, 113, 0.3); }
+.estado-etiqueta--crit { background: rgba(251, 113, 133, 0.15); color: var(--critico);    border: 1px solid rgba(251, 113, 133, 0.3); }
+.estado-etiqueta--neut { background: rgba(148, 163, 184, 0.12); color: var(--neutro);     border: 1px solid rgba(148, 163, 184, 0.2); }
+.estado-etiqueta--venc { background: rgba(251, 146, 60, 0.15); color: var(--vencido);     border: 1px solid rgba(251, 146, 60, 0.3); }
+
+/* =========================================================================
+   MODO CLARO
+   ========================================================================= */
+[data-tema="claro"] .visor3d__canvas-wrap {
+  background: linear-gradient(145deg, #e8f0fa 0%, #d1e3f8 100%);
+  border-color: rgba(15, 23, 42, 0.12);
+}
+
+[data-tema="claro"] .ctrl-btn {
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(15, 23, 42, 0.14);
+  color: var(--t2);
+}
+
+[data-tema="claro"] .visor3d__lista {
+  background: var(--panel-solido);
+}
+
+/* =========================================================================
+   PREFERENCIA SIN MOVIMIENTO (F-1105)
+   Sin animaciones en el spinner ni en los tooltips.
+   El renderizado 3D sigue pero sin rotación automática (escena3d.js lo lee).
+   ========================================================================= */
+.sin-movimiento .spinner {
+  animation: none;
+  border-top-color: var(--acento);
+}
+
+.sin-movimiento .tooltip3d {
+  animation: none;
+}

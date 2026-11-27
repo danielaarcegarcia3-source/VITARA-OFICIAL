@@ -1,0 +1,168 @@
+/*
+ * inicio.css — Sistema de diseño nuevo (T-01) + Inicio-ecosistema (T-02)
+ * + Omnibox y Tabs de vistas (T-04) + Suggestions con z-index
+ */
+
+/* ---------- 2.1 Tipografía (T-01) ---------- */
+/*
+ * NOTA: los archivos woff2 reales se añaden en app/assets/fonts/ por el
+ * equipo de diseño. Los @font-face apuntan a sus rutas y dejan cálido el
+ * stack con sistema. Sin CDN / Google Fonts en runtime.
+ */
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/space-grotesk-500.woff2') format('woff2'),
+       url('/fonts/space-grotesk-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('/fonts/space-grotesk-700.woff2') format('woff2'),
+       url('/fonts/space-grotesk-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('/fonts/manrope-500.woff2') format('woff2'),
+       url('/fonts/manrope-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Manrope';
+  src: url('/fonts/manrope-700.woff2') format('woff2'),
+       url('/fonts/manrope-700.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-400.woff2') format('woff2'),
+       url('/fonts/inter-400.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-500.woff2') format('woff2'),
+       url('/fonts/inter-500.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-600.woff2') format('woff2'),
+       url('/fonts/inter-600.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+
+/* ---------- Inicio-ecosistema (T-02) ---------- */
+
+.inicio-ecosistema { display: flex; flex-direction: column; gap: var(--e4); padding-top: calc(var(--e5) * 2); }
+
+/* Carrusel de experiencias */
+.carousel { position: relative; width: 100%; height: 320px; border-radius: 16px; overflow: hidden; }
+.carousel__slides { position: absolute; inset: 0; display: grid; }
+.carousel__slide {
+  grid-area: 1 / 1;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 8px;
+  padding: 0 0 24px 26px;
+  background: linear-gradient(180deg, #0b1220, #061022);
+  border: 1px solid #1e3a5f;
+  cursor: pointer; text-decoration: none; transition: transform .18s ease, border-color .18s ease;
+}
+.carousel__slide--activo { z-index: 2; }
+.carousel__slide h3 { margin: 0; color: #fff; font-family: var(--fuente-display, var(--fuente-mono));
+  font-size: 16px; font-weight: 700; line-height: 1.1; }
+.carousel__slide p { margin: 0; color: #94a3b8; font-size: 12px; line-height: 1.5; max-width: 420px; }
+.carousel__slide--activo h3, .carousel__slide--activo p { visibility: visible; }
+.carousel__flecha {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 4; width: 34px; height: 34px; border-radius: 50%;
+  background: #fff; border: none; color: #0d1424; cursor: pointer;
+  font-size: 17px; line-height: 1; display: grid; place-items: center;
+}
+.carousel__flecha--prev { left: 14px; }
+.carousel__flecha--next { right: 14px; }
+.carousel__indicadores {
+  position: absolute; bottom: 14px; left: 16px; display: flex; gap: 8px; z-index: 4;
+}
+.carousel__indicador {
+  width: 8px; height: 8px; border-radius: 50%; border: 1px solid #334155;
+  background: transparent; padding: 0; cursor: pointer;
+}
+.carousel__indicador--activo { background: var(--acento, #0284c7); border-color: var(--acento, #0284c7); }
+.carousel__leyenda { margin: 0; font-size: 12px; color: #475569; }
+
+/* Franja de pulso en vivo (alimentada por datos locales, jamás spinner) */
+.franja-pulso {
+  display: flex; gap: 24px; flex-wrap: wrap; align-items: center;
+  background: #0b1320; border: 1px solid #1e3a5f;
+  border-radius: 12px; padding: 12px 16px;
+  list-style: none; margin: 0;
+}
+.franja-pulso li { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #cbd5e1; }
+.franja-pulso li .pulso-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ok, #10b981); }
+
+/* Panel: continuar donde quedaste */
+.panel-continuar {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(16, 185, 129, 0.05));
+  border: 1px solid #1e3a5f; border-radius: 12px; padding: 14px 18px; max-width: 720px;
+}
+.panel-continuar__eyebrow { margin: 0 0 2px 0; font-size: 10px; color: #38bdf8; text-transform: uppercase; }
+.panel-continuar__titulo { margin: 0; font-size: 13px; color: #fff; }
+.panel-continuar__lista { list-style: none; margin: 10px 0 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.panel-continuar__item { color: #7dd3fc; font-size: 12px; text-decoration: none; padding: 4px 0; border-bottom: 1px dashed rgba(56, 189, 248, 0.3); }
+.panel-continuar__boton {
+  display: inline-block; margin-top: 10px; color: #38bdf8; text-decoration: none;
+  font-size: 12px; font-weight: 700; border: 1px solid #38bdf8; padding: 6px 12px; border-radius: 8px;
+}
+
+/* Barra de pestañas de vistas abiertas (T-04) */
+.tabs-vistas {
+  display: flex; gap: 6px; flex-wrap: wrap; padding-top: 8px;
+}
+.tabs-vistas__tab {
+  border: 1px solid #334155; background: #0b1320; color: #94a3b8;
+  border-radius: 12px; padding: 5px 12px; font-size: 11px; cursor: pointer;
+}
+
+/* ---------- Omnibox (T-04): desplegable de sugerencias, sin tapones ---------- */
+#form-busqueda { position: relative; }
+.sugerencias {
+  position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 60;
+  max-height: 300px; overflow-y: auto; margin: 0; padding: 6px;
+  background: var(--superficie, #0b1320); border: 1px solid #1e3a5f;
+  border-radius: 12px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+.sugerencias button.sugerencia {
+  display: flex; gap: 8px; align-items: center; width: 100%; padding: 8px 10px;
+  background: transparent; border: none; color: #cbd5e1; font-size: 12px;
+  border-radius: 8px; cursor: pointer; text-align: left;
+}
+.sugerencias button.sugerencia:hover, .sugerencias button.sugerencia:focus {
+  background: rgba(56, 189, 248, 0.1);
+}
+
+/* ---------- T-03 · Onboarding de primer arranque (3 pasos, saltable) ---------- */
+#onboarding-modal {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(4, 10, 20, 0.92); backdrop-filter: blur(12px);
+  display: grid; place-items: center; padding: var(--e4);
+}
+#onboarding-modal[hidden] { display: none; }
+.onboarding-modal__cuerpo {
+  background: #0b1320; border: 1px solid #334155; border-radius: 14px;
+  padding: 24px; color: #cbd5e1; max-width: 480px; width: 100%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+}
+.onboarding-modal__cuerpo h3 { margin: 0 0 8px; color: #fff; font-size: 1.1rem; }
+.onboarding-modal__cuerpo p { margin: 0 0 16px; font-size: 13px; line-height: 1.55; }
+.onboarding-step { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; font-size: 12px; color: #fff; }
+.onboarding-step select {
+  background: #040913; border: 1px solid #334155; color: #fff; padding: 9px 10px;
+  border-radius: 8px; font-size: 13px; max-height: 190px;
+}
+.onboarding-prefs { display: flex; gap: 16px; flex-wrap: wrap; }
+.onboarding-prefs label { display: flex; gap: 6px; align-items: center; font-size: 12px; }
+.onboarding-footer { display: flex; gap: 10px; justify-content: flex-end; }
+.btn-ghost { background: transparent; border: 1px solid #334155; color: #94a3b8;
+  padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 12px; }
+.btn-primario { background: #0284c7; color: #fff; border: none; padding: 8px 18px;
+  border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 700; }

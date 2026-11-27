@@ -1,0 +1,149 @@
+/* =========================================================================
+   TOKENS · Ecosistema de Acceso a la Salud · Grupo 3
+   Un solo lugar para color, tipografía, espacio, sombra y movimiento.
+   Todo lo demás consume estas variables: cambiar un valor aquí cambia todo.
+   ========================================================================= */
+
+:root {
+  /* --- Identidad ODS ---------------------------------------------------- */
+  --ods3: #17c964;          /* Salud y bienestar */
+  --ods9: #3b82f6;          /* Industria, innovación e infraestructura */
+  --ods10: #f59e0b;         /* Reducción de desigualdades */
+
+  /* --- Acentos de interfaz --------------------------------------------- */
+  --acento: #22d3ee;
+  --acento-2: #6ee7b7;
+  --menta: #34d399;
+  --lima: #a3e635;
+
+  /* --- Estados del dato (pares: fondo + texto; nunca color solo) ---------
+   * Sistema V2 (HANDOFF 09): blanco dominante, color = significado semántico. */
+  --ok: #10b981;  --ok-bg: #E4F5EB;   --ok-t: #2E7D5B;    /* operativo/vigente */
+  --aviso: #fbbf24; --aviso-bg: #FFF4E0; --aviso-t: #96660F; /* por vencer */
+  --err: #f87171;  --err-bg: #FDE8EC;  --err-t: #B4485C;   /* no disponible */
+  --critico: #fb7185; --critico-bg: #F9DCE2; --critico-t: #8E2F43; /* fuera de servicio */
+  --mantenimiento: #a78bfa; --mant-bg: #F0ECFE; --mant-t: #6B4FC9;
+  --neutro: #94a3b8;  --neutro-bg: #F2F4F7; --neutro-t: #4A5568;   /* sin dato oficial */
+  --vencido: #fb923c; --vencido-bg: #FEE9E6; --vencido-t: #9A3920; /* expiración */
+  --mando: #6b4fc9;   --mando-bg: #EDEAFB;  --mando-t: #3F2987;    /* rol admin */
+
+  /* --- Superficies: blancas dominantes ---------------------------------- */
+  --fondo: #FFFFFF;
+  --fondo-2: #FAFBFD;
+  --superficie: #FBFCFD;
+  --superficie-2: #F4F6F9;
+  --borde: #E6EAF0;
+  --borde-fuerte: #D5DCE7;
+  --linea: #E6EAF0;
+  --linea-fuerte: #D5DCE7;
+  --panel: #FFFFFF;
+  --panel-solido: #FBFCFD;
+  --panel-alto: #FFFFFF;
+
+  /* --- Texto ------------------------------------------------------------ */
+  --t1: #1C2430;
+  --t2: #5A6675;
+  --t3: #8A96A8;
+  --t4: #B9C2CD;
+
+  /* --- Tipografía ------------------------------------------------------- */
+  --fuente: "Inter", "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --fuente-display: "Space Grotesk", "Manrope", var(--fuente);
+  --fuente-mono: "JetBrains Mono", "Cascadia Code", ui-monospace, "SF Mono", Consolas, monospace;
+  --esc: 1;                 /* escala global de texto (accesibilidad) */
+  --t-xs: calc(0.75rem * var(--esc));
+  --t-sm: calc(0.875rem * var(--esc));
+  --t-md: calc(1rem * var(--esc));
+  --t-lg: calc(1.125rem * var(--esc));
+  --t-xl: clamp(1.35rem, 1.1rem + 1vw, 1.75rem);
+  --t-2xl: clamp(1.9rem, 1.4rem + 2.2vw, 3rem);
+  --t-3xl: clamp(2.4rem, 1.5rem + 4.2vw, 4.6rem);
+
+  /* --- Espacio (escala 4) ---------------------------------------------- */
+  --e1: 4px;  --e2: 8px;  --e3: 12px; --e4: 16px;
+  --e5: 24px; --e6: 32px; --e7: 48px; --e8: 64px; --e9: 96px;
+
+  /* --- Radios ----------------------------------------------------------- */
+  --r-xs: 8px; --r-sm: 12px; --r-md: 16px; --r-lg: 22px; --r-xl: 30px; --r-full: 999px;
+
+  /* --- Sombras y brillos ------------------------------------------------ */
+  --s1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --s2: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+  --s3: 0 24px 60px -20px rgba(0, 0, 0, 0.75);
+  --glow-ods3: 0 0 0 1px rgba(23, 201, 100, 0.28), 0 12px 48px -12px rgba(23, 201, 100, 0.45);
+  --glow-acento: 0 0 0 1px rgba(34, 211, 238, 0.25), 0 16px 60px -18px rgba(34, 211, 238, 0.55);
+
+  /* --- Curvas de animación (las de verdad, no "ease") ------------------- */
+  --ease-salida: cubic-bezier(0.16, 1, 0.3, 1);        /* expo out: entrada suave */
+  --ease-entrada: cubic-bezier(0.7, 0, 0.84, 0);       /* salida acelerada */
+  --ease-muelle: cubic-bezier(0.34, 1.56, 0.64, 1);    /* spring con rebote */
+  --ease-suave: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --dur-1: 140ms; --dur-2: 240ms; --dur-3: 420ms; --dur-4: 700ms; --dur-5: 1200ms;
+
+  /* --- Layout ----------------------------------------------------------- */
+  --ancho: 1240px;
+  --corte-movil: 640px;
+  --corte-tablet: 1024px;
+
+  /* Variables que el JS actualiza para el brillo que sigue al puntero */
+  --px: 50%;
+  --py: 50%;
+}
+
+/* -------------------------------------------------------------------------
+   TEMA CLARO · mismas claves, otros valores. Se activa con [data-tema="claro"]
+   (botón en la barra) o cuando el sistema prefiere claro y no hay elección.
+   ------------------------------------------------------------------------- */
+[data-tema="claro"] {
+  --fondo: #f6f8fb;
+  --fondo-2: #eef2f7;
+  --panel: rgba(255, 255, 255, 0.78);
+  --panel-solido: #ffffff;
+  --panel-alto: rgba(255, 255, 255, 0.92);
+  --linea: rgba(15, 23, 42, 0.12);
+  --linea-fuerte: rgba(15, 23, 42, 0.26);
+
+  --t1: #0b1220;
+  --t2: #3a4759;
+  --t3: #64748b;
+
+  --ok: #0f9f6e;
+  --aviso: #b45309;
+  --err: #dc2626;
+  --critico: #be123c;
+  --mantenimiento: #7c3aed;
+  --neutro: #64748b;
+  --vencido: #c2410c;
+  --menta: #059669;
+
+  --s2: 0 8px 24px -12px rgba(15, 23, 42, 0.18);
+  --s3: 0 24px 60px -24px rgba(15, 23, 42, 0.28);
+  --glow-ods3: 0 0 0 1px rgba(23, 201, 100, 0.35), 0 12px 40px -16px rgba(16, 185, 129, 0.35);
+  --glow-acento: 0 0 0 1px rgba(59, 130, 246, 0.3), 0 16px 44px -18px rgba(59, 130, 246, 0.3);
+}
+
+/* -------------------------------------------------------------------------
+   VARIANTES DE ACCESIBILIDAD · se aplican en <html> y son reversibles
+   ------------------------------------------------------------------------- */
+[data-texto="grande"]  { --esc: 1.12; }
+[data-texto="enorme"]  { --esc: 1.28; }
+
+[data-contraste="alto"] {
+  --panel: #0a0f16;
+  --panel-solido: #060a10;
+  --linea: rgba(255, 255, 255, 0.55);
+  --linea-fuerte: #ffffff;
+  --t1: #ffffff;
+  --t2: #e6edf6;
+  --t3: #c9d4e2;
+  --ok: #4ade80; --aviso: #fde047; --err: #fca5a5; --neutro: #cbd5e1;
+}
+[data-contraste="alto"][data-tema="claro"] {
+  --panel: #ffffff;
+  --panel-solido: #ffffff;
+  --linea: #0b1220;
+  --linea-fuerte: #000000;
+  --t1: #000000; --t2: #101827; --t3: #1f2a3a;
+  --ok: #05623f; --aviso: #6b3d00; --err: #8b0000; --neutro: #334155;
+}

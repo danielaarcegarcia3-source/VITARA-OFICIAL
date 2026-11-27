@@ -1,0 +1,495 @@
+/* =========================================================================
+   TABLERO REGIONAL SISMED & MAPAS INTERACTIVOS
+   Estilos inspirados en InfoSismedLL (Dirección Regional de Salud La Libertad)
+   y Centro de Inteligencia Sanitaria Nacional
+   ========================================================================= */
+
+/* Contenedor Principal del Tablero */
+.tablero-sismed {
+  background: var(--panel-solido);
+  border: 1px solid var(--linea);
+  border-radius: var(--r-xl);
+  box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  margin-top: var(--e6);
+}
+
+/* 1. Cabecera del Tablero Regional */
+.tablero__header {
+  background: linear-gradient(90deg, #091e3a 0%, #0c2b52 50%, #061830 100%);
+  border-bottom: 2px solid #1e4a7a;
+  padding: var(--e3) var(--e5);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e4);
+}
+
+.tablero__titulo-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--e3);
+}
+
+.tablero__logo-sismed {
+  width: 44px;
+  height: 44px;
+  background: radial-gradient(circle, #38bdf8 0%, #0284c7 100%);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  color: #fff;
+  font-size: 11px;
+  letter-spacing: -0.05em;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+}
+
+.tablero__titulo h3 {
+  font-size: var(--t-md);
+  color: #f8fafc;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 800;
+}
+
+.tablero__subtitulo {
+  font-size: var(--t-xs);
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  gap: var(--e2);
+}
+
+/* Filtros Superiores de Selección */
+.tablero__filtros-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--e2);
+}
+
+.filtro-chip-select {
+  display: flex;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid #334155;
+  border-radius: var(--r-sm);
+  padding: 4px 10px;
+  font-size: var(--t-xs);
+  color: #cbd5e1;
+}
+
+.filtro-chip-select label {
+  color: #38bdf8;
+  font-weight: 700;
+  margin-right: 6px;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.filtro-chip-select select {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+}
+
+.filtro-chip-select select option {
+  background: #0f172a;
+  color: #fff;
+}
+
+.badge-ipress-count {
+  background: #0284c7;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: var(--r-full);
+  font-size: var(--t-xs);
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  border: 1px solid #38bdf8;
+}
+
+/* 2. Barra de KPIs Superiores (Cards Exactos de la foto) */
+.tablero__kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  padding: var(--e3) var(--e4);
+  background: #081424;
+  border-bottom: 1px solid var(--linea);
+}
+
+.kpi-card {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid #1e293b;
+  border-radius: var(--r-sm);
+  padding: 8px 10px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: #38bdf8;
+}
+
+.kpi-card__valor {
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-family: var(--fuente-mono);
+  line-height: 1.1;
+}
+
+.kpi-card__etiqueta {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: 3px;
+  letter-spacing: 0.02em;
+}
+
+/* Variantes de color según nivel de stock */
+.kpi-card--sobre .kpi-card__valor { color: #38bdf8; }
+.kpi-card--sobre .kpi-card__etiqueta { color: #7dd3fc; }
+
+.kpi-card--normo .kpi-card__valor { color: #4ade80; }
+.kpi-card--normo .kpi-card__etiqueta { color: #86efac; }
+
+.kpi-card--sub .kpi-card__valor { color: #facc15; }
+.kpi-card--sub .kpi-card__etiqueta { color: #fde047; }
+
+.kpi-card--desab .kpi-card__valor { color: #f87171; }
+.kpi-card--desab .kpi-card__etiqueta { color: #fca5a5; }
+
+.kpi-card--sinrot .kpi-card__valor { color: #fb923c; }
+.kpi-card--sinrot .kpi-card__etiqueta { color: #fdba74; }
+
+.kpi-card--critico {
+  background: rgba(220, 38, 38, 0.15);
+  border-color: #ef4444;
+}
+.kpi-card--critico .kpi-card__valor { color: #ef4444; }
+.kpi-card--critico .kpi-card__etiqueta { color: #f87171; }
+
+.kpi-card--optimo {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: #10b981;
+}
+.kpi-card--optimo .kpi-card__valor { color: #10b981; font-size: 1.5rem; }
+.kpi-card--optimo .kpi-card__etiqueta { color: #6ee7b7; font-size: 12px; }
+
+/* 3. Estructura con Sidebar y Contenido Central */
+.tablero__cuerpo {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  min-height: 600px;
+}
+
+@media (max-width: 990px) {
+  .tablero__cuerpo {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar de Módulos (como en InfoSismedLL) */
+.tablero__sidebar {
+  background: #091322;
+  border-right: 1px solid #1e293b;
+  padding: var(--e3) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tablero-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px var(--e4);
+  background: transparent;
+  border: none;
+  border-left: 3px solid transparent;
+  color: #94a3b8;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tablero-nav-btn:hover {
+  background: rgba(56, 189, 248, 0.08);
+  color: #f1f5f9;
+}
+
+.tablero-nav-btn.activo {
+  background: linear-gradient(90deg, rgba(2, 132, 199, 0.25) 0%, transparent 100%);
+  border-left-color: #38bdf8;
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.tablero-nav-btn__ico {
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+}
+
+/* Contenido Principal con Gráficos y Tabla */
+.tablero__main {
+  padding: var(--e4);
+  background: #070e1a;
+  overflow-x: auto;
+}
+
+/* Grilla de Visualizaciones */
+.tablero__grid-visual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--e4);
+  margin-bottom: var(--e4);
+}
+
+@media (max-width: 860px) {
+  .tablero__grid-visual {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tablero__panel-box {
+  background: #0b172a;
+  border: 1px solid #1e293b;
+  border-radius: var(--r-md);
+  padding: var(--e4);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.tablero__panel-cab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--e3);
+  padding-bottom: var(--e2);
+  border-bottom: 1px solid #1e293b;
+}
+
+.tablero__panel-cab h4 {
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  color: #cbd5e1;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 4. Tablas Interactivas de IPRESS */
+.tablero__tabla-wrap {
+  overflow-x: auto;
+  border: 1px solid #1e293b;
+  border-radius: var(--r-md);
+  background: #091322;
+}
+
+.tabla-sismed {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  text-align: left;
+}
+
+.tabla-sismed th {
+  background: #0f2238;
+  color: #38bdf8;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 8px 10px;
+  border-bottom: 2px solid #1e4a7a;
+  white-space: nowrap;
+}
+
+.tabla-sismed td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #17263c;
+  color: #e2e8f0;
+  white-space: nowrap;
+}
+
+.tabla-sismed tr:hover {
+  background: rgba(56, 189, 248, 0.07);
+}
+
+.badge-nivel {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+.badge-nivel--optimo { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+.badge-nivel--critico { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+/* 5. Mapa Interactivo SVG */
+.mapa-interactivo-container {
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  background: radial-gradient(circle at 50% 50%, #0d223f 0%, #061122 100%);
+  border-radius: var(--r-lg);
+  border: 1px solid #1e3a5f;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mapa-svg {
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.8));
+}
+
+.dep-region {
+  fill: #1e3a5f;
+  stroke: #38bdf8;
+  stroke-width: 1.2;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.dep-region:hover {
+  fill: #0284c7;
+  stroke: #ffffff;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8));
+}
+
+.dep-region.activo {
+  fill: #0ea5e9;
+  stroke: #f8fafc;
+  stroke-width: 2.2;
+}
+
+/* Indicadores de Salud en Mapa */
+.dep-region--verde { fill: #064e3b; }
+.dep-region--verde:hover { fill: #059669; }
+
+.dep-region--ambar { fill: #78350f; }
+.dep-region--ambar:hover { fill: #d97706; }
+
+.dep-region--rojo { fill: #7f1d1d; }
+.dep-region--rojo:hover { fill: #dc2626; }
+
+/* Tooltip Flotante del Mapa */
+.mapa-tooltip {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 260px;
+  background: rgba(11, 23, 42, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid #38bdf8;
+  border-radius: var(--r-md);
+  padding: var(--e3) var(--e4);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  z-index: 50;
+  pointer-events: none;
+}
+
+.mapa-tooltip h5 {
+  margin: 0 0 6px 0;
+  font-size: var(--t-sm);
+  color: #38bdf8;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.mapa-tooltip p {
+  margin: 3px 0;
+  font-size: 11px;
+  color: #cbd5e1;
+  display: flex;
+  justify-content: space-between;
+}
+
+.mapa-tooltip span.kpi-num {
+  font-weight: 700;
+  color: #fff;
+  font-family: var(--fuente-mono);
+}
+
+/* 6. Gráficos SVG Nativos (Sin dependencias externas pesadas) */
+.svg-chart {
+  width: 100%;
+  height: 180px;
+  display: block;
+}
+
+.chart-bar-normo { fill: #10b981; }
+.chart-bar-sobre { fill: #0284c7; }
+.chart-bar-sub { fill: #eab308; }
+.chart-bar-desab { fill: #ef4444; }
+
+.chart-line {
+  fill: none;
+  stroke: #38bdf8;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chart-point {
+  fill: #0ea5e9;
+  stroke: #fff;
+  stroke-width: 1.5;
+  cursor: pointer;
+  transition: r 0.2s;
+}
+
+.chart-point:hover {
+  r: 6;
+  fill: #38bdf8;
+}
+
+.chart-waterfall-up { fill: #10b981; }
+.chart-waterfall-down { fill: #ef4444; }
+
+/* 7. Switcher de Vistas del Mapa (Nacional vs La Libertad) */
+.mapa-view-switch {
+  display: flex;
+  gap: var(--e2);
+  margin-bottom: var(--e3);
+}
+
+.btn-map-switch {
+  background: #0f2238;
+  border: 1px solid #1e3a5f;
+  color: #94a3b8;
+  padding: 6px 14px;
+  border-radius: var(--r-full);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-map-switch:hover,
+.btn-map-switch.activo {
+  background: #0284c7;
+  color: #fff;
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}

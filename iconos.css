@@ -1,0 +1,323 @@
+/* =========================================================================
+   ICONOS · SVG propios. Ningún emoji, ninguna fuente de iconos.
+   ------------------------------------------------------------------------
+   Cómo funciona el dibujo de trazo:
+     · Cada elemento que debe "dibujarse" lleva class="trazo" y pathLength="1".
+     · La regla base lo deja oculto (dashoffset 1) y la animación `trazar`
+       lo dibuja hasta dashoffset 0.
+     · Cada icono añade DESPUÉS su propio bucle (latido, ondas, giro…) que
+       arranca cuando el trazo termina.
+   El movimiento describe la función del icono, no solo decora.
+   ========================================================================= */
+
+.ico {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  display: inline-block;
+  vertical-align: -0.125em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  overflow: visible;
+}
+
+/* Base del trazo: oculto hasta que la animación lo dibuja */
+.ico .trazo {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+@keyframes trazar { to { stroke-dashoffset: 0; } }
+
+/* Si no hay JS, todo visible (clase .no-js en <html>) */
+.no-js .ico .trazo { stroke-dashoffset: 0; }
+.no-js .ico * { animation: none !important; }
+
+/* ============================== LUPA ==================================== */
+.ico-buscar .aro     { animation: trazar 620ms var(--ease-salida) forwards; transform-origin: 11px 11px; }
+.ico-buscar .mango   { animation: trazar 380ms 300ms var(--ease-salida) forwards; }
+.ico-buscar .barrido {
+  stroke: var(--acento); stroke-width: 1.3; opacity: 0;
+  animation: barrido 3.6s ease-in-out 900ms infinite;
+  transform-origin: 11px 11px;
+}
+@keyframes barrido {
+  0%   { opacity: 0; transform: scale(0.3); }
+  20%  { opacity: 0.9; }
+  55%  { opacity: 0.9; transform: scale(1.05); }
+  80%  { opacity: 0; transform: scale(1.15); }
+  100% { opacity: 0; transform: scale(1.15); }
+}
+
+/* ============================== POSTA =================================== */
+.ico-posta .edificio { animation: trazar 820ms var(--ease-salida) forwards; }
+.ico-posta .base     { animation: trazar 460ms 460ms var(--ease-salida) forwards; }
+.ico-posta .v1, .ico-posta .v2, .ico-posta .v3 {
+  opacity: 0;
+  transform-origin: center;
+  animation: ventana-encender 340ms var(--ease-muelle) forwards;
+}
+.ico-posta .v1 { animation-delay: 700ms; }
+.ico-posta .v2 { animation-delay: 820ms; }
+.ico-posta .v3 { animation-delay: 940ms; }
+.ico-posta .cruz {
+  animation: trazar 420ms 900ms var(--ease-salida) forwards,
+             cruz-latir 2.8s ease-in-out 1.4s infinite;
+  transform-origin: 12px 8.5px;
+}
+@keyframes ventana-encender {
+  from { opacity: 0; transform: scale(0.2); }
+  to   { opacity: 0.8; transform: scale(1); }
+}
+@keyframes cruz-latir {
+  0%, 100% { transform: scale(1); }
+  12%      { transform: scale(1.2); }
+  24%      { transform: scale(1); }
+  36%      { transform: scale(1.1); }
+  48%      { transform: scale(1); }
+}
+
+/* ============================== PASTILLA ================================ */
+.ico-pastilla { transform-origin: 12px 12px; animation: pastilla-balanceo 4.4s ease-in-out infinite; }
+.ico-pastilla .tapa-a { animation: trazar 600ms var(--ease-salida) forwards, tapa-a 4.4s var(--ease-muelle) 600ms infinite; }
+.ico-pastilla .tapa-b { animation: trazar 600ms var(--ease-salida) forwards, tapa-b 4.4s var(--ease-muelle) 600ms infinite; }
+.ico-pastilla .division { animation: trazar 400ms 500ms var(--ease-salida) forwards, division-op 4.4s ease-in-out infinite; }
+@keyframes pastilla-balanceo {
+  0%, 100% { transform: rotate(-12deg); }
+  50%      { transform: rotate(8deg); }
+}
+@keyframes tapa-a {
+  0%, 52%, 100% { transform: translate(0, 0); }
+  66%           { transform: translate(-1.7px, -1.7px); }
+  80%           { transform: translate(0, 0); }
+}
+@keyframes tapa-b {
+  0%, 52%, 100% { transform: translate(0, 0); }
+  66%           { transform: translate(1.7px, 1.7px); }
+  80%           { transform: translate(0, 0); }
+}
+@keyframes division-op { 0%, 52%, 100% { opacity: 0.6; } 68% { opacity: 0.1; } }
+
+/* ============================== LATIDO ================================== */
+.ico-latido .marco { animation: trazar 700ms var(--ease-salida) forwards; }
+.ico-latido .onda {
+  stroke-dasharray: 0.42 1;
+  stroke-dashoffset: 0.3;
+  animation: onda-corre 2.8s var(--ease-suave) 600ms infinite;
+}
+.ico-latido .punto {
+  fill: var(--err); stroke: none; opacity: 0;
+  transform-origin: 4px 12px;
+  animation: punto-viaja 2.8s var(--ease-suave) 600ms infinite;
+}
+@keyframes onda-corre {
+  0%   { stroke-dashoffset: 0.32; }
+  62%  { stroke-dashoffset: -0.75; }
+  100% { stroke-dashoffset: -0.75; }
+}
+@keyframes punto-viaja {
+  0%   { opacity: 0; transform: translateX(0); }
+  12%  { opacity: 1; }
+  62%  { opacity: 1; transform: translateX(14.5px); }
+  78%  { opacity: 0; transform: translateX(15px); }
+  100% { opacity: 0; transform: translateX(15px); }
+}
+
+/* ============================== TELESALUD =============================== */
+.ico-telesalud .pantalla { animation: trazar 720ms var(--ease-salida) forwards; }
+.ico-telesalud .antena   { animation: trazar 400ms 420ms var(--ease-salida) forwards; }
+.ico-telesalud .onda-1, .ico-telesalud .onda-2, .ico-telesalud .onda-3 {
+  transform-origin: 12px 10px;
+  animation: onda-emite 3s ease-out infinite;
+}
+.ico-telesalud .onda-1 { animation-delay: 800ms; }
+.ico-telesalud .onda-2 { animation-delay: 1500ms; }
+.ico-telesalud .onda-3 { animation-delay: 2200ms; }
+@keyframes onda-emite {
+  0%   { opacity: 0; transform: scale(0.55); stroke-width: 1.9; }
+  25%  { opacity: 0.8; }
+  100% { opacity: 0; transform: scale(1.45); stroke-width: 0.4; }
+}
+
+/* ============================== EQUIPO ================================== */
+.ico-equipo .engranaje {
+  transform-origin: 12px 10px;
+  animation: trazar 800ms var(--ease-salida) forwards, girar-paso 7s var(--ease-suave) 800ms infinite;
+}
+.ico-equipo .b1, .ico-equipo .b2, .ico-equipo .b3 {
+  transform-origin: center bottom;
+  animation: trazar 350ms 500ms var(--ease-salida) forwards, barra-sube 2.6s var(--ease-muelle) infinite;
+}
+.ico-equipo .b2 { animation-delay: 620ms, 200ms; }
+.ico-equipo .b3 { animation-delay: 740ms, 400ms; }
+@keyframes girar-paso {
+  0%, 38%  { transform: rotate(0deg); }
+  62%, 82% { transform: rotate(120deg); }
+  100%     { transform: rotate(120deg); }
+}
+@keyframes barra-sube {
+  0%, 100% { transform: scaleY(0.5); }
+  55%      { transform: scaleY(1); }
+}
+
+/* ============================== ALERTA ================================== */
+.ico-alerta .triangulo {
+  transform-origin: 12px 12px;
+  animation: trazar 620ms var(--ease-salida) forwards, alerta-golpe 3.2s ease-in-out 800ms infinite;
+}
+.ico-alerta .signo { animation: trazar 320ms 440ms var(--ease-salida) forwards; }
+.ico-alerta .halo  {
+  opacity: 0; transform-origin: 12px 12px; stroke-width: 1.2;
+  animation: halo-expande 3.2s ease-out 900ms infinite;
+}
+@keyframes alerta-golpe {
+  0%, 100% { transform: scale(1) rotate(0); }
+  7%       { transform: scale(1.09) rotate(-3deg); }
+  14%      { transform: scale(1.05) rotate(2deg); }
+  22%      { transform: scale(1) rotate(0); }
+}
+@keyframes halo-expande {
+  0%   { opacity: 0.55; transform: scale(0.9); }
+  70%  { opacity: 0; transform: scale(1.55); }
+  100% { opacity: 0; transform: scale(1.55); }
+}
+
+/* ============================== RELOJ =================================== */
+.ico-reloj .esfera { animation: trazar 640ms var(--ease-salida) forwards; }
+.ico-reloj .aguja  { transform-origin: 12px 12px; animation: trazar 300ms 300ms var(--ease-salida) forwards, aguja-gira 12s linear 600ms infinite; }
+@keyframes aguja-gira { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ============================== CANDADO ================================= */
+.ico-candado .cuerpo { animation: trazar 560ms var(--ease-salida) forwards; }
+.ico-candado .arco   { transform-origin: 12px 10px; animation: trazar 420ms 300ms var(--ease-salida) forwards, arco-cierra 4.2s var(--ease-muelle) infinite; }
+.ico-candado .llave  { animation: trazar 340ms 620ms var(--ease-salida) forwards, llave-luce 4.2s ease-in-out infinite; }
+@keyframes arco-cierra {
+  0%, 45%  { transform: translateY(-1.8px) scaleY(1.05); }
+  60%, 92% { transform: translateY(0) scaleY(1); }
+  100%     { transform: translateY(-1.8px) scaleY(1.05); }
+}
+@keyframes llave-luce { 0%, 55%, 100% { opacity: 0.65; } 68% { opacity: 1; } }
+
+/* ============================== DATOS =================================== */
+.ico-datos .nube  { animation: trazar 760ms var(--ease-salida) forwards; }
+.ico-datos .p1, .ico-datos .p2, .ico-datos .p3 {
+  opacity: 0; transform-origin: center;
+  animation: particula-sube 2.4s ease-in infinite;
+}
+.ico-datos .p1 { animation-delay: 500ms; }
+.ico-datos .p2 { animation-delay: 1100ms; }
+.ico-datos .p3 { animation-delay: 1700ms; }
+@keyframes particula-sube {
+  0%   { opacity: 0; transform: translateY(4px) scale(0.4); }
+  25%  { opacity: 1; transform: translateY(0) scale(1); }
+  75%  { opacity: 1; transform: translateY(-5px) scale(1); }
+  100% { opacity: 0; transform: translateY(-8px) scale(0.6); }
+}
+
+/* ============================== MAPA ==================================== */
+.ico-mapa .terreno { animation: trazar 720ms var(--ease-salida) forwards; }
+.ico-mapa .pin     { transform-origin: 12px 21px; animation: trazar 460ms 400ms var(--ease-salida) forwards, pin-cae 3.8s var(--ease-muelle) 900ms infinite; }
+.ico-mapa .sombra  { transform-origin: 12px 21px; animation: sombra-encoge 3.8s var(--ease-muelle) 900ms infinite; }
+@keyframes pin-cae {
+  0%, 34%, 100% { transform: translateY(0) scale(1); }
+  10%           { transform: translateY(-6px) scale(1.02); }
+  19%           { transform: translateY(0) scale(1, 0.93); }
+  25%           { transform: translateY(-1.4px) scale(1); }
+}
+@keyframes sombra-encoge {
+  0%, 34%, 100% { transform: scaleX(1); opacity: 0.32; }
+  10%           { transform: scaleX(0.55); opacity: 0.14; }
+  19%           { transform: scaleX(1.12); opacity: 0.38; }
+}
+
+/* ============================== ACCESIBILIDAD =========================== */
+.ico-accesibilidad .aro    { animation: trazar 760ms var(--ease-salida) forwards, aro-gira 10s linear 800ms infinite; transform-origin: 12px 12px; }
+.ico-accesibilidad .cuerpo { animation: trazar 420ms 400ms var(--ease-salida) forwards; }
+@keyframes aro-gira { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+/* ============================== DOCUMENTO =============================== */
+.ico-documento .hoja { animation: trazar 720ms var(--ease-salida) forwards; }
+.ico-documento .l1, .ico-documento .l2, .ico-documento .l3 {
+  animation: trazar 360ms var(--ease-salida) forwards;
+}
+.ico-documento .l1 { animation-delay: 500ms; }
+.ico-documento .l2 { animation-delay: 640ms; }
+.ico-documento .l3 { animation-delay: 780ms; }
+
+/* ============================== FLECHA ================================== */
+.ico-flecha .flecha {
+  animation: trazar 420ms var(--ease-salida) forwards, flecha-avanza 2.6s var(--ease-muelle) 500ms infinite;
+}
+@keyframes flecha-avanza {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(3px); }
+}
+
+/* ============================== TEMA (sol/luna) ========================= */
+.ico-tema .nucleo { animation: trazar 520ms var(--ease-salida) forwards, nucleo-pulso 5.5s ease-in-out infinite; }
+.ico-tema .rayo   { transform-origin: 12px 12px; animation: rayo-respira 5.5s ease-in-out infinite; }
+[data-tema="claro"] .ico-tema .rayo { animation-name: rayo-brilla; }
+@keyframes nucleo-pulso { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes rayo-respira { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+@keyframes rayo-brilla  { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+/* ============================== SEÑAL =================================== */
+.ico-senal .s1, .ico-senal .s2, .ico-senal .s3 {
+  transform-origin: center bottom;
+  animation: senal-enciende 2.2s ease-in-out infinite;
+}
+.ico-senal .s1 { animation-delay: 0s; }
+.ico-senal .s2 { animation-delay: 0.28s; }
+.ico-senal .s3 { animation-delay: 0.56s; }
+@keyframes senal-enciende {
+  0%, 100% { opacity: 0.25; }
+  32%      { opacity: 1; }
+  62%      { opacity: 0.5; }
+}
+
+/* ============================== ESCUDO ================================== */
+.ico-escudo .contorno { animation: trazar 820ms var(--ease-salida) forwards; }
+.ico-escudo .check    { animation: trazar 380ms 640ms var(--ease-salida) forwards; }
+
+/* ============================== CORAZÓN (marca) ========================= */
+.ico-corazon .linea { animation: trazar 700ms var(--ease-salida) forwards, corazon-late 2.8s ease-in-out 700ms infinite; transform-origin: 12px 12px; }
+@keyframes corazon-late {
+  0%, 100% { transform: scale(1); }
+  10%      { transform: scale(1.09); }
+  20%      { transform: scale(1); }
+  30%      { transform: scale(1.05); }
+  42%      { transform: scale(1); }
+}
+
+/* =========================================================================
+   MOVIMIENTO REDUCIDO · los elementos que normalmente aparecen desde oculto
+   (ventanas, partículas, ondas) deben quedar VISIBLES, no en estado inicial.
+   Sin esto quedarían con opacity:0 al congelarse las animaciones.
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .ico-posta .v1, .ico-posta .v2, .ico-posta .v3,
+  .ico-datos .p1, .ico-datos .p2, .ico-datos .p3,
+  .ico-latido .punto {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .ico-telesalud .onda-1,
+  .ico-telesalud .onda-2,
+  .ico-telesalud .onda-3 { opacity: 0.45 !important; transform: none !important; }
+  .ico-alerta .halo { opacity: 0 !important; }
+}
+
+/* El modo "reducir movimiento" del panel de accesibilidad hace lo mismo
+   incluso si el sistema operativo no lo pide. */
+.sin-movimiento .ico-posta .v1, .sin-movimiento .ico-posta .v2, .sin-movimiento .ico-posta .v3,
+.sin-movimiento .ico-datos .p1, .sin-movimiento .ico-datos .p2, .sin-movimiento .ico-datos .p3,
+.sin-movimiento .ico-latido .punto {
+  opacity: 1 !important;
+  transform: none !important;
+}
+.sin-movimiento .ico-telesalud .onda-1,
+.sin-movimiento .ico-telesalud .onda-2,
+.sin-movimiento .ico-telesalud .onda-3 { opacity: 0.45 !important; transform: none !important; }
+.sin-movimiento .ico-alerta .halo { opacity: 0 !important; }

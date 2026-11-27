@@ -1,0 +1,146 @@
+/*
+ * nuevos.css — T-06 Canales reales, T-08 Mapa real, T-07 ADN interactivo
+ */
+
+/* ---------- T-06 · Canales reales (CANALES_AYUDA) ---------- */
+.canales-real__grid { display: flex; flex-wrap: wrap; gap: 14px; }
+.canal-real {
+  width: 264px; display: flex; flex-direction: column; gap: 8px;
+  background: #091322; border: 1px solid #1e3a5f; border-radius: 12px; padding: 16px;
+}
+.canal-real__cab { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.canal-real__titulo { margin: 0; font-size: 13px; color: #fff; }
+.canal-real__tipo { font-size: 10px; color: #94a3b8; }
+.canal-real__fuente { font-size: 9px; color: #475569; }
+.canal-real__desc { margin: 0; font-size: 11px; color: #94a3b8; line-height: 1.55; }
+.canal-real__opciones { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.canal-real__opc {
+  font-size: 9px; color: #7dd3fc; background: #0b1320; border: 1px solid #1e3a5f;
+  border-radius: 8px; padding: 2px 6px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.canal-real__acciones { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.canal-real__boton {
+  display: inline-block; font-size: 10px; font-weight: 700; padding: 6px 10px;
+  border-radius: 8px; cursor: pointer; color: #fff; text-decoration: none;
+  background: rgba(56, 189, 248, 0.12); border: 1px solid #38bdf8;
+}
+.canal-real__boton--link { background: rgba(16, 185, 129, 0.12); border-color: #10b981; }
+.canal-real__boton--sec { background: transparent; border-color: #334155; color: #94a3b8; }
+
+/* ---------- T-08 · Mapa real de disponibilidad ---------- */
+.mapa-real__tabla { overflow-x: auto; margin-bottom: 14px; }
+.tabla-sismed { width: 100%; border-collapse: collapse; font-size: 11px; color: #cbd5e1; }
+.tabla-sismed th, .tabla-sismed td { padding: 6px 8px; border-bottom: 1px solid #1e3a5f; text-align: left; }
+.tabla-sismed th { font-size: 10px; text-transform: uppercase; color: #94a3b8; }
+.mapa-real__rango { display: inline-block; width: 16px; height: 16px; border-radius: 4px; }
+.rango-ok { background: #22c55e; }
+.rango-aviso { background: #f59e0b; }
+.rango-neut { background: #64748b; }
+.rango-err { background: #ef4444; }
+.mapa-real__3d { width: 100%; height: 320px; border-radius: 12px; background: #060c13; cursor: pointer; }
+.mapa-real__panel { margin-top: 12px; }
+
+/* ---------- T-07 · ADN interactivo ---------- */
+.adn-real__canvas {
+  width: 100%; height: 420px; border-radius: 12px; background: #050a11;
+  display: inline-block; cursor: grab;
+}
+
+/* ---------- T-14 · Panel admin separado del ecosistema ---------- */
+.ecosistema-footer {
+  margin-top: var(--e6); padding: 14px 0; border-top: 1px solid #1e3a5f;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+}
+.ecosistema-footer__txt { font-size: 11px; color: #475569; }
+.ecosistema-footer__admin {
+  font-size: 11px; font-weight: 700; color: #38bdf8; text-decoration: none;
+}
+
+/* ---------- T-07 · ADN: panel de equipos médicos ---------- */
+.adn-equipos {
+  margin-top: var(--e4); border-top: 1px solid #E6EAF0; padding-top: var(--e4);
+  max-height: 320px; overflow-y: auto;
+}
+.adn-equipos__titulo { margin: 0; font-size: 13px; color: var(--t1); }
+.adn-equipos__fe { margin: 4px 0 10px; font-size: 10px; color: var(--t3); }
+.adn-equipos__lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.adn-equipos__lista li {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 11px; color: var(--t1);
+}
+.adn-equipos__lista li strong { flex-basis: 170px; color: var(--t2); font-weight: 700; }
+.adn-equipos__cat { font-size: 9px; color: var(--t3); background: var(--superficie-2); padding: 2px 6px; border-radius: var(--r-full); }
+.adn-equipos__est { font-size: 9px; padding: 2px 6px; border-radius: var(--r-full); background: var(--superficie-2); color: var(--t2); }
+.adn-equipos__boton { margin-left: auto; font-size: 9px; padding: 4px 8px; border-radius: 6px; background: var(--acento); color: var(--fondo); border: none; cursor: pointer; }
+
+/* ---------- R-02 · Shell HANDOFF 09 ---------- */
+.app-shell { display: flex; min-height: 100vh; }
+.app-rail { width: 240px; flex: 0 0 240px; display: flex; flex-direction: column; gap: var(--e2); background: var(--fondo); border-right: 1px solid var(--borde); padding: var(--e5) 0; z-index: 50; }
+.app-rail--colapsado { width: 56px; padding: var(--e5) 6px; align-items: center; }
+.app-rail__logo { font-size: 15px; font-weight: 800; color: var(--t1); padding: 0 var(--e4); }
+.app-rail nav { display: flex; flex-direction: column; gap: var(--e1); padding: 0 var(--e4); }
+.app-rail-link { font-size: 13px; padding: var(--e2); color: var(--t2); text-decoration: none; border-radius: var(--r-sm); display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.app-rail-link:hover { background: var(--superficie-2); color: var(--t1); }
+.app-rail-toggle { align-self: flex-end; border: none; background: transparent; color: var(--t3); cursor: pointer; font-size: 14px; margin-top: var(--e6); margin-right: 6px; }
+#app-rail { display: none; }
+#app-rail[hidden] { display: none; }
+#app-rail:not([hidden]) { display: flex; }
+.app-tabs { padding: var(--e3); display: flex; gap: 6px; flex-wrap: wrap; min-height: 42px; align-items: center; }
+.app-tab { border: 1px solid var(--borde-fuerte); background: var(--superficie); color: var(--t2); padding: 4px 10px; border-radius: var(--r-full); font-size: 11px; cursor: pointer; }
+.app-tab--activo { border-color: var(--acento); background: var(--superficie-2); color: var(--t1); }
+.app-split { display: flex; gap: 0; flex: 1; min-height: calc(100vh - 72px); }
+.app-area { flex: 1; min-width: 0; padding: var(--e4); }
+.app-inspector { width: 320px; background: var(--superficie); border-left: 1px solid var(--borde); padding: var(--e4); display: none; overflow-y: auto; }
+.app-inspector[hidden] { display: none; }
+@media (max-width: 820px) { .app-rail { width: 56px; } .app-rail nav { display: none; } }
+
+/* ---------- R-02 · Split en ≥1280 px + pestañas con fijar ---------- */
+body.app-split-on .app-split--on { display: flex; gap: 0; }
+body.app-split-on .app-area { flex: 0 0 58%; min-width: 0; padding-right: var(--e5); }
+body.app-split-on #app-inspector { display: block; }
+body.app-split-on .app-tabs, .app-tabs { gap: 4px; flex-wrap: nowrap; overflow-x: auto; }
+.app-tab-wrap { display: inline-flex; gap: 2px; align-items: center; }
+.app-tab-pin, .app-tab-close { font-size: 8px; padding: 2px 5px; border-radius: 6px; cursor: pointer; color: var(--t3); background: transparent; border: 1px solid transparent; }
+.app-tab-pin:hover { color: #fbbf24; background: #fffbeb; }
+.app-tab-close:hover { color: #f87171; background: #fde8ec; }
+.app-inspector { transition: width 0.16s ease; }
+.app-inspector__tit { margin: 0; color: var(--t1); font-size: 14px; font-weight: 700; }
+.app-inspector__sub { margin: 6px 0 14px; font-size: 11px; color: var(--t2); }
+.app-inspector-btn {
+  display: block; width: 100%; margin-bottom: 8px; padding: 9px; font-size: 12px; font-weight: 700;
+  border-radius: 8px; border: 1px solid var(--borde-fuerte); background: var(--superficie); color: var(--t1); cursor: pointer;
+}
+
+/* ---------- R-07/R-08 · Planos y Equipamiento ---------- */
+.planos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--e4); }
+.plano-card { border: 1px solid var(--borde); border-radius: var(--r-md); padding: var(--e4); background: var(--superficie); }
+.plano-card h3 { margin: 0 0 8px 0; font-size: 13px; color: var(--t1); }
+.plano-box { background: var(--superficie-2); border: 1px dashed var(--borde-fuerte); border-radius: var(--r-sm); margin-bottom: 10px; display: grid; place-items: center; color: var(--t3); font-size: 11px; }
+.plano-medidas li { font-size: 11px; color: var(--t2); list-style: none; padding-left: 0; }
+.equipamiento-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--e4); margin-bottom: var(--e6); }
+.equip-card { border: 1px solid var(--borde); border-radius: var(--r-md); padding: var(--e4); display: flex; flex-direction: column; gap: 4px; }
+.equip-card strong { font-size: 13px; color: var(--t1); }
+.equip-est { font-size: 9px; font-weight: 800; color: var(--ok-t); background: var(--ok-bg); padding: 2px 6px; border-radius: var(--r-full); align-self: flex-start; }
+.equip-fb { font-size: 10px; color: var(--t3); }
+.equip-glb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--e3); }
+.equip-glb-item h4 { margin: 0 0 2px 0; font-size: 11px; color: var(--t1); }
+.equip-glb-item code { font-size: 9px; color: var(--t3); }
+.equip-etiqueta { font-size: 9px; color: var(--t3); margin-top: var(--e6); font-style: italic; }
+
+/* ============ FAST DESIGN FIX P0 (mejora inmediata de UX/visual) ============ */
+body { background: var(--fondo); font-family: var(--fuente-texto); }
+.app-tabs { min-height: 32px; }
+.app-tab { font-size: 12px; padding: 6px 12px; border-radius: 8px; }
+.carousel { height: 280px; border-radius: 12px; background: var(--fondo); }
+.carousel__slide { background: var(--fondo); border-color: var(--borde); }
+.carousel__slide h3 { color: var(--t1); font-family: var(--fuente-display); font-weight: 700; }
+.carousel__slide p { color: var(--t2); font-family: var(--fuente-texto); }
+.carousel__indicadores, .carousel__flecha { z-index: 20; }
+.panel-continuar { max-width: 720px; }
+.franja-pulso { background: var(--superficie-2); border: 1px solid var(--borde); }
+.franja-pulso li { color: var(--t1); font-size: 13px; }
+.tabs-vistas__tab { border-radius: 999px; }
+.canal-real { border-radius: 12px; background: var(--superficie); }
+.canal-real__boton { height: 34px; font-size: 11px; padding: 6px 12px; }
+.tabla-sismed th { background: var(--superficie-2); }
+.mapa-real__3d { height: 300px; }
+.adn-real__canvas { height: 380px; }

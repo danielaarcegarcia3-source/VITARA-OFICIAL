@@ -1,0 +1,320 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "dpto-0",
+      "properties": {
+        "nombre": "Amazonas",
+        "dispoSismed": 74.5
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-1",
+      "properties": {
+        "nombre": "Áncash",
+        "dispoSismed": 82.1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-2",
+      "properties": {
+        "nombre": "Apurímac",
+        "dispoSismed": 84.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-3",
+      "properties": {
+        "nombre": "Arequipa",
+        "dispoSismed": 87.4
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-4",
+      "properties": {
+        "nombre": "Ayacucho",
+        "dispoSismed": 83.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-5",
+      "properties": {
+        "nombre": "Cajamarca",
+        "dispoSismed": 85
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-6",
+      "properties": {
+        "nombre": "Callao",
+        "dispoSismed": 76.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-7",
+      "properties": {
+        "nombre": "Cusco",
+        "dispoSismed": 88.3
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-8",
+      "properties": {
+        "nombre": "Huancavelica",
+        "dispoSismed": 81.7
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-9",
+      "properties": {
+        "nombre": "Huánuco",
+        "dispoSismed": 79.5
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-10",
+      "properties": {
+        "nombre": "Ica",
+        "dispoSismed": 84
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-11",
+      "properties": {
+        "nombre": "Junín",
+        "dispoSismed": 85.6
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-12",
+      "properties": {
+        "nombre": "La Libertad",
+        "dispoSismed": 92.9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-13",
+      "properties": {
+        "nombre": "Lambayeque",
+        "dispoSismed": 78.4
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-14",
+      "properties": {
+        "nombre": "Lima Metropolitana",
+        "dispoSismed": 79.1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-15",
+      "properties": {
+        "nombre": "Lima Región",
+        "dispoSismed": 80.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-16",
+      "properties": {
+        "nombre": "Loreto",
+        "dispoSismed": 53
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-17",
+      "properties": {
+        "nombre": "Madre de Dios",
+        "dispoSismed": 48.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-18",
+      "properties": {
+        "nombre": "Moquegua",
+        "dispoSismed": 96.5
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-19",
+      "properties": {
+        "nombre": "Pasco",
+        "dispoSismed": 77.8
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-20",
+      "properties": {
+        "nombre": "Piura",
+        "dispoSismed": 49.5
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-21",
+      "properties": {
+        "nombre": "Puno",
+        "dispoSismed": 83.9
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-22",
+      "properties": {
+        "nombre": "San Martín",
+        "dispoSismed": 76.1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-23",
+      "properties": {
+        "nombre": "Tacna",
+        "dispoSismed": 97.2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-24",
+      "properties": {
+        "nombre": "Tumbes",
+        "dispoSismed": 68.4
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "dpto-25",
+      "properties": {
+        "nombre": "Ucayali",
+        "dispoSismed": 62.1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": []
+      }
+    }
+  ],
+  "props": {
+    "fuente": "DEPARTAMENTOS_PERU (datos-reales-peru.js) — distribución conceptual"
+  }
+}
