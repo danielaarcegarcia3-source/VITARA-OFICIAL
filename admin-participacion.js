@@ -20,9 +20,9 @@
     } catch(error) { status.textContent = error.message || 'No se pudo completar la configuración.'; }
     finally { button.disabled = false; }
   });
-  const section = document.createElement('section'); section.className = 'admin-participation'; section.setAttribute('aria-labelledby','participants-title'); section.hidden = true;
-  section.innerHTML = '<header><div><span>PARTICIPACIÓN / REGISTROS REALES</span><h2 id="participants-title">Personas que conectan.</h2><p>En la demostración usa alias ficticios y correos example.test. Solo perfiles con consentimiento. Correo sin verificar; no equivale a identidad autenticada. No se registran mensajes del chat ni búsquedas.</p></div><button type="button" id="participants-refresh">Actualizar ↻</button></header><p id="participants-status" role="status"></p><div id="participants-summary" class="participants-summary"></div><div id="participants-list" class="participants-list"></div><footer>Actualización por eventos y consulta de respaldo cada 15 s mientras el panel está visible. Activo: señal de presencia durante los últimos 90 s. Máximo 200 interacciones por perfil; retención de 30 días desde última actividad.</footer>';
-  document.querySelector('.admin-kpis')?.before(section);
+  const section = document.createElement('section'); section.className = 'admin-participation'; section.id = 'participantes-panel'; section.setAttribute('aria-labelledby','participants-title'); section.hidden = true;
+  section.innerHTML = '<header><div><span>02 / PARTICIPACIÓN CONSENTIDA</span><h2 id="participants-title">Detrás de cada conexión, una persona.</h2><p>En la demostración usa alias ficticios y correos example.test. Solo perfiles con consentimiento. Correo sin verificar; no equivale a identidad autenticada. No se registran mensajes del chat ni búsquedas.</p></div><button type="button" id="participants-refresh">Actualizar ↻</button></header><p id="participants-status" role="status"></p><div id="participants-summary" class="participants-summary"></div><div id="participants-list" class="participants-list"></div><footer>Actualización por eventos y consulta de respaldo cada 15 s mientras el panel está visible. Activo: señal de presencia durante los últimos 90 s. Máximo 200 interacciones por perfil; retención de 30 días desde última actividad.</footer>';
+  document.querySelector('.admin-primary')?.append(section);
   let timer, debounce, controller, generation = 0;
   const list = document.getElementById('participants-list');
   const names = { vista:'Módulo visitado',modelo:'Modelo abierto',mapa:'Mapa elegido',tema:'Tema elegido',chat:'Consulta al orientador' };
@@ -36,7 +36,7 @@
       const response=await fetch('/api/admin/usuarios',{signal:controller.signal,headers:{Authorization:`Bearer ${token}`}});
       const data=await response.json(); if(!response.ok) { if(response.status===401) { clearInterval(timer); sessionStorage.removeItem('g3_admin_auth_token'); window.dispatchEvent(new Event('vitara:admin-logout')); document.getElementById('loginOverlay').style.display='grid'; } throw new Error(data.error); }
       if (current !== generation || sessionStorage.getItem('g3_admin_auth_token') !== token || section.hidden) return;
-      state.textContent=`Última consulta: ${new Date().toLocaleTimeString('es-PE')}. Sin registros de ejemplo.`;
+      state.textContent=`Última consulta: ${new Date().toLocaleTimeString('es-PE')}. Datos consultados al servidor.`;
       const summary=document.getElementById('participants-summary');summary.replaceChildren();
       for(const [value,label] of [[`${data.users.length} / ${data.capacity}`,'Perfiles guardados'],[data.active,'Con presencia reciente'],[data.users.reduce((n,u)=>n+u.interactions.length,0),'Interacciones guardadas']]) { const card=node('div');card.append(node('strong',String(value)),node('span',label));summary.append(card); }
       const open = new Set([...list.querySelectorAll('details[open]')].map(item=>item.dataset.user)); list.replaceChildren();

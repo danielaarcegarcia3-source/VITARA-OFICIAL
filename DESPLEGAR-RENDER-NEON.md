@@ -1,6 +1,6 @@
 # VITARA pública · Render + Neon, conservando el modo local
 
-Actualizado el 27/11/2026. **El código está adaptado y probado con PostgreSQL local; esto no significa que el despliegue público ya exista.** El propietario creó Neon VITARA (Free). La conexión privada y el servicio Render todavía deben configurarse y verificarse en sus paneles.
+Actualizado el 27/11/2026. **El propietario completó el despliegue** y compartió capturas de `/api/salud` con `estado: operativo`, `modo: publico_postgres`, `almacenamiento: postgres`, además del acceso al panel en https://vitara-oficial.onrender.com. Los pasos siguientes documentan cómo reproducirlo; no repetir la creación del servicio existente. Siguen pendientes el ensayo de persistencia tras reiniciar Render, recuperación integral y siete dispositivos físicos. El rediseño de administración se entrega después de esas capturas y necesita su propio despliegue.
 
 ## Qué hace cada parte
 

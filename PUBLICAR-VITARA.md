@@ -1,8 +1,8 @@
 # Publicar VITARA: qué está listo y qué falta
 
-> **Ruta elegida (27/11/2026): Render Web Service Free + Neon PostgreSQL Free.** El propietario ya creó Neon; el adaptador PostgreSQL está implementado y probado localmente, pero la conexión a su cuenta y la URL pública siguen pendientes. Seguir [DESPLEGAR-RENDER-NEON.md](DESPLEGAR-RENDER-NEON.md), que detalla rama, comandos, secretos privados, verificación y contingencia en Windows. No usar el túnel como solución permanente ni JSON sobre disco efímero.
+> **Ruta elegida (27/11/2026): Render Web Service Free + Neon PostgreSQL Free.** El propietario completó el despliegue y mostró salud PostgreSQL operativa y login correcto en https://vitara-oficial.onrender.com. La actualización visual del panel requiere desplegar el nuevo commit; siguen pendientes reinicio/recuperación y siete dispositivos físicos. Seguir [DESPLEGAR-RENDER-NEON.md](DESPLEGAR-RENDER-NEON.md), que detalla rama, comandos, secretos privados, verificación y contingencia en Windows. No usar el túnel como solución permanente ni JSON sobre disco efímero.
 
-## Estado comprobado en esta sesión
+## Historial de preparación y subida (anterior al despliegue del propietario)
 
 **Subida comprobada el 27/11/2026:** commit de implementación `07b7f3043744e60bd9d59df684fdc7e2158cc961` en `origin/arena/ccf66afb-vitara-oficial`. Pull request abierto y fusionable: **https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/pull/1**. Los cambios de documentación posteriores se entregan en la misma rama. No se ha fusionado ni modificado `main`. Las comprobaciones automáticas de GitHub se iniciaron; consultar su resultado en el PR, sin confundirlo con las pruebas locales aprobadas.
 

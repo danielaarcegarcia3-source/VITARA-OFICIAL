@@ -2,7 +2,7 @@
 
 ## Publicación independiente de la laptop
 
-Guía vigente: [DESPLEGAR-RENDER-NEON.md](DESPLEGAR-RENDER-NEON.md). Con `DATABASE_URL` privada, el backend utiliza PostgreSQL con TLS verificado, conserva los datos fuera de Render y no escribe participación ni solicitudes en el disco efímero. Si la conexión falla, no sustituye los datos por JSON. Sin esta variable se mantiene el modo local descrito abajo; Render exige PostgreSQL para arrancar. Nube y local son almacenamientos independientes, no sincronizados. La cuenta Neon está creada; la conexión y el despliegue públicos todavía requieren configuración y comprobación por el propietario.
+Guía vigente: [DESPLEGAR-RENDER-NEON.md](DESPLEGAR-RENDER-NEON.md). Con `DATABASE_URL` privada, el backend utiliza PostgreSQL con TLS verificado, conserva los datos fuera de Render y no escribe participación ni solicitudes en el disco efímero. Si la conexión falla, no sustituye los datos por JSON. Sin esta variable se mantiene el modo local descrito abajo; Render exige PostgreSQL para arrancar. Nube y local son almacenamientos independientes, no sincronizados. El propietario aportó capturas del despliegue público operativo con PostgreSQL y acceso administrativo en https://vitara-oficial.onrender.com. Falta comprobar persistencia tras reinicio del alojamiento, recuperación integral y siete dispositivos físicos. El rediseño del panel requiere actualizar el servicio desde esta rama.
 
 ## Ejecutar
 

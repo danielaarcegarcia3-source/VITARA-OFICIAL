@@ -1,6 +1,21 @@
 # VITARA · Activos, territorios y participación
 
-## Revisión vigente · PostgreSQL opcional y preparación Render + Neon
+## Revisión vigente · renovación del panel administrativo
+
+El usuario eligió renovar **solo administración**, no el portal público. Se conserva el backend, PostgreSQL/JSON, autenticación, datos, modelos y rutas. El usuario aportó capturas de Render con despliegue exitoso, `/api/salud` operativo en modo `publico_postgres` y acceso administrativo correcto en https://vitara-oficial.onrender.com. No se recibió ninguna contraseña ni conexión privada. La persistencia tras reinicio del alojamiento, recuperación integral y siete dispositivos físicos siguen sin acreditarse.
+
+- Nuevo `admin-panel.css`: paleta clara crema/menta con petróleo, contraste explícito, tipografía sans real (se elimina la referencia indefinida anterior), navegación lateral y adaptación móvil, tarjetas de resumen, login y diálogo coherentes. Se extrae el CSS anterior incrustado sin sustituir el proyecto ni cambiar los modelos del portal.
+- Hover de elevación, flechas de navegación y giro de motivo decorativo; interacción por teclado, foco visible, fondo inerte y foco contenido en diálogos; Escape/cancelar devuelve el foco al botón de respuesta. Movimiento reducido y dispositivos sin hover tienen alternativas sin movimiento innecesario. No es certificación WCAG.
+- Bandeja con búsqueda local sobre registros ya autenticados, filtros con `aria-pressed` incluido Cerradas, estados diferenciados, vacío orientador y error de consulta distinto de cero registros. Actualizaciones muestran conexión/reconexión real, no un indicador siempre activo.
+- Se retira del resumen el 339 estático que parecía un conteo operativo. Se conserva en el portal su catálogo de referencia. No se inventan métricas, sedes por defecto ni disponibilidad: responder no significa stock confirmado, y las respuestas se atribuyen al equipo, no a una entidad pública.
+- Perfiles, actividad consentida y borrado conservados; guía de prueba al final, reglas técnicas plegables y advertencia/confirmación antes de restaurar solicitudes. La descarga explica que no contiene perfiles ni credenciales.
+- Entrevista a un funcionario de Socios en Salud propuesta por el usuario, **todavía no recibida ni integrada**. Pendientes archivo/enlace, identidad/cargo y autorización para publicación; no se inventan citas ni respaldo institucional.
+
+**Verificación de esta revisión:** 28/28 pruebas UI aprobadas (Chromium, un worker, 5,2 min), incluidas cuatro nuevas de panel: acceso/estado real/navegación/CSP, filtros/búsqueda/respuesta con teclado/exportación/logout, móvil 390 y 320 px sin desbordamiento, y fallo de consulta sin conteos ficticios. Además 34 comprobaciones de servicios, 96 de seguridad, 61 activos/25 texturas SHA-256, build y npm audit 0 aprobados. Inspección visual de acceso, escritorio y móvil mediante capturas de almacenamiento temporal aislado: ningún registro de prueba se creó en Neon ni en la preview. El adaptador PostgreSQL no se modificó; sus 63 pruebas y CI del commit anterior terminaron aprobados, no se presentan como reejecutadas en esta revisión.
+
+Subida en la misma rama de sesión/PR #1, sin fusionar main. El nuevo diseño requiere desplegar este commit en Render y verificarlo allí: la prueba local no confirma automáticamente la actualización pública. No se modifican los secretos del proveedor.
+
+## Revisión anterior · PostgreSQL opcional y preparación Render + Neon
 
 27/11/2026. El propietario creó el proyecto Neon VITARA Free. **No se ha conectado esta sesión a su base ni desplegado Render; no existe una nueva URL pública comprobada.** Guía paso a paso: `DESPLEGAR-RENDER-NEON.md`. No se pidieron ni publicaron contraseñas o cadenas de conexión.
 
