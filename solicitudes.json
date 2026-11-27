@@ -1,0 +1,525 @@
+[
+  {
+    "codigo": "G3-E45895",
+    "item": "Insulina NPH 100 UI/ml",
+    "alias": "Equipo 8 Visitante",
+    "sede": "HOSPITAL REGIONAL",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:55:38.737Z",
+    "idempotencyHash": "9c6811650aef25c315e273594741b9ba3333f7dc718418ec16caf19f59af769b"
+  },
+  {
+    "codigo": "G3-CF14E3",
+    "item": "Azitromicina 500 mg tableta",
+    "alias": "Equipo 10 Jurado",
+    "sede": "C.S. ASCOPE",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:55:38.721Z",
+    "idempotencyHash": "77e64632cd05ca9f5aabb130cfae87fc8e38d1c59b01b20d4c1f07fc42fd77ca"
+  },
+  {
+    "codigo": "G3-DC9DC3",
+    "item": "Bomba de Infusión Volumétrica",
+    "alias": "Equipo 9 Evaluador",
+    "sede": "HOSPITAL LAZARTE",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:55:38.705Z",
+    "idempotencyHash": "44943ad8695d4702e422867d7b1549eb8280301a1555766a91e0ee577069c75f"
+  },
+  {
+    "codigo": "G3-766751",
+    "item": "Kit de Emergencia Dengue",
+    "alias": "Equipo 5 Visitante",
+    "sede": "C.S. CHEPEN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:55:38.700Z",
+    "idempotencyHash": "abab78f4663f6f93f78e21efb39c6550dccb89546db1a543f4a30f2bc5d7f766"
+  },
+  {
+    "codigo": "G3-CB2423",
+    "item": "Metformina 850 mg tableta",
+    "alias": "Equipo 11 Jurado",
+    "sede": "C.S. OTUZCO",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:55:38.694Z",
+    "idempotencyHash": "7e139b587c6d6f92cdf5aa7bcf32b71611508e709d38d4b7149eb35fe2f38bf9"
+  },
+  {
+    "codigo": "G3-E09B3B",
+    "item": "Ventilador Mecánico de Transporte",
+    "alias": "Equipo 4 Visitante",
+    "sede": "HOSPITAL BELEN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:55:38.688Z",
+    "idempotencyHash": "60f4a88355db7af6f3baa24a7da2a71c129f71b284865575b9bc23aa60950940"
+  },
+  {
+    "codigo": "G3-BF3F40",
+    "item": "Atorvastatina 20 mg tableta",
+    "alias": "Equipo 12 Jurado",
+    "sede": "P.S. HUAGUIL",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:55:38.683Z",
+    "idempotencyHash": "62a91243e2fbec1529f6b845b22c6e299fe8e58c56db908b3419c2e1d1138be4"
+  },
+  {
+    "codigo": "G3-AA5205",
+    "item": "Sales de Rehidratación Oral",
+    "alias": "Equipo 6 Visitante",
+    "sede": "C.S. VIRU",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:55:38.673Z",
+    "idempotencyHash": "a493704a9a83c677e582f4bafac9d3a466f96232edb4c61ecef85bb93a5f4c5c"
+  },
+  {
+    "codigo": "G3-2E81DD",
+    "item": "Ibuprofeno 400 mg tableta",
+    "alias": "Equipo 7 Visitante",
+    "sede": "P.S. SANAGORAN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:55:38.660Z",
+    "idempotencyHash": "acdbfcbbedb1c8fc0b446c5ac88bae6a7fefccae03eb25f9f7362220722f762a"
+  },
+  {
+    "codigo": "G3-BC5213",
+    "item": "Amoxicilina 500 mg cápsula",
+    "alias": "Equipo 2 Visitante",
+    "sede": "P.S. COCHABAMBA",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:55:38.653Z",
+    "idempotencyHash": "8ee3e967f8be0eeee13a913ae77df4ca036631665b9586907f88c7a2b06bc179"
+  },
+  {
+    "codigo": "G3-B28EAD",
+    "item": "Ecógrafo Portátil con Doppler",
+    "alias": "Equipo 3 Visitante",
+    "sede": "P.S. CHUGAY",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:55:38.646Z",
+    "idempotencyHash": "0cf6ff31683c520e930811b16779d3ad20b66344847a450293ce3429ba22a7eb"
+  },
+  {
+    "codigo": "G3-63508C",
+    "item": "Paracetamol 500 mg tableta",
+    "alias": "Equipo 1 Visitante",
+    "sede": "C.S. MOCHE",
+    "estado": "respondido",
+    "respuesta": "Stock normostock verificado en Farmacia de C.S. Moche.",
+    "fecha": "2026-11-24T01:55:38.622Z",
+    "idempotencyHash": "89bf11658df664147780aa23b99034b34720ff4bb9b662e5fd91e0fdf5200036",
+    "fechaRespuesta": "2026-11-24T01:55:38.764Z"
+  },
+  {
+    "codigo": "G3-009761",
+    "item": "Azitromicina 500 mg tableta",
+    "alias": "Equipo 10 Jurado",
+    "sede": "C.S. ASCOPE",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:17:02.899Z",
+    "idempotencyHash": "3fb0e6d55af37b88035979749fd74ad4e88b2fa627d6d17abcff42b82abcd4fd"
+  },
+  {
+    "codigo": "G3-E39853",
+    "item": "Sales de Rehidratación Oral",
+    "alias": "Equipo 6 Visitante",
+    "sede": "C.S. VIRU",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:17:02.888Z",
+    "idempotencyHash": "d20d583adb2a6f4a99d80e76d9e86c56024c07c2a716e5e95225a3d5c58a3fe9"
+  },
+  {
+    "codigo": "G3-B450CE",
+    "item": "Amoxicilina 500 mg cápsula",
+    "alias": "Equipo 2 Visitante",
+    "sede": "P.S. COCHABAMBA",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:17:02.881Z",
+    "idempotencyHash": "dad9ae84df32df4a9b31a857398f041bcd5937b9f3150090511210ce7a6c537f"
+  },
+  {
+    "codigo": "G3-362DB5",
+    "item": "Metformina 850 mg tableta",
+    "alias": "Equipo 11 Jurado",
+    "sede": "C.S. OTUZCO",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:17:02.869Z",
+    "idempotencyHash": "eebd6f13c42cc94b57c87949f5f0b64b1cb70444b1ae556510cb76acfccf2dba"
+  },
+  {
+    "codigo": "G3-0582F8",
+    "item": "Atorvastatina 20 mg tableta",
+    "alias": "Equipo 12 Jurado",
+    "sede": "P.S. HUAGUIL",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:17:02.853Z",
+    "idempotencyHash": "84c49f0592249c557f642ae333cac86d68154021abfa9dce161fe54a2f5052fc"
+  },
+  {
+    "codigo": "G3-B4F780",
+    "item": "Ibuprofeno 400 mg tableta",
+    "alias": "Equipo 7 Visitante",
+    "sede": "P.S. SANAGORAN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:17:02.843Z",
+    "idempotencyHash": "783e85a5ef416fad3457fca2d00f20f74dd77a0c8282516e60be45fbda281962"
+  },
+  {
+    "codigo": "G3-E7D3C7",
+    "item": "Bomba de Infusión Volumétrica",
+    "alias": "Equipo 9 Evaluador",
+    "sede": "HOSPITAL LAZARTE",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:17:02.839Z",
+    "idempotencyHash": "e0a86e8bde7ee4454d01cfb98bba5f3dc90134d83791d39c97af8f603c04204e"
+  },
+  {
+    "codigo": "G3-9526EB",
+    "item": "Insulina NPH 100 UI/ml",
+    "alias": "Equipo 8 Visitante",
+    "sede": "HOSPITAL REGIONAL",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:17:02.836Z",
+    "idempotencyHash": "e35b275bb0446b21581e3f67acfaee861cc760086c190564ce9f377a6d4d8f19"
+  },
+  {
+    "codigo": "G3-88C355",
+    "item": "Kit de Emergencia Dengue",
+    "alias": "Equipo 5 Visitante",
+    "sede": "C.S. CHEPEN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:17:02.824Z",
+    "idempotencyHash": "670a3a3e90965276309a5471e9485a593922f48ee9893c9bb971d51e5a1fb543"
+  },
+  {
+    "codigo": "G3-B83302",
+    "item": "Ventilador Mecánico de Transporte",
+    "alias": "Equipo 4 Visitante",
+    "sede": "HOSPITAL BELEN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:17:02.821Z",
+    "idempotencyHash": "30ea0ddae2c2791c6abd71f24654c4859c4b573d09575e2ae49f855c8325cf6a"
+  },
+  {
+    "codigo": "G3-DE81C4",
+    "item": "Ecógrafo Portátil con Doppler",
+    "alias": "Equipo 3 Visitante",
+    "sede": "P.S. CHUGAY",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:17:02.816Z",
+    "idempotencyHash": "174b344571c9d9f4ce02561a653384faa08cddd13065b0cf8a42ba43d17618f7"
+  },
+  {
+    "codigo": "G3-E14D6F",
+    "item": "Paracetamol 500 mg tableta",
+    "alias": "Equipo 1 Visitante",
+    "sede": "C.S. MOCHE",
+    "estado": "respondido",
+    "respuesta": "Stock normostock verificado en Farmacia de C.S. Moche.",
+    "fecha": "2026-11-24T01:17:02.788Z",
+    "idempotencyHash": "03950938e2d5bdf5ab25987e2522ebe8380facb56c2ef9a21312c0f7d9549f02",
+    "fechaRespuesta": "2026-11-24T01:17:02.933Z"
+  },
+  {
+    "codigo": "G3-529D5E",
+    "item": "Bomba de Infusión Volumétrica",
+    "alias": "Equipo 9 Evaluador",
+    "sede": "HOSPITAL LAZARTE",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:10:15.059Z",
+    "idempotencyHash": "a1bf68300b6caaa06094d85e3cd03180d534052ab80019e414ec8f7bdf3a58b6"
+  },
+  {
+    "codigo": "G3-62FEA1",
+    "item": "Kit de Emergencia Dengue",
+    "alias": "Equipo 5 Visitante",
+    "sede": "C.S. CHEPEN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:10:15.055Z",
+    "idempotencyHash": "2f9383134fbf9aa044716f836cea93c1dce50e64cd4e5bff928b855f7231f7ce"
+  },
+  {
+    "codigo": "G3-A34865",
+    "item": "Ventilador Mecánico de Transporte",
+    "alias": "Equipo 4 Visitante",
+    "sede": "HOSPITAL BELEN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:10:15.051Z",
+    "idempotencyHash": "29e12ac06b95dd2c1c877d6543b2651a0cebff26241ac0e48a4c5fa616db2c70"
+  },
+  {
+    "codigo": "G3-B8C1EC",
+    "item": "Atorvastatina 20 mg tableta",
+    "alias": "Equipo 12 Jurado",
+    "sede": "P.S. HUAGUIL",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:10:15.044Z",
+    "idempotencyHash": "b87d5ba7c8a8ab016d2897032605095060c3a94db7132e8b3c08b9c44a7ef622"
+  },
+  {
+    "codigo": "G3-BAECDA",
+    "item": "Metformina 850 mg tableta",
+    "alias": "Equipo 11 Jurado",
+    "sede": "C.S. OTUZCO",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:10:15.040Z",
+    "idempotencyHash": "3bbb2b9bb646471a2614661cc702965a20ae4d5faef4a0fe3fadafbf8719890f"
+  },
+  {
+    "codigo": "G3-48DF99",
+    "item": "Azitromicina 500 mg tableta",
+    "alias": "Equipo 10 Jurado",
+    "sede": "C.S. ASCOPE",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:10:15.005Z",
+    "idempotencyHash": "241cf2c857b9dbb076e2df3a86c607dc59a7305c741284852d3f43ab0f7ad746"
+  },
+  {
+    "codigo": "G3-083059",
+    "item": "Ibuprofeno 400 mg tableta",
+    "alias": "Equipo 7 Visitante",
+    "sede": "P.S. SANAGORAN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:10:15.002Z",
+    "idempotencyHash": "3a4fb7a6a0f8c965ca4a6184431a6638d9a0b42fba625c51102da149f8a861ea"
+  },
+  {
+    "codigo": "G3-4507CB",
+    "item": "Insulina NPH 100 UI/ml",
+    "alias": "Equipo 8 Visitante",
+    "sede": "HOSPITAL REGIONAL",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:10:14.995Z",
+    "idempotencyHash": "2e1dc1185a79cabb0fb400de748e4ac99a454b0c72861a8544926f465d073073"
+  },
+  {
+    "codigo": "G3-13A0D3",
+    "item": "Sales de Rehidratación Oral",
+    "alias": "Equipo 6 Visitante",
+    "sede": "C.S. VIRU",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:10:14.991Z",
+    "idempotencyHash": "4a325bb42432796d66daf8df0bc7a504d1e80fdcdc81041520c3abdf1d0ae4f5"
+  },
+  {
+    "codigo": "G3-44B5E9",
+    "item": "Ecógrafo Portátil con Doppler",
+    "alias": "Equipo 3 Visitante",
+    "sede": "P.S. CHUGAY",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:10:14.987Z",
+    "idempotencyHash": "b0250784dcbfec22e6f8e6108cc5d60f6cec8d973d988b4b710448968834b312"
+  },
+  {
+    "codigo": "G3-791A57",
+    "item": "Amoxicilina 500 mg cápsula",
+    "alias": "Equipo 2 Visitante",
+    "sede": "P.S. COCHABAMBA",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-24T01:10:14.982Z",
+    "idempotencyHash": "54ce5f7ac98af636b87b338a43c611d978d8d5902e5451865cafcdb00d335b87"
+  },
+  {
+    "codigo": "G3-29D473",
+    "item": "Paracetamol 500 mg tableta",
+    "alias": "Equipo 1 Visitante",
+    "sede": "C.S. MOCHE",
+    "estado": "respondido",
+    "respuesta": "Stock normostock verificado en Farmacia de C.S. Moche.",
+    "fecha": "2026-11-24T01:10:14.961Z",
+    "idempotencyHash": "b7c86c269bd0362ec287f67ca6e259aaef9955f336a096c2eac700ae3e1f7e10",
+    "fechaRespuesta": "2026-11-24T01:10:15.100Z"
+  },
+  {
+    "codigo": "G3-548B9C",
+    "item": "Metformina 850 mg tableta",
+    "alias": "Equipo 11 Jurado",
+    "sede": "C.S. OTUZCO",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:41:44.658Z",
+    "idempotencyHash": "9495488c76f13e0fdf0a8af31643e459ae722f3b6dd94b5b21ed28171df293bf"
+  },
+  {
+    "codigo": "G3-553D7F",
+    "item": "Atorvastatina 20 mg tableta",
+    "alias": "Equipo 12 Jurado",
+    "sede": "P.S. HUAGUIL",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:41:44.654Z",
+    "idempotencyHash": "dc7fdf93a69ce922d493be9bdaf3ce632a46e260d180c4794ba4898ae6fb4c44"
+  },
+  {
+    "codigo": "G3-F30AE0",
+    "item": "Azitromicina 500 mg tableta",
+    "alias": "Equipo 10 Jurado",
+    "sede": "C.S. ASCOPE",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:41:44.650Z",
+    "idempotencyHash": "9af090693433e2ba606a6b6bce260539936439dc381d88eab674b65404b11de1"
+  },
+  {
+    "codigo": "G3-01F172",
+    "item": "Bomba de Infusión Volumétrica",
+    "alias": "Equipo 9 Evaluador",
+    "sede": "HOSPITAL LAZARTE",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:41:44.644Z",
+    "idempotencyHash": "216ffc4ff743c6e1293d8dd4e54c902083f03cadac69d83c5fdc3b3713f6e0a1"
+  },
+  {
+    "codigo": "G3-F277F2",
+    "item": "Insulina NPH 100 UI/ml",
+    "alias": "Equipo 8 Visitante",
+    "sede": "HOSPITAL REGIONAL",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:41:44.640Z",
+    "idempotencyHash": "bfcc8c8e38a920331a1d32d47a787967dc84d26c52386ddce7c46d3635150d00"
+  },
+  {
+    "codigo": "G3-58575C",
+    "item": "Ibuprofeno 400 mg tableta",
+    "alias": "Equipo 7 Visitante",
+    "sede": "P.S. SANAGORAN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:41:44.635Z",
+    "idempotencyHash": "e9f7ec6f911d3ae7154a0c87ab2f91e6311b28140c5b76b9a6ec3a5832dcb404"
+  },
+  {
+    "codigo": "G3-1F8EFE",
+    "item": "Ventilador Mecánico de Transporte",
+    "alias": "Equipo 4 Visitante",
+    "sede": "HOSPITAL BELEN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:41:44.631Z",
+    "idempotencyHash": "6fcc6c0deaf14559dbaacf0c1244264e0cf59e109a100c88daeac4f0af138d49"
+  },
+  {
+    "codigo": "G3-33ED04",
+    "item": "Ecógrafo Portátil con Doppler",
+    "alias": "Equipo 3 Visitante",
+    "sede": "P.S. CHUGAY",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:41:44.626Z",
+    "idempotencyHash": "17f93e4e4ca563a09783e64f08e0c6b2f11b51b7c02c341252f4b697c30fc941"
+  },
+  {
+    "codigo": "G3-D77F2B",
+    "item": "Sales de Rehidratación Oral",
+    "alias": "Equipo 6 Visitante",
+    "sede": "C.S. VIRU",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:41:44.622Z",
+    "idempotencyHash": "1e725362218132bcadd757281eb47c538949749f0f4ce3d39fdee9e237ae3cc9"
+  },
+  {
+    "codigo": "G3-0B26A5",
+    "item": "Kit de Emergencia Dengue",
+    "alias": "Equipo 5 Visitante",
+    "sede": "C.S. CHEPEN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:41:44.618Z",
+    "idempotencyHash": "74546834c68cff1bbd98f636d079baf494f2c9869ae1fe54fdece38168650033"
+  },
+  {
+    "codigo": "G3-08BEF7",
+    "item": "Amoxicilina 500 mg cápsula",
+    "alias": "Equipo 2 Visitante",
+    "sede": "P.S. COCHABAMBA",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:41:44.610Z",
+    "idempotencyHash": "7a5fe6b51fda1a92ffad644fb5f901af31bd59595cb02311da1587f2a5b5d0db"
+  },
+  {
+    "codigo": "G3-C465EE",
+    "item": "Paracetamol 500 mg tableta",
+    "alias": "Equipo 1 Visitante",
+    "sede": "C.S. MOCHE",
+    "estado": "respondido",
+    "respuesta": "Stock normostock verificado en Farmacia de C.S. Moche.",
+    "fecha": "2026-11-23T20:41:44.582Z",
+    "idempotencyHash": "f8f811be83fbdd25c0c9a612dddefe3c88e77a2bc9b1cbd3a76618ffcbd01d2f",
+    "fechaRespuesta": "2026-11-23T20:41:44.678Z"
+  },
+  {
+    "codigo": "G3-8A2F1B",
+    "item": "Paracetamol 500 mg tableta",
+    "categoria": "medicamento",
+    "alias": "Vecina de Moche",
+    "esAcompanamiento": false,
+    "sede": "C.S. MOCHE",
+    "estado": "respondido",
+    "respuesta": "Stock normostock disponible en ventanilla de farmacia (Lunes a Sábado 07:00 a 19:00).",
+    "fecha": "2026-11-23T16:39:54.727Z",
+    "fechaRespuesta": "2026-11-23T18:39:54.749Z",
+    "idempotencyHash": "seed-01"
+  },
+  {
+    "codigo": "G3-9B3C4D",
+    "item": "Ecógrafo Portátil con Transductor Convexo",
+    "categoria": "equipo",
+    "alias": "Promotor Comunitario",
+    "esAcompanamiento": true,
+    "sede": "P.S. CHUGAY",
+    "estado": "en_revision",
+    "respuesta": "En calibración preventiva programada según protocolo IETSI. Retorno estimado: 48h.",
+    "fecha": "2026-11-23T18:39:54.749Z",
+    "fechaRespuesta": null,
+    "idempotencyHash": "seed-02"
+  },
+  {
+    "codigo": "G3-7K8M9P",
+    "item": "Kit de Emergencia Dengue (Sales de Rehidratación + Paracetamol)",
+    "categoria": "dengue",
+    "alias": "Ciudadano anónimo",
+    "esAcompanamiento": false,
+    "sede": "HOSPITAL DISTRITAL JERUSALEN",
+    "estado": "recibida",
+    "respuesta": null,
+    "fecha": "2026-11-23T20:09:54.749Z",
+    "fechaRespuesta": null,
+    "idempotencyHash": "seed-03"
+  }
+]

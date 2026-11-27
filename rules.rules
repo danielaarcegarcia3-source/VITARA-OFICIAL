@@ -1,0 +1,83 @@
+/*
+ * Firebase Rules - Ecosistema Digital ODS 3 y 9
+ * Nivel gratuito - sin costos obligatorios
+ * Protección de acceso, separación de datos, sin credenciales expuestas
+*/
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // === DATOS PÚBLICOS (lectura sin autenticación) ===
+    match /public/{document=**} {
+      allow read: if true;  // Cualquier visitante puede leer catálogo
+      allow write: if false; // Solo escritura por flujo autorizado
+    }
+
+    // === SOLICITUDES CIUDADANAS ===
+    match /requests/{requestId} {
+      // Lectura: usuarios autenticados como citizen o posta
+      allow read: if request.auth != null;
+
+      // Creación: solo ciudadanos (visitantes sin cuenta o con cuenta básica)
+      allow create: if request.auth != null &&
+                     request.auth.token.role == "citizen";
+
+      // Actualización: solo personal de posta autorizada
+      allow update: if request.auth != null &&
+                     request.auth.token.role == "posta" &&
+                     request.auth.token.postaId == resource.data.postaId;
+    }
+
+    // === RESPUESTAS A SOLICITUDES ===
+    match /responses/{responseId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null &&
+                     request.auth.token.role == "posta";
+      allow update: if request.auth != null &&
+                     request.auth.token.role == "posta";
+    }
+
+    // === PANEL ADMINISTRADOR (acceso restringido) ===
+    match /admin/{document=**} {
+      // Solo usuario con rol admin ver y modificar
+      allow read: if request.auth != null &&
+                    request.auth.token.role == "admin";
+      allow write: if request.auth != null &&
+                    request.auth.token.role == "admin";
+    }
+
+    // === PERSONAL DE POSTA ===
+    match /personal/{personaId} {
+      allow read: if request.auth != null &&
+                    request.auth.token.role == "posta" &&
+                    request.auth.token.postaId == resource.data.postaId;
+      allow create: if request.auth != null &&
+                     request.auth.token.role == "posta";
+      allow update: if request.auth != null &&
+                     request.auth.token.role == "posta";
+    }
+
+    // === ACTIVIDAD/LOG DE SISTEMA ===
+    match /system-logs/{logId} {
+      allow read: if request.auth != null &&
+                    request.auth.token.role == "admin";
+      allow create: if request.auth != null &&
+                     request.auth.token.role == "admin";
+    }
+
+    // === CONFIGURACIÓN Y ACTIVOS ===
+    match /config/{configId} {
+      allow read: if request.auth != null &&
+                    request.auth.token.role == "admin";
+      allow write: if request.auth != null &&
+                    request.auth.token.role == "admin";
+    }
+
+    // === MODELOS 3D Y ASSETS ===
+    match /assets/{asset=**} {
+      allow read: if true;  // Modelos 3D visibles para todos
+      allow write: if request.auth != null &&
+                    request.auth.token.role == "admin";
+    }
+  }
+}

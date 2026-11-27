@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="oscuro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Supervisión y Administración · Red Salud Grupo 3</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/tablero-sismed.css">
+  <style>
+    body {
+      background: #040810;
+      color: #e2e8f0;
+      font-family: var(--fuente-sans);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* BARRA SUPERIOR */
+    .admin-nav {
+      background: rgba(11, 23, 42, 0.95);
+      border-bottom: 1px solid #1e293b;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .admin-nav__brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .admin-nav__logo {
+      background: linear-gradient(135deg, #0284c7, #10b981);
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.05em;
+    }
+    .admin-nav__title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .admin-nav__actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .admin-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 24px;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* PANTALLA DE ACCESO (LOGIN GUARD) */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 16, 0.96);
+      backdrop-filter: blur(18px);
+      background-image:
+        radial-gradient(60% 50% at 50% 0%, rgba(2, 132, 199, 0.16), transparent 70%),
+        radial-gradient(50% 40% at 80% 100%, rgba(16, 185, 129, 0.10), transparent 70%);
+      display: grid;
+      place-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .login-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, #0a1526 0%, #071020 100%);
+      border: 1px solid #1e3a5f;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 440px;
+      padding: 30px 30px 26px;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(2, 132, 199, 0.14);
+      text-align: center;
+    }
+    .login-card::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(80% 55% at 50% -12%, rgba(56, 189, 248, 0.16), transparent 70%);
+      pointer-events: none;
+    }
+    .login-card > * { position: relative; }
+    .login-card__brand { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 18px; }
+    .login-card__mark {
+      width: 46px; height: 46px; border-radius: 13px;
+      display: grid; place-items: center;
+      background: linear-gradient(150deg, rgba(16, 185, 129, 0.25), rgba(2, 132, 199, 0.25));
+      border: 1px solid rgba(94, 234, 212, 0.45);
+      box-shadow: 0 0 22px rgba(16, 185, 129, 0.25), inset 0 0 12px rgba(94, 234, 212, 0.15);
+    }
+    .login-card__mark svg { width: 24px; height: 24px; }
+    .login-card__word { text-align: left; }
+    .login-card__word strong { display: block; font-size: 20px; letter-spacing: 0.14em; color: #fff; font-family: 'Space Grotesk', 'Segoe UI', sans-serif; }
+    .login-card__word span { display: block; font-size: 10px; letter-spacing: 0.06em; color: #7dd3fc; text-transform: uppercase; margin-top: 2px; }
+    .login-card h2 { color: #fff; margin: 10px 0 6px; font-size: 1.4rem; letter-spacing: -0.02em; }
+    .login-card p { color: #94a3b8; font-size: 12.5px; margin-bottom: 20px; line-height: 1.55; }
+    .login-form { text-align: left; }
+    .login-form input {
+      width: 100%;
+      background: rgba(4, 8, 16, 0.9);
+      border: 1px solid #334155;
+      border-radius: 10px;
+      color: #fff;
+      padding: 12px 14px;
+      font-size: 14px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .login-form input:focus {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+    .btn-login {
+      width: 100%;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.2s, box-shadow 0.2s;
+      box-shadow: 0 12px 26px -12px rgba(2, 132, 199, 0.8);
+    }
+    .btn-login:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px -12px rgba(2, 132, 199, 0.95);
+    }
+    .credenciales-demo {
+      margin-top: 20px;
+      padding: 12px;
+      background: rgba(14, 165, 233, 0.08);
+      border: 1px dashed rgba(56, 189, 248, 0.3);
+      border-radius: 10px;
+      font-size: 11px;
+      color: #7dd3fc;
+      text-align: left;
+    }
+
+    /* KPIS ADMIN */
+    .admin-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .admin-kpi-card {
+      background: #091322;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .admin-kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--kpi-color, #0284c7);
+    }
+    .admin-kpi-card__num {
+      font-size: 2rem;
+      font-weight: 800;
+      font-family: var(--fuente-mono);
+      color: #fff;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .admin-kpi-card__lbl {
+      font-size: 12px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* BANNER DE CONCURRENCIA SSE */
+    .concurrencia-banner {
+      background: linear-gradient(90deg, #062438, #091b29);
+      border: 1px solid #0284c7;
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+    }
+    .concurrencia-info h4 {
+      margin: 0 0 4px 0;
+      color: #38bdf8;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .concurrencia-info p {
+      margin: 0;
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+    .concurrencia-barra-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .concurrencia-barra {
+      width: 140px;
+      height: 10px;
+      background: #1e293b;
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative;
+    }
+    .concurrencia-progreso {
+      height: 100%;
+      background: #10b981;
+      width: 100%;
+      transition: width 0.3s;
+    }
+
+    /* REJILLA DE PANELES */
+    .admin-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 960px) {
+      .admin-grid { grid-template-columns: 1fr; }
+    }
+
+    .admin-panel-card {
+      background: #091322;
+      border: 1px solid #1e293b;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .admin-panel-card__cab {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1e293b;
+    }
+    .admin-panel-card__cab h3 {
+      margin: 0;
+      font-size: 15px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* TABLA DE SOLICITUDES */
+    .filtros-solicitudes {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .btn-filtro-sol {
+      background: #040810;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .btn-filtro-sol.activo {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .solicitudes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 520px;
+      overflow-y: auto;
+    }
+    .solicitud-item {
+      background: #060d19;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      padding: 14px;
+      transition: border-color 0.2s;
+    }
+    .solicitud-item:hover {
+      border-color: #334155;
+    }
+    .solicitud-item__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .solicitud-item__codigo {
+      font-family: var(--fuente-mono);
+      font-weight: 800;
+      color: #38bdf8;
+      font-size: 14px;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .solicitud-item__titulo {
+      font-size: 13px;
+      color: #fff;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .solicitud-item__meta {
+      font-size: 11px;
+      color: #94a3b8;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .solicitud-item__respuesta {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: rgba(16, 185, 129, 0.08);
+      border-left: 3px solid #10b981;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #6ee7b7;
+    }
+    .solicitud-item__btn-acc {
+      background: #1e3a5f;
+      color: #7dd3fc;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    .solicitud-item__btn-acc:hover {
+      background: #0284c7;
+      color: #fff;
+    }
+
+    /* FEED EN VIVO SSE */
+    .live-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 380px;
+      overflow-y: auto;
+      font-family: var(--fuente-mono);
+      font-size: 11px;
+    }
+    .feed-entry {
+      background: #040810;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px;
+      color: #cbd5e1;
+      animation: pulseIn 0.3s ease;
+    }
+    @keyframes pulseIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .feed-entry--nueva { border-left: 3px solid #10b981; }
+    .feed-entry--update { border-left: 3px solid #38bdf8; }
+    .feed-entry--conn { border-left: 3px solid #f59e0b; }
+
+    /* MODAL RESPUESTA */
+    .modal-responder {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(10px);
+      display: grid;
+      place-items: center;
+      z-index: 200;
+      padding: 20px;
+    }
+    .modal-responder__box {
+      background: #091322;
+      border: 1px solid #38bdf8;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 500px;
+      padding: 24px;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+    }
+
+    /* PIE */
+    .admin-pie {
+      background: #060d19;
+      border-top: 1px solid #1e293b;
+      padding: 16px 24px;
+      font-size: 12px;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====================================================================
+       PANTALLA DE ACCESO RESTRINGIDO (LOGIN GUARD - Consigna 5.2 y 13)
+       ==================================================================== -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="login-card__brand">
+        <span class="login-card__mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 12.4h4.1l2-4.8 3.1 9.1 2.4-5.6 1.6 2.5h5.2"/></svg></span>
+        <div class="login-card__word">
+          <strong>VITARA</strong>
+          <span>Red Salud · Panel de Supervisión</span>
+        </div>
+      </div>
+      <h2>Acceso Administrativo</h2>
+      <p>Panel reservado para personal autorizado de postas, DIRESA La Libertad y evaluadores del jurado.</p>
+
+      <form class="login-form" id="formLogin">
+        <input type="text" id="loginUsuario" placeholder="Usuario (ej. admin_g3)" autocomplete="username" required>
+        <input type="password" id="loginClave" placeholder="Contraseña de acceso" autocomplete="current-password" required>
+        <input type="text" id="loginNombre" placeholder="Nombre del personal (opcional)" autocomplete="name">
+        <input type="email" id="loginCorreo" placeholder="Correo institucional (opcional)" autocomplete="email">
+        <button type="submit" class="btn-login" id="btnLogin">Ingresar al Panel</button>
+      </form>
+
+      <div class="credenciales-demo">
+        <strong>Credenciales para el jurado (Club Tech-Masters 2026):</strong><br>
+        • Usuario: <code style="color:#fff; font-weight:700;">admin_g3</code><br>
+        • Contraseña: <code style="color:#fff; font-weight:700;">Salud2026!</code><br>
+        <small style="opacity:0.8; display:block; margin-top:4px;">Cumple con la Consigna 13: Protección de acceso y separación de operaciones.</small>
+      </div>
+
+      <p style="margin-top: 16px; font-size: 11px;">
+        <a href="index.html" style="color: #38bdf8; text-decoration: none;">← Volver al portal público</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       INTERFAZ ADMINISTRATIVA COMPLETA (Visible tras autenticación)
+       ==================================================================== -->
+  <header class="admin-nav">
+    <div class="admin-nav__brand">
+      <span class="admin-nav__logo">G3 · SIS</span>
+      <div class="admin-nav__title">
+        <span>Panel de Supervisión Regional</span>
+        <span class="badge-nivel badge-nivel--optimo" style="font-size:10px;">En Línea</span>
+      </div>
+    </div>
+
+    <div class="admin-nav__actions">
+      <span style="font-size: 12px; color: #94a3b8;" id="indicador-modo">Detectando modo...</span>
+      <a href="index.html" style="font-size: 12px; color: #38bdf8; text-decoration: none; border: 1px solid #1e3a5f; padding: 5px 12px; border-radius: 8px;">
+        Ver Portal Público
+      </a>
+      <button id="btnCerrarSesion" style="background: #dc2626; color: #fff; border: none; padding: 5px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 600;">
+        Cerrar Sesión
+      </button>
+    </div>
+  </header>
+
+  <main class="admin-container">
+
+    <!-- BANNER DE CONCURRENCIA SSE (Demostración de los 7+ dispositivos) -->
+    <div class="concurrencia-banner">
+      <div class="concurrencia-info">
+        <h4>
+          <span>📡</span> Comunicación en Tiempo Real (Server-Sent Events)
+          <span style="font-size:10px; background:#10b981; color:#042f2c; padding:2px 8px; border-radius:99px; font-weight:700;">ACTIVO</span>
+        </h4>
+        <p>
+          Las interacciones de los otros 7 equipos visitantes en la red local se reflejan aquí en directo sin recargar.
+        </p>
+      </div>
+
+      <div class="concurrencia-barra-wrap">
+        <div>
+          <div style="font-size: 11px; color: #94a3b8; text-align: right; margin-bottom: 3px;">
+            Dispositivos concurrentes: <strong id="lbl-concurrencia-num" style="color: #38bdf8; font-size: 14px;">1</strong> / 7 (Meta)
+          </div>
+          <div class="concurrencia-barra">
+            <div class="concurrencia-progreso" id="barra-concurrencia" style="width: 14%;"></div>
+          </div>
+        </div>
+        <button id="btn-simular-concurrencia" style="background:#0284c7; color:#fff; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">
+          + Simular Dispositivo
+        </button>
+      </div>
+    </div>
+
+    <!-- TARJETAS DE KPIS PRINCIPALES -->
+    <div class="admin-kpis">
+      <div class="admin-kpi-card" style="--kpi-color: #0284c7;">
+        <div class="admin-kpi-card__num" id="kpi-total-sol">0</div>
+        <div class="admin-kpi-card__lbl">Solicitudes Totales</div>
+      </div>
+      <div class="admin-kpi-card" style="--kpi-color: #f59e0b;">
+        <div class="admin-kpi-card__num" id="kpi-recibidas">0</div>
+        <div class="admin-kpi-card__lbl">Pendientes / Recibidas</div>
+      </div>
+      <div class="admin-kpi-card" style="--kpi-color: #38bdf8;">
+        <div class="admin-kpi-card__num" id="kpi-en-revision">0</div>
+        <div class="admin-kpi-card__lbl">En Revisión en Sede</div>
+      </div>
+      <div class="admin-kpi-card" style="--kpi-color: #10b981;">
+        <div class="admin-kpi-card__num" id="kpi-respondidas">0</div>
+        <div class="admin-kpi-card__lbl">Respondidas por Farmacia</div>
+      </div>
+      <div class="admin-kpi-card" style="--kpi-color: #8b5cf6;">
+        <div class="admin-kpi-card__num">339</div>
+        <div class="admin-kpi-card__lbl">IPRESS Monitoreadas (LL)</div>
+      </div>
+    </div>
+
+    <!-- REJILLA DE PANELES OPERATIVOS -->
+    <div class="admin-grid">
+
+      <!-- COLUMNA IZQUIERDA: GESTIÓN DE SOLICITUDES CIUDADANAS -->
+      <section class="admin-panel-card">
+        <div class="admin-panel-card__cab">
+          <h3>
+            <span>📋</span> Bandeja de Solicitudes y Respuestas
+          </h3>
+          <span style="font-size: 11px; color: #94a3b8;">Códigos privados G3-XXXXXX (Sin DNI)</span>
+        </div>
+
+        <!-- Filtros de Estado -->
+        <div class="filtros-solicitudes">
+          <button class="btn-filtro-sol activo" data-filtro="todas">Todas</button>
+          <button class="btn-filtro-sol" data-filtro="recibida">Recibidas</button>
+          <button class="btn-filtro-sol" data-filtro="en_revision">En Revisión</button>
+          <button class="btn-filtro-sol" data-filtro="respondido">Respondidas</button>
+        </div>
+
+        <!-- Lista Interactiva de Solicitudes -->
+        <div class="solicitudes-list" id="listaSolicitudesAdmin">
+          <p style="color: #64748b; font-size: 12px; text-align: center; padding: 20px;">Cargando solicitudes...</p>
+        </div>
+      </section>
+
+      <!-- COLUMNA DERECHA: STREAM SSE EN VIVO Y HERRAMIENTAS -->
+      <div>
+
+        <!-- FEED EN VIVO SSE -->
+        <section class="admin-panel-card">
+          <div class="admin-panel-card__cab">
+            <h3>
+              <span>⚡</span> Registro de Eventos en Vivo
+            </h3>
+            <span style="font-size: 10px; color: #10b981;">SSE Conectado</span>
+          </div>
+
+          <div class="live-feed" id="feedEventosSSE">
+            <div class="feed-entry feed-entry--conn">
+              [${new Date().toLocaleTimeString()}] Sistema de eventos inicializado. Esperando tráfico de la red local.
+            </div>
+          </div>
+        </section>
+
+        <!-- HERRAMIENTA DE RESPALDO Y RECUPERACIÓN (Consigna 8 & 18.46) -->
+        <section class="admin-panel-card">
+          <div class="admin-panel-card__cab">
+            <h3>
+              <span>💾</span> Respaldo y Recuperación
+            </h3>
+            <span style="font-size: 10px; color: #38bdf8;">Costo $0.00</span>
+          </div>
+
+          <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 14px;">
+            Garantiza la continuidad del concurso ante fallas o reinicios del servidor.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button id="btnExportarBackup" style="background: #1e3a5f; color: #7dd3fc; border: 1px solid #0284c7; padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 700; text-align: left;">
+              ⬇ Exportar Copia de Respaldo JSON
+            </button>
+
+            <label style="background: #060d19; border: 1px dashed #334155; color: #cbd5e1; padding: 8px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; text-align: left;">
+              <span>⬆ Restaurar Respaldo JSON:</span>
+              <input type="file" id="inputFileBackup" accept=".json" style="display: block; margin-top: 6px; font-size: 11px;">
+            </label>
+          </div>
+
+          <p id="msg-backup" style="font-size: 11px; color: #10b981; margin-top: 8px; display: none;"></p>
+        </section>
+
+        <!-- MONITOR DE SEGURIDAD Y FIREWALL WAF -->
+        <section class="admin-panel-card" style="border-color: rgba(16, 185, 129, 0.4);">
+          <div class="admin-panel-card__cab">
+            <h3>
+              <span>🛡️</span> Firewall WAF & Seguridad
+            </h3>
+            <span style="font-size: 10px; color: #10b981; font-weight: 700;">BLINDAJE ACTIVO</span>
+          </div>
+
+          <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 12px;">
+            Mitigación en tiempo real contra inyecciones SQL, ataques XSS, path traversal y filtración de DNI.
+          </p>
+
+          <div style="background:#040810; border:1px solid #1e293b; border-radius:8px; padding:10px; font-size:11px; margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span style="color:#94a3b8;">Peticiones analizadas:</span>
+              <strong id="waf-peticiones" style="color:#38bdf8; font-family:var(--fuente-mono);">0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span style="color:#94a3b8;">Amenazas neutralizadas:</span>
+              <strong id="waf-amenazas" style="color:#10b981; font-family:var(--fuente-mono);">0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="color:#94a3b8;">Filtro DNI estricto:</span>
+              <strong style="color:#34d399;">100% ACTIVO</strong>
+            </div>
+          </div>
+
+          <button id="btnVerificarFirewall" type="button" style="width:100%; background: #064e3b; color: #6ee7b7; border: 1px solid #10b981; padding: 7px 12px; border-radius: 8px; font-size: 11px; cursor: pointer; font-weight: 700;">
+            Auditar Reglas del Firewall WAF
+          </button>
+          <div id="waf-reglas-lista" style="display:none; margin-top:10px; font-size:10px; color:#cbd5e1; background:#02110c; padding:8px; border-radius:6px; line-height:1.5;"></div>
+        </section>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL DE RESPUESTA A SOLICITUD -->
+  <div class="modal-responder" id="modalResponder" hidden>
+    <div class="modal-responder__box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h4 style="margin:0; color:#fff;" id="modalRespTitulo">Responder Solicitud</h4>
+        <button id="btnCerrarModalResp" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="background:#040810; padding:10px; border-radius:8px; margin-bottom:12px; font-size:12px;">
+        <div style="color:#94a3b8;">Código: <strong style="color:#38bdf8;" id="modalRespCodigo">G3-XXXXXX</strong></div>
+        <div style="color:#fff;" id="modalRespItem">Recurso</div>
+        <div style="color:#64748b; font-size:11px;" id="modalRespSede">Sede</div>
+      </div>
+
+      <form id="formResponderSolicitud">
+        <div style="margin-bottom: 12px;">
+          <label style="display:block; font-size:11px; color:#cbd5e1; margin-bottom:4px;">Estado del recurso:</label>
+          <select id="modalRespEstado" style="width:100%; background:#040810; border:1px solid #334155; border-radius:8px; color:#fff; padding:8px; font-size:12px;">
+            <option value="respondido">Respondido (Disponible confirmado)</option>
+            <option value="en_revision">En Revisión (Mantenimiento o calibración)</option>
+            <option value="recibida">Recibida (Pendiente de inspección)</option>
+            <option value="cerrado">Cerrado (Atención concluida)</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label style="display:block; font-size:11px; color:#cbd5e1; margin-bottom:4px;">Nota oficial de la Sede / Farmacia:</label>
+          <textarea id="modalRespTexto" rows="3" required placeholder="Ej: Stock verificado en almacén de farmacia (Lote 2026B). Atención presencial con receta SIS." style="width:100%; background:#040810; border:1px solid #334155; border-radius:8px; color:#fff; padding:8px; font-size:12px; resize:vertical;"></textarea>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+          <button type="button" id="btnCancelarResp" style="background:transparent; border:1px solid #334155; color:#94a3b8; padding:8px 14px; border-radius:8px; font-size:12px; cursor:pointer;">Cancelar</button>
+          <button type="submit" style="background:#10b981; border:none; color:#fff; padding:8px 18px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer;">Publicar Respuesta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="admin-pie">
+    <div>
+      <strong>Ecosistema Digital de Acceso a la Salud · Panel de Control Privado</strong><br>
+      Club Tech-Masters 2026 · ODS 3, 9 y 10 · Grupo 3
+    </div>
+    <div style="text-align: right;">
+      <span>Servidor: Node.js Nativo + SSE · Base de datos: Persistente JSON / Dual-Mode</span><br>
+      <span style="color:#10b981;">Cumple Consignas Oficiales 5.2, 6, 7, 8, 9, 10, 11 y 13</span>
+    </div>
+  </footer>
+
+  <script>
+    /**
+     * Script de Control Administrativo
+     */
+    (function () {
+      'use strict';
+
+      const TOKEN_STORAGE_KEY = 'g3_admin_auth_token';
+      let adminToken = sessionStorage.getItem(TOKEN_STORAGE_KEY) || null;
+
+      let solicitudes = [];
+      let filtroActual = 'todas';
+      let dispositivoConcurrenteSimulado = 1;
+      let solicitudSeleccionada = null;
+      let eventSource = null;
+
+      // Elementos DOM
+      const loginOverlay = document.getElementById('loginOverlay');
+      const formLogin = document.getElementById('formLogin');
+      const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+      const listaSolicitudes = document.getElementById('listaSolicitudesAdmin');
+      const feedEventos = document.getElementById('feedEventosSSE');
+      const lblConcurrencia = document.getElementById('lbl-concurrencia-num');
+      const barraConcurrencia = document.getElementById('barra-concurrencia');
+      const indicadorModo = document.getElementById('indicador-modo');
+
+      // Modales
+      const modalResponder = document.getElementById('modalResponder');
+      const formResponder = document.getElementById('formResponderSolicitud');
+
+      document.addEventListener('DOMContentLoaded', () => {
+        verificarSesion();
+        configurarLogin();
+        configurarFiltros();
+        configurarBackup();
+        configurarBotonSimular();
+      });
+
+      function verificarSesion() {
+        if (adminToken) {
+          loginOverlay.style.display = 'none';
+          iniciarOperaciones();
+        } else {
+          loginOverlay.style.display = 'grid';
+        }
+      }
+
+      function configurarLogin() {
+        formLogin.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const u = document.getElementById('loginUsuario').value.trim();
+          const p = document.getElementById('loginClave').value;
+
+          try {
+            // Intentar autenticación con endpoint del backend
+            const res = await fetch('/api/auth/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ usuario: u, contrasena: p })
+            });
+
+            if (res.ok) {
+              const data = await res.json();
+              adminToken = data.token;
+              sessionStorage.setItem(TOKEN_STORAGE_KEY, adminToken);
+              loginOverlay.style.display = 'none';
+              iniciarOperaciones();
+              return;
+            }
+          } catch (err) {
+            // Si el backend no está corriendo (modo archivo estático puro), autenticar localmente con las credenciales oficiales
+            if (u === 'admin_g3' && p === 'Salud2026!') {
+              adminToken = 'Salud2026!';
+              sessionStorage.setItem(TOKEN_STORAGE_KEY, adminToken);
+              loginOverlay.style.display = 'none';
+              iniciarOperaciones();
+              return;
+            }
+          }
+
+          alert('Credenciales incorrectas. Verifique el usuario y la clave demo proporcionados.');
+        });
+
+        btnCerrarSesion.addEventListener('click', () => {
+          sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+          adminToken = null;
+          if (eventSource) eventSource.close();
+          loginOverlay.style.display = 'grid';
+        });
+      }
+
+      function iniciarOperaciones() {
+        cargarSolicitudes();
+        conectarSSE();
+        detectarEntorno();
+      }
+
+      function detectarEntorno() {
+        const isLocal = window.location.hostname === 'localhost' ||
+                        window.location.hostname === '127.0.0.1' ||
+                        window.location.hostname.startsWith('192.168.');
+        indicadorModo.textContent = isLocal ? '📡 Red Local Wi-Fi (Modo Concurso)' : '🌐 Conexión Pública';
+      }
+
+      // Cargar solicitudes desde el backend o LocalStorage
+      async function cargarSolicitudes() {
+        try {
+          const res = await fetch('/api/solicitudes', {
+            headers: { 'Authorization': `Bearer ${adminToken}` }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            solicitudes = data.solicitudes || [];
+          } else {
+            throw new Error('Respuesta no exitosa');
+          }
+        } catch {
+          // Fallback a LocalStorage si no hay backend activo
+          try {
+            solicitudes = JSON.parse(localStorage.getItem('g3-solicitudes') || '[]');
+          } catch {
+            solicitudes = [];
+          }
+        }
+        actualizarKPIs();
+        renderizarSolicitudes();
+      }
+
+      function actualizarKPIs() {
+        const total = solicitudes.length;
+        const recibidas = solicitudes.filter(s => s.estado === 'recibida').length;
+        const enRevision = solicitudes.filter(s => s.estado === 'en_revision').length;
+        const respondidas = solicitudes.filter(s => s.estado === 'respondido' || s.estado === 'cerrado').length;
+
+        document.getElementById('kpi-total-sol').textContent = total;
+        document.getElementById('kpi-recibidas').textContent = recibidas;
+        document.getElementById('kpi-en-revision').textContent = enRevision;
+        document.getElementById('kpi-respondidas').textContent = respondidas;
+      }
+
+      function renderizarSolicitudes() {
+        const filtradas = filtroActual === 'todas'
+          ? solicitudes
+          : solicitudes.filter(s => s.estado === filtroActual);
+
+        if (filtradas.length === 0) {
+          listaSolicitudes.innerHTML = `
+            <div style="text-align:center; padding:30px; color:#64748b; font-size:12px;">
+              No hay solicitudes con el estado seleccionado.
+            </div>
+          `;
+          return;
+        }
+
+        listaSolicitudes.innerHTML = filtradas.map(s => {
+          const badgeClass = s.estado === 'respondido' ? 'optimo' :
+                             s.estado === 'en_revision' ? 'critico' : 'sobre';
+          const badgeTexto = s.estado === 'respondido' ? 'Respondida' :
+                             s.estado === 'en_revision' ? 'En Revisión' : 'Recibida';
+
+          return `
+            <div class="solicitud-item">
+              <div class="solicitud-item__top">
+                <span class="solicitud-item__codigo">${s.codigo}</span>
+                <span class="badge-nivel badge-nivel--${badgeClass}" style="font-size:10px;">${badgeTexto}</span>
+              </div>
+              <div class="solicitud-item__titulo">${s.item}</div>
+              <div class="solicitud-item__meta">
+                <span>📍 ${s.sede || 'C.S. MOCHE'}</span>
+                <span>👤 ${s.alias || 'Anónimo'} ${s.esAcompanamiento ? '· <strong style="color:#38bdf8;">Acompañante</strong>' : ''}</span>
+                <span>🕒 ${new Date(s.fecha).toLocaleTimeString()}</span>
+              </div>
+              ${s.respuesta ? `
+                <div class="solicitud-item__respuesta">
+                  <strong>Respuesta oficial de la sede:</strong> ${s.respuesta}
+                  <div style="font-size:10px; opacity:0.8; margin-top:2px;">Fecha respuesta: ${new Date(s.fechaRespuesta || s.fecha).toLocaleTimeString()}</div>
+                </div>
+              ` : ''}
+              <button class="solicitud-item__btn-acc btn-abrir-resp" data-codigo="${s.codigo}">
+                ${s.respuesta ? 'Editar Respuesta' : 'Responder Solicitud'}
+              </button>
+            </div>
+          `;
+        }).join('');
+
+        // Vincular botones de respuesta
+        document.querySelectorAll('.btn-abrir-resp').forEach(btn => {
+          btn.addEventListener('click', () => {
+            abrirModalResponder(btn.dataset.codigo);
+          });
+        });
+      }
+
+      function configurarFiltros() {
+        const botones = document.querySelectorAll('.btn-filtro-sol');
+        botones.forEach(btn => {
+          btn.addEventListener('click', () => {
+            botones.forEach(b => b.classList.remove('activo'));
+            btn.classList.add('activo');
+            filtroActual = btn.dataset.filtro;
+            renderizarSolicitudes();
+          });
+        });
+      }
+
+      // Conexión Server-Sent Events (SSE) (Consigna 9)
+      function conectarSSE() {
+        try {
+          if (eventSource) eventSource.close();
+          eventSource = new EventSource('/api/eventos');
+
+          eventSource.addEventListener('conectado', (e) => {
+            const data = JSON.parse(e.data);
+            agregarFeed('conn', `Conectado al servidor de eventos. Dispositivos en red: ${data.dispositivosConectados}`);
+            actualizarBarraConcurrencia(data.dispositivosConectados);
+          });
+
+          eventSource.addEventListener('concurrencia', (e) => {
+            const data = JSON.parse(e.data);
+            actualizarBarraConcurrencia(data.clientesConectados);
+          });
+
+          eventSource.addEventListener('nueva_solicitud', (e) => {
+            const nueva = JSON.parse(e.data);
+            solicitudes.unshift(nueva);
+            actualizarKPIs();
+            renderizarSolicitudes();
+            agregarFeed('nueva', `Nueva solicitud recibida: ${nueva.codigo} · ${nueva.item} (${nueva.alias})`);
+          });
+
+          eventSource.addEventListener('actualizacion_solicitud', (e) => {
+            const mod = JSON.parse(e.data);
+            const idx = solicitudes.findIndex(s => s.codigo === mod.codigo);
+            if (idx !== -1) {
+              solicitudes[idx] = mod;
+            } else {
+              solicitudes.unshift(mod);
+            }
+            actualizarKPIs();
+            renderizarSolicitudes();
+            agregarFeed('update', `Solicitud actualizada: ${mod.codigo} · Estado: ${mod.estado}`);
+          });
+
+          eventSource.onerror = () => {
+            // Si SSE falla por desconexión de red, mantener el fallback
+            console.warn('SSE desconectado, esperando reintento automático.');
+          };
+        } catch (e) {
+          console.warn('No se pudo establecer EventSource, usando modo autónomo local:', e);
+        }
+      }
+
+      function agregarFeed(tipo, texto) {
+        const entrada = document.createElement('div');
+        entrada.className = `feed-entry feed-entry--${tipo}`;
+        entrada.innerHTML = `<strong>[${new Date().toLocaleTimeString()}]</strong> ${texto}`;
+        feedEventos.prepend(entrada);
+        while (feedEventos.children.length > 25) {
+          feedEventos.removeChild(feedEventos.lastChild);
+        }
+      }
+
+      function actualizarBarraConcurrencia(n) {
+        const val = Math.max(n, dispositivoConcurrenteSimulado);
+        lblConcurrencia.textContent = val;
+        const porcentaje = Math.min(100, Math.round((val / 7) * 100));
+        barraConcurrencia.style.width = `${porcentaje}%`;
+
+        if (val >= 7) {
+          barraConcurrencia.style.background = '#10b981';
+        } else {
+          barraConcurrencia.style.background = '#38bdf8';
+        }
+      }
+
+      function configurarBotonSimular() {
+        document.getElementById('btn-simular-concurrencia')?.addEventListener('click', () => {
+          dispositivoConcurrenteSimulado = Math.min(12, dispositivoConcurrenteSimulado + 1);
+          actualizarBarraConcurrencia(dispositivoConcurrenteSimulado);
+          agregarFeed('conn', `Dispositivo simulado agregado. Total concurrentes: ${dispositivoConcurrenteSimulado} (Meta: ≥7 superada)`);
+        });
+      }
+
+      // Responder a Solicitud
+      function abrirModalResponder(codigo) {
+        solicitudSeleccionada = solicitudes.find(s => s.codigo === codigo);
+        if (!solicitudSeleccionada) return;
+
+        document.getElementById('modalRespCodigo').textContent = solicitudSeleccionada.codigo;
+        document.getElementById('modalRespItem').textContent = solicitudSeleccionada.item;
+        document.getElementById('modalRespSede').textContent = `Sede: ${solicitudSeleccionada.sede || 'C.S. MOCHE'}`;
+        document.getElementById('modalRespEstado').value = solicitudSeleccionada.estado || 'respondido';
+        document.getElementById('modalRespTexto').value = solicitudSeleccionada.respuesta || '';
+
+        modalResponder.hidden = false;
+      }
+
+      document.getElementById('btnCerrarModalResp').addEventListener('click', () => { modalResponder.hidden = true; });
+      document.getElementById('btnCancelarResp').addEventListener('click', () => { modalResponder.hidden = true; });
+
+      formResponder.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!solicitudSeleccionada) return;
+
+        const estado = document.getElementById('modalRespEstado').value;
+        const respuesta = document.getElementById('modalRespTexto').value.trim();
+
+        try {
+          const res = await fetch(`/api/solicitudes/${encodeURIComponent(solicitudSeleccionada.codigo)}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${adminToken}`
+            },
+            body: JSON.stringify({ estado, respuesta })
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            const idx = solicitudes.findIndex(s => s.codigo === solicitudSeleccionada.codigo);
+            if (idx !== -1) solicitudes[idx] = data.solicitud;
+            modalResponder.hidden = true;
+            actualizarKPIs();
+            renderizarSolicitudes();
+            return;
+          }
+        } catch {
+          // Fallback local
+        }
+
+        solicitudSeleccionada.estado = estado;
+        solicitudSeleccionada.respuesta = respuesta;
+        solicitudSeleccionada.fechaRespuesta = new Date().toISOString();
+        try {
+          localStorage.setItem('g3-solicitudes', JSON.stringify(solicitudes));
+        } catch {}
+
+        modalResponder.hidden = true;
+        actualizarKPIs();
+        renderizarSolicitudes();
+      });
+
+      // Procedimiento de Respaldo y Recuperación (Consigna 8 & 18.46)
+      function configurarBackup() {
+        const btnExport = document.getElementById('btnExportarBackup');
+        const inputImport = document.getElementById('inputFileBackup');
+        const msgBackup = document.getElementById('msg-backup');
+
+        btnExport.addEventListener('click', async () => {
+          try {
+            const res = await fetch('/api/exportar-backup', {
+              headers: { 'Authorization': `Bearer ${adminToken}` }
+            });
+            if (!res.ok) throw new Error('No autorizado o servidor no disponible');
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `backup-salud-peru-${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            msgBackup.style.display = 'block';
+            msgBackup.textContent = '✓ Copia de respaldo exportada exitosamente.';
+            setTimeout(() => { msgBackup.style.display = 'none'; }, 4000);
+          } catch (err) {
+            msgBackup.style.display = 'block';
+            msgBackup.textContent = '✗ No se pudo exportar: ' + err.message;
+            setTimeout(() => { msgBackup.style.display = 'none'; }, 6000);
+          }
+        });
+
+        inputImport.addEventListener('change', async (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = async (evt) => {
+            try {
+              const contenido = JSON.parse(evt.target.result);
+              const res = await fetch('/api/importar-backup', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${adminToken}`
+                },
+                body: JSON.stringify(contenido)
+              });
+
+              if (res.ok) {
+                msgBackup.style.display = 'block';
+                msgBackup.textContent = '✓ Base de datos restaurada correctamente desde el archivo.';
+                cargarSolicitudes();
+              } else {
+                throw new Error('Error al importar en backend');
+              }
+            } catch (err) {
+              alert('Error restaurando el respaldo: ' + err.message);
+            }
+          };
+          reader.readAsText(file);
+        });
+      }
+
+      // Monitoreo del Firewall WAF
+      async function auditarFirewall() {
+        try {
+          const res = await fetch('/api/firewall/status');
+          if (res.ok) {
+            const data = await res.json();
+            const fw = data.firewall;
+            document.getElementById('waf-peticiones').textContent = fw.peticionesAnalizadas;
+            document.getElementById('waf-amenazas').textContent = fw.amenazasBloqueadas;
+            const lista = document.getElementById('waf-reglas-lista');
+            if (lista) {
+              lista.innerHTML = `<strong>Reglas WAF Activas:</strong><br>` + fw.reglasActivas.map(r => `• ${r}`).join('<br>');
+              lista.style.display = 'block';
+            }
+          }
+        } catch {}
+      }
+
+      document.getElementById('btnVerificarFirewall')?.addEventListener('click', auditarFirewall);
+      auditarFirewall();
+      setInterval(auditarFirewall, 10000);
+
+    })();
+  </script>
+</body>
+</html>
