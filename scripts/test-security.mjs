@@ -89,12 +89,15 @@ try {
   const health = await api('/api/salud'); check(health.data.clientesConectadosSSE,7,'siete streams realmente abiertos');
   for (const connection of connections) {
     check(connection.text.includes('event: nueva_solicitud'),true,'evento real recibido');
+    check(connection.text.includes('event: participacion_actualizada'),true,'invalidación de participación sin datos personales');
     check(/G3-|Recurso de prueba|Equipo prueba|example\.test/.test(connection.text),false,'SSE público sin códigos ni textos privados');
   }
   const backup = await api('/api/exportar-backup','GET',undefined,token); check(backup.status,200,'exportación privada'); check(backup.data.datos.length,9,'backup de solicitudes reales de prueba');
   check((await api('/api/importar-backup','POST',backup.data,token)).status,200,'restauración privada');
   check((await api('/api/admin/usuarios/'+profiles[1].data.profile.id,'DELETE',undefined,token)).status,200,'DELETE administrativo a través del servidor real');
   check((await api('/api/perfil','DELETE',undefined,ptoken)).status,200,'DELETE de perfil propio a través del servidor real');
+  await Promise.all(Array.from({length:9},stream));
+  check((await api('/api/eventos')).status,429,'17º stream desde la misma conexión limitado');
   const stored = fs.readFileSync(path.join(dir,'participacion.json'),'utf8');
   check(stored.includes(ptoken),false,'clave de dispositivo no se almacena en claro');
   check(fs.statSync(path.join(dir,'solicitudes.json')).mode & 0o777,0o600,'permisos de solicitudes');

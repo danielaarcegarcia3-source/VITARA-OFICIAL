@@ -1,15 +1,8 @@
 import { test, expect } from '@playwright/test';
-import http from 'node:http';
-import fs from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
-import { createServices } from '../server-services.mjs';
-let server, base, dir;
-test.beforeAll(async()=>{
-  dir=fs.mkdtempSync(path.join(os.tmpdir(),'vitara-setup-ui-'));process.env.VITARA_DATA_DIR=dir;process.env.VITARA_SETUP_KEY='bootstrap-isolated-test-only';delete process.env.ADMIN_USUARIO;delete process.env.ADMIN_CLAVE;
-  const services=createServices({root:dir});server=http.createServer(async(req,res)=>{if(await services.handle(req,res,new URL(req.url,'http://local').pathname))return;const remote=await fetch('http://127.0.0.1:3000'+req.url);const headers=Object.fromEntries(remote.headers);delete headers['content-encoding'];delete headers['content-length'];delete headers['transfer-encoding'];res.writeHead(remote.status,headers);res.end(Buffer.from(await remote.arrayBuffer()));});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));base=`http://127.0.0.1:${server.address().port}`;
-});
-test.afterAll(async()=>{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));fs.rmSync(dir,{recursive:true,force:true});delete process.env.VITARA_DATA_DIR;delete process.env.VITARA_SETUP_KEY;});
+import { startIsolatedServer } from './helpers/server.mjs';
+let isolated, base;
+test.beforeAll(async()=>{isolated=await startIsolatedServer({VITARA_SETUP_KEY:'bootstrap-isolated-test-only'});base=isolated.base;});
+test.afterAll(async()=>{await isolated?.dispose();});
 test('configuración inicial guiada exige clave privada, permite elegir credenciales y se cierra tras el alta',async({page,request})=>{
   await page.goto(base+'/admin.html');await expect(page.locator('#admin-setup')).toBeVisible();await expect(page.locator('#admin-setup')).toHaveAttribute('open','');
   await page.locator('[name=setupKey]').fill('incorrecta');await page.locator('[name=usuario]').fill('mi_operador');await page.locator('[name=contrasena]').fill('contrasena-larga-de-prueba');await page.locator('#admin-setup-form button').click();await expect(page.locator('#admin-config-status')).toContainText('clave de configuración');

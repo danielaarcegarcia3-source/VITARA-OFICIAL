@@ -23,7 +23,7 @@ Es un **filtro de la aplicación HTTP**, no un firewall del sistema operativo:
 
 - Presupuestos independientes por IP de conexión: 180 peticiones API/min y 1800 activos/min. El proxy puede hacer compartir el presupuesto a varios visitantes. No se confía ciegamente en cabeceras de IP.
 - Límites específicos: 10 intentos de login/15 min, 5 de configuración/15 min, 20 registros/min, 150 eventos/min y 20 consultas al chat/min.
-- JSON de perfiles/chat: 16 KiB; solicitudes/restauración: 1 MB. Máximo 5000 solicitudes, 7 perfiles, 80 conexiones SSE; desconexión de clientes con búfer de escritura excesivo.
+- JSON de perfiles/chat: 16 KiB; solicitudes/restauración: 1 MB. Máximo 5000 solicitudes, 7 perfiles, 80 conexiones SSE globales, 16 por IP de conexión y máximo 200 conexiones TCP; desconexión de clientes con búfer de escritura excesivo.
 - Timeouts para cabeceras y cuerpos de peticiones. Detección de patrones comunes SQL/XSS/traversal, sin afirmar cobertura universal. El backend no ejecuta SQL.
 - Indicadores de bloqueos reales; incidencias en memoria sin IP ni URL privada en el registro guardado por la aplicación. Los logs del proxy/alojamiento son responsabilidad de su operador.
 
@@ -54,4 +54,8 @@ npm test
 
 `test:security` arranca el **servidor real** en puerto y carpeta temporales, con secretos aleatorios de prueba. Incluye 7 streams SSE abiertos simultáneamente, registros concurrentes, exclusión de datos privados, inyección, permisos, origen, DELETE, backup/restore, reinicio y límites. No ejecutarlo contra registros de usuarios reales. Las pruebas no equivalen a siete dispositivos físicos ni a WAN/LAN del concurso.
 
-Pendientes operativos: HTTPS público, comprobación del enlace y volumen final, siete dispositivos físicos en la red del evento, permisos de medios aportados y nombres autorizados de los cuatro integrantes. Ver `CONSIGNA-CUMPLIMIENTO.md` y `PUBLICAR-VITARA.md`.
+Pendientes operativos: HTTPS público, comprobación del enlace y volumen final, siete dispositivos físicos en la red del evento, permisos de medios aportados y confirmación de roles del equipo ya identificado. Ver `CONSIGNA-CUMPLIMIENTO.md` y `PUBLICAR-VITARA.md`.
+
+### Refuerzo de actualización y sesiones
+
+Altas, cambios de actividad y borrados de participación generan invalidaciones SSE sin datos personales. El panel vuelve a consultar con token administrativo y mantiene un respaldo de 15 s. Consultas anteriores se cancelan o descartan al cerrar sesión para impedir que un registro antiguo reaparezca en el DOM. El cierre limpia las listas del panel. Ver `RED-SEGURA-CONCURSO.md` para límites y firewall del anfitrión.

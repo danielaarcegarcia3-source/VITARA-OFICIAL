@@ -97,3 +97,7 @@ cloudflared tunnel --url http://localhost:3000
 6. Un túnel temporal no es un alojamiento permanente; cerrar al terminar y no usarlo con datos personales reales. El archivo de datos permanece en la computadora, no en GitHub.
 
 El acceso al servicio de túneles está fuera de los hosts salientes permitidos en este entorno, por lo que el equipo debe validar esa opción desde su propia computadora. Para un link permanente se debe elegir un alojamiento gratuito compatible con Node y persistencia, comprobar sus límites actuales y no activar facturación. **No usar Pages estático como sustituto del backend para afirmar cumplimiento completo.**
+
+### Revisión de equipo y red
+
+Nombres incorporados: Daniela Arce, Dharma Valle, Zoe Cabrera y Rafael Carbajal. Charité se conserva por petición del usuario, manteniendo CC BY-NC 4.0. El panel recibe cambios de participantes por eventos sin publicar sus datos. Consulta `RED-SEGURA-CONCURSO.md` antes del ensayo LAN: el filtro HTTP no configura el firewall del equipo anfitrión.

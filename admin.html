@@ -794,6 +794,8 @@
         cargarSolicitudes();
         conectarSSE();
         detectarEntorno();
+        clearInterval(requestsTimer);
+        requestsTimer = setInterval(() => { if (!document.hidden && adminToken) cargarSolicitudes(); }, 15000);
       }
 
       function detectarEntorno() {
@@ -803,24 +805,36 @@
         indicadorModo.textContent = isLocal ? '📡 Red Local Wi-Fi (Modo Concurso)' : '🌐 Conexión Pública';
       }
 
-      // Cargar solicitudes desde el backend o LocalStorage
+      let requestsController, requestsRevision = 0, requestsTimer, requestsDebounce;
+      window.addEventListener('vitara:admin-logout', () => {
+        ++requestsRevision; requestsController?.abort();
+        clearInterval(requestsTimer); clearTimeout(requestsDebounce);
+        adminToken = null; sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+        eventSource?.close(); solicitudes = []; actualizarKPIs(); renderizarSolicitudes();
+        feedEventos.replaceChildren(); document.getElementById('loginClave').value = '';
+        modalResponder.hidden = true; solicitudSeleccionada = null;
+        document.getElementById('modalRespTexto').value = '';
+        for (const id of ['modalRespCodigo','modalRespItem','modalRespSede']) document.getElementById(id).textContent = '';
+        loginOverlay.style.display = 'grid';
+      });
+      // Consultas privadas, cancelables; una respuesta antigua no reaparece tras logout.
       async function cargarSolicitudes() {
+        const token = adminToken; if (!token) return;
+        const revision = ++requestsRevision;
+        requestsController?.abort(); requestsController = new AbortController();
         try {
-          const res = await fetch('/api/solicitudes', {
-            headers: { 'Authorization': `Bearer ${adminToken}` }
-          });
-          if (res.ok) {
-            const data = await res.json();
-            solicitudes = data.solicitudes || [];
-          } else {
-            throw new Error('Respuesta no exitosa');
-          }
-        } catch {
+          const res = await fetch('/api/solicitudes', { signal: requestsController.signal, headers: { Authorization: `Bearer ${token}` } });
+          if (res.status === 401) { window.dispatchEvent(new Event('vitara:admin-logout')); return; }
+          if (!res.ok) throw new Error('Respuesta no exitosa');
+          const data = await res.json();
+          if (token !== adminToken || revision !== requestsRevision) return;
+          solicitudes = data.solicitudes || [];
+        } catch (error) {
+          if (error.name === 'AbortError' || token !== adminToken || revision !== requestsRevision) return;
           solicitudes = [];
-          agregarFeed('conn', 'No se pudieron consultar las solicitudes del servidor; no se sustituyen por datos locales.');
+          agregarFeed('conn', 'Sin conexión a solicitudes. Reintentamos automáticamente; no se sustituyen por datos locales.');
         }
-        actualizarKPIs();
-        renderizarSolicitudes();
+        actualizarKPIs(); renderizarSolicitudes();
       }
 
       function actualizarKPIs() {
@@ -921,12 +935,14 @@
           // El stream público solo invalida: volver a consultar con Authorization.
           for (const type of ['nueva_solicitud', 'actualizacion_solicitud', 'restauracion_backup']) {
             eventSource.addEventListener(type, () => {
-              cargarSolicitudes();
+              clearTimeout(requestsDebounce); requestsDebounce = setTimeout(cargarSolicitudes, 180);
               agregarFeed('update', 'Cambios recibidos; consultando registros privados con sesión autenticada.');
             });
           }
 
+          eventSource.addEventListener('participacion_actualizada', () => window.dispatchEvent(new Event('vitara:participants-updated')));
           eventSource.onerror = () => {
+            agregarFeed('conn', 'Canal de eventos desconectado. Reintento automático y consulta de respaldo cada 15 s.');
             // Si SSE falla por desconexión de red, mantener el fallback
             console.warn('SSE desconectado, esperando reintento automático.');
           };

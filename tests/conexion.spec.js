@@ -1,24 +1,9 @@
 import { test, expect } from '@playwright/test';
-import http from 'node:http';
-import fs from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
-import { createServices } from '../server-services.mjs';
-let server, base, dir;
-test.beforeAll(async()=>{
-  dir=fs.mkdtempSync(path.join(os.tmpdir(),'vitara-ui-'));
-  process.env.VITARA_DATA_DIR=dir;process.env.ADMIN_USUARIO='operador_prueba';process.env.ADMIN_CLAVE='clave-solo-pruebas-aisladas';
-  const service=createServices({root:dir});
-  server=http.createServer(async(req,res)=>{
-    if(await service.handle(req,res,new URL(req.url,'http://local').pathname))return;
-    const remote=await fetch('http://127.0.0.1:3000'+req.url);
-    const headers=Object.fromEntries(remote.headers);delete headers['transfer-encoding'];delete headers['content-encoding'];delete headers['content-length'];
-    res.writeHead(remote.status,headers);res.end(Buffer.from(await remote.arrayBuffer()));
-  });
-  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));base=`http://127.0.0.1:${server.address().port}`;
-});
-test.afterAll(async()=>{server.closeAllConnections();await new Promise(resolve=>server.close(resolve));fs.rmSync(dir,{recursive:true,force:true});delete process.env.VITARA_DATA_DIR;delete process.env.ADMIN_USUARIO;delete process.env.ADMIN_CLAVE;});
-async function enter(page){await page.goto(base);await page.evaluate(()=>document.querySelector('#splash-skip').click());await page.locator('#access-name').fill('Persona de prueba');}
+import { startIsolatedServer } from './helpers/server.mjs';
+let isolated, base;
+test.beforeAll(async()=>{isolated=await startIsolatedServer({ADMIN_USUARIO:'operador_prueba',ADMIN_CLAVE:'clave-solo-pruebas-aisladas'});base=isolated.base;});
+test.afterAll(async()=>{await isolated?.dispose();});
+async function enter(page){await page.emulateMedia({reducedMotion:'reduce'});await page.goto(base);await page.evaluate(()=>document.querySelector('#splash-skip').click());await page.locator('#access-name').fill('Persona de prueba');}
 
 test('perfil consentido persistente, actividad real y eliminación',async({page,request})=>{
   await enter(page);await page.locator('#access-email').fill('persona@example.test');await page.locator('#access-district').fill('Trujillo');await page.locator('#access-sync').check();await page.locator('#access-form [type=submit]').click();await expect(page.locator('#access')).toBeHidden();
@@ -33,8 +18,8 @@ test('perfil consentido persistente, actividad real y eliminación',async({page,
 test('mapas reconocibles con polígonos, tema y chat honesto',async({page})=>{
   const errors=[];page.on('pageerror',error=>errors.push(error.message));await enter(page);await page.locator('#access-form [type=submit]').click();
   await expect(page.locator('html')).toHaveAttribute('data-base','blanco');await page.locator('#theme-switch').click();await expect(page.locator('html')).toHaveAttribute('data-base','editorial');
-  await page.locator('[data-view-link=mapas]').click();await expect(page.locator('[data-region]')).toHaveCount(25);await page.locator('[data-region="LIMA"]').click();await expect(page.locator('.territory-selection')).toContainText('LIMA');
-  await page.locator('#map-btn-ll').click();await expect(page.locator('[data-region]')).toHaveCount(12);await page.locator('[data-terrain="2d"]').click();await expect(page.locator('.territory-flat svg')).toBeVisible();
+  await page.locator('[data-view-link=mapas]').click();await expect(page.locator('[data-region]')).toHaveCount(25,{timeout:20000});await page.locator('[data-region="LIMA"]').click();await expect(page.locator('.territory-selection')).toContainText('LIMA');
+  await page.locator('#map-btn-ll').click();await expect(page.locator('[data-region]')).toHaveCount(12,{timeout:20000});await page.locator('[data-terrain="2d"]').click();await expect(page.locator('.territory-flat svg')).toBeVisible();
   await page.locator('#chat-open').click();await expect(page.locator('#chat-ai')).toBeDisabled();await page.locator('#chat-input').fill('¿Cómo exploro los mapas?');await page.locator('#chat-form [type=submit]').click();await expect(page.locator('#chat-messages')).toContainText('GeoJSON');
   await page.locator('#chat-input').fill('explica física cuántica');await page.locator('#chat-form [type=submit]').click();await expect(page.locator('#chat-messages')).toContainText('No tengo información suficiente');expect(errors).toEqual([]);
 });

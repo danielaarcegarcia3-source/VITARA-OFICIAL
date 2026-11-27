@@ -28,7 +28,7 @@ Revisión 27/11/2026. Sustituye la matriz histórica que afirmaba 12 dispositivo
 | Requisito | Estado |
 |---|---|
 | La necesidad de verificar un recurso obtiene un resultado útil | Flujo de demostración funcional; no demuestra atención real ni un convenio con sedes. Validación con beneficiarios/usuarios reales pendiente. |
-| Cuatro integrantes identificados y capaces de explicar el sistema | Roles presentes; nombres autorizados y ensayo oral pendientes. |
+| Cuatro integrantes identificados y capaces de explicar el sistema | Daniela Arce, Dharma Valle, Zoe Cabrera y Rafael Carbajal incorporados. Roles propuestos y ensayo oral por confirmar. |
 | Siete dispositivos visitantes a la vez | Pendiente en LAN del concurso. Declaración actual: **7 clientes automatizados en una máquina**, no 7 dispositivos físicos. |
 | Red local con firewall del anfitrión y sin aislamiento de clientes (14.27) | Servidor escucha en 0.0.0.0; pendiente probar la red física y su política de firewall. |
 | Caída de WAN con funciones principales locales (14.28) | Activos y backend locales implementados; pendiente ensayo físico desconectando WAN, sin apagar Wi-Fi. No hay sincronización automática entre instalaciones. |
@@ -38,10 +38,12 @@ Revisión 27/11/2026. Sustituye la matriz histórica que afirmaba 12 dispositivo
 
 ## Resultados de esta revisión
 
-- `npm run test:security`: **88 comprobaciones aprobadas** del servidor real en procesos aislados.
+- `npm run test:security`: **96 comprobaciones aprobadas** del servidor real en procesos aislados.
 - `npm run test:services`: **34 comprobaciones aprobadas** de servicios aislados.
 - `npm run test:assets`: **61 activos**, 25 texturas verificadas.
-- **23/23 pruebas UI aprobadas**, incluidas las regresiones completas y el panel real; 5,0 min, Chromium headless, un worker.
+- **24/24 pruebas UI aprobadas**, incluidas las regresiones completas y el panel real; 4,9 min, Chromium headless, un worker.
 - `npm audit`: **0 vulnerabilidades conocidas** al 27/11/2026; build y chequeo de espacios sin errores.
 
 No se incluyen claves, tokens, correos personales ni bases reales en las evidencias. Las pruebas crean y eliminan sus propios directorios temporales. El workflow de GitHub repite las comprobaciones sin secretos de producción; su resultado remoto es distinto del resultado local y debe consultarse en el PR.
+
+Ampliación vigente: altas/actividad/borrados del perfil se reflejan por SSE en el panel sin pulsar Actualizar; formulario de visitante → respuesta administrativa → seguimiento tras recarga verificado en navegador. Límite de 16 streams por IP probado con rechazo de la conexión 17. Los escenarios administrativos antiguos usan ahora procesos completos y directorios aislados, no un proxy que mezcle sesiones de dos backends.

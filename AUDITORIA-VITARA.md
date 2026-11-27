@@ -1,6 +1,23 @@
 # VITARA · Activos, territorios y participación
 
-## Revisión vigente · consigna, seguridad y preparación para GitHub
+## Revisión vigente · equipo, entrada multicolor y panel automático
+
+Petición del usuario: incorporar nombres, ampliar animaciones, reforzar protecciones y revisar solicitudes/panel antes de volver a subir.
+
+- Nombres proporcionados por el usuario: **Daniela Arce, Dharma Valle, Zoe Cabrera y Rafael Carbajal**, incorporados en Fuentes / Equipo y README. Se conserva una distribución de roles propuesta para confirmar, sin inventar responsabilidades acordadas.
+- Entrada con seis colores (menta, cian, violeta, coral, dorado y verde), partículas del logo durante el ensamblaje, símbolos de salud diferenciados, órbitas con cometas, aurora, señal expansiva suave y parallax de cursor. El logo mantiene su identidad al completar el ensamblaje. Respeta movimiento reducido, salto, pausa al ocultar y móviles. Sin nuevos archivos multimedia pesados. Inspección visual estática en 1440 y 390 px, sin errores de página/desbordamiento. Una captura dinámica headless agotó su tiempo por composición; se repitió con movimiento reducido, videos detenidos y espera de carga/dibujo, no se presenta como prueba de rendimiento en dispositivos físicos.
+- Participación genera avisos SSE **sin datos personales** al registrar, cambiar actividad y borrar. El panel hace una consulta autenticada y mantiene respaldo cada 15 s. Prueba del servidor real confirma aparición del perfil y del evento sin clic manual. Consultas cancelables y revisiones de sesión descartan respuestas antiguas tras logout; se limpian listas y formulario de respuesta.
+- Nueva prueba de principio a fin: formulario de visitante → código persistido → aparición automática en panel → respuesta administrativa → seguimiento de visitante incluso tras recargar y volver a entrar. Se corrigió que la categoría `servicio` se redujera a medicamento y se retiró la invitación a consultar un código de muestra inexistente. Las pruebas no crean datos en la preview.
+- Se limita SSE a **16 conexiones por IP** y 80 globales; 200 conexiones TCP máximas, además de los controles previos. Rechazo comprobado del stream 17 desde una IP. No se anuncia resistencia universal a ataques ni se modifica el router/firewall del usuario. Nueva guía `RED-SEGURA-CONCURSO.md`, incluida regla Windows limitada a Node/puerto/subred privada y cómo retirarla.
+- Charité se conserva por petición del usuario, con autoría y condición CC BY-NC 4.0 intactas. “Descarga libre” no elimina la condición no comercial. No se inventan permisos para otros medios aportados.
+
+### Verificación de la ampliación
+
+**24/24 UI aprobadas**, suite completa, Chromium, un worker, 4,9 min; **96 comprobaciones de seguridad/integración**, **34 de servicios**, **61 activos** y 25 coincidencias de texturas SHA-256. `npm audit` sin vulnerabilidades conocidas, build y diff sin errores. Las pruebas de administración se migraron de proxies híbridos a procesos reales aislados: un token de un servidor no debe aceptarse en otro. Se mantuvo esa protección y se corrigió el montaje de pruebas, no se relajaron permisos.
+
+El CI de GitHub de la entrega anterior terminó **aprobado**: [ejecución 46066727793](https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/actions/runs/46066727793). El nuevo commit debe ejecutar sus propios controles; no extrapolar el resultado anterior. Continúan pendientes el enlace público completo, el ensayo de siete dispositivos físicos y confirmación de permisos de medios aportados. Código se sube a la misma rama/PR #1, sin fusionar main.
+
+## Revisión anterior · consigna, seguridad y preparación para GitHub
 
 Se leyó íntegramente el PDF de la consigna aportado el 27/11/2026. Matriz en `CONSIGNA-CUMPLIMIENTO.md`; no se declara cumplimiento total ni se contrata un servicio de pago.
 

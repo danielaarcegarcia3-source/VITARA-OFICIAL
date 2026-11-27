@@ -2,7 +2,7 @@
 
 Fuente contrastada: PDF aportado por el usuario, “Consigna Oficial Code Battle – Concurso final 2026”, Club Tech-Masters, Prof. Saúl Pajares. Entrega 27/11 y exposición 28/11/2026. Esta matriz no inventa validaciones ni reemplaza la evaluación del docente.
 
-**Estado:** código subido a la rama de sesión y [PR #1](https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/pull/1) abierto; comprobaciones locales aprobadas. No se declara cumplimiento total: faltan enlace público completo validado, ensayo en siete dispositivos físicos, identificación autorizada de integrantes y confirmación de permisos de algunos medios. No se ha contratado ningún servicio ni activado facturación.
+**Estado:** código subido a la rama de sesión y [PR #1](https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/pull/1) abierto; comprobaciones locales aprobadas. No se declara cumplimiento total: faltan enlace público completo validado, ensayo en siete dispositivos físicos, confirmación de permisos de algunos medios. No se ha contratado ningún servicio ni activado facturación.
 
 ## Requisitos y evidencias
 
@@ -10,14 +10,14 @@ Fuente contrastada: PDF aportado por el usuario, “Consigna Oficial Code Battle
 |---|---|---|
 | 1–4: problema y ODS | Acceso a recursos y orientación de salud en La Libertad. ODS principal 3; 9 y 10 complementarios. Buscador, solicitud de verificación, seguimiento y administración. | Implementado; no es atención clínica ni conexión certificada con IPRESS. |
 | 5.1: identidad, navegación, responsive, formularios | Logo, bienvenida, módulos originales, formularios procesados por Node, estados de éxito/error, mapas y modelos locales. Pruebas Chromium escritorio y móvil. | Implementado. Accesibilidad y equipos físicos requieren validación adicional. |
-| 5.1 y 18.44: cuatro integrantes | Se conservan cuatro roles; no se inventaron nombres. | **Pendiente:** completar nombres autorizados de los cuatro integrantes en Comunidad y README. |
+| 5.1 y 18.44: cuatro integrantes | Daniela Arce, Dharma Valle, Zoe Cabrera y Rafael Carbajal, proporcionados por el usuario. | Nombres incorporados en Fuentes / Equipo y README; distribución de roles propuesta por confirmar. |
 | 5.1: función principal y dos complementarias | Principal: crear y seguir solicitudes con respuesta administrativa persistida. Complementarias: búsqueda/filtrado de recursos, orientación local/canales, exploración de mapas/modelos y comparación de dispositivos. | Implementado y probado; sin stock en vivo ni atención prometida. |
 | 5.2: panel privado y actividad no sensible | Listado de solicitudes, estado/respuesta, KPIs, perfiles de prueba consentidos y eventos. Tokens y permisos en servidor. Utilizar alias de equipo, UUID y correos example.test. | Implementado; el rol público elegido no da permisos administrativos. |
 | 6: flujo conectado | Acción → API → validación → JSON privado → notificación SSE sin texto privado → consulta administrativa autenticada. | Probado en backend y navegador, sin recarga. |
 | 7: multiusuario | Siete clientes SSE simultáneos; siete perfiles y siete solicitudes enviados concurrentemente al servidor real en proceso aislado. Sin pérdida de eventos simultáneos de un perfil. | **Prueba automatizada**, no siete dispositivos físicos. Ensayo oficial pendiente. |
 | 8: persistencia y separación | data/solicitudes.json y data/participacion.json por defecto. Directorio privado configurable, modos 0600, JSON atómico, un proceso escritor. Datos nuevos vacíos. | Reinicio y conservación probados en proceso aislado. No reutilizar la base histórica como datos reales. |
 | 8: backup/recuperación | Exportación/importación de solicitudes con permiso administrativo. Para perfil/admin, copia privada del directorio con servidor detenido. | Backup/restore de solicitudes probado; procedimiento integral en este documento, ensayo del equipo pendiente. |
-| 9: actualizaciones | SSE para solicitudes; consulta automática cada 15 s para participación. Errores de conexión visibles. | Implementado y probado; contadores de conexiones no equivalen a personas. |
+| 9: actualizaciones | SSE para solicitudes; eventos para participación y consulta de respaldo cada 15 s. Errores de conexión visibles. | Implementado y probado; contadores de conexiones no equivalen a personas. |
 | 10.1 y 18.31: enlace público gratuito | Requiere Node accesible mediante HTTPS, no solo una página estática. La preview de Arena no se declara alojamiento definitivo. | **Pendiente de despliegue y comprobación exterior.** Subir a GitHub no genera por sí solo el enlace de la app. |
 | 10.2, 12, 14.27: LAN | Servidor en 0.0.0.0, rutas API del mismo origen, IP local impresa en consola. | Implementado; firewall del anfitrión y comunicación entre siete equipos deben probarse en la red real. |
 | 10.3, 14.28: continuidad sin WAN | HTML, JS, Three/Draco, datos de referencia, modelos y medios locales. Node/JSON siguen en el equipo anfitrión. El chat local no necesita proveedor. | Recursos locales comprobados; desconexión WAN con la LAN del concurso pendiente de ensayo físico. Enlaces oficiales e IA externa no funcionan sin Internet. |
@@ -53,7 +53,8 @@ No hay sincronización automática entre dos instalaciones distintas (LAN y aloj
 
 ## Ensayo físico obligatorio antes de declarar cumplimiento
 
-- [ ] Cuatro integrantes identificados con autorización y responsabilidades conocidas.
+- [x] Nombres de los cuatro integrantes proporcionados e incorporados.
+- [ ] Distribución de responsabilidades confirmada y ensayo oral del equipo.
 - [ ] Confirmación de derechos sobre logo, globo, imágenes y videos aportados; atribuciones y restricción NC revisadas.
 - [ ] URL pública HTTPS abre desde un teléfono con datos móviles y permite la acción principal, con panel protegido.
 - [ ] Siete dispositivos visitantes conectados simultáneamente a la red acordada; registrar alias ficticios y solicitudes distintas. Anotar fecha, navegador y resultado, sin publicar IPs privadas ni tokens.

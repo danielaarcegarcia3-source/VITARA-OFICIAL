@@ -14,7 +14,7 @@ async function readJSON(req) {
   for await (const chunk of req) { size += chunk.length; if (size > 16384) throw error(413, 'Solicitud demasiado grande.'); text += chunk; }
   try { const value = JSON.parse(text || '{}'); if (!value || typeof value !== 'object' || Array.isArray(value)) throw error(400, 'Objeto JSON requerido.'); return value; } catch { throw error(400, 'JSON inválido.'); }
 }
-export function createServices({ root }) {
+export function createServices({ root, onParticipationChange = () => {} }) {
   const dir = path.resolve(process.env.VITARA_DATA_DIR || path.join(root, 'data'));
   fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
   const file = path.join(dir, 'participacion.json');
@@ -28,7 +28,9 @@ export function createServices({ root }) {
   function save(next) {
     const temporary = file + '.tmp';
     fs.writeFileSync(temporary, JSON.stringify(next, null, 2), { mode: 0o600 });
-    fs.renameSync(temporary, file); state = next;
+    fs.renameSync(temporary, file);
+    const changed = next.profiles !== state.profiles; state = next;
+    if (changed) onParticipationChange();
   }
   function prune() { const profiles = state.profiles.filter(p => Date.parse(p.updatedAt) > Date.now() - RETENTION); if (profiles.length !== state.profiles.length) save({ ...state, profiles }); }
   prune(); const timer = setInterval(prune, 3600000); timer.unref();

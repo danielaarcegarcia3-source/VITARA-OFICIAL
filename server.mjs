@@ -29,7 +29,7 @@ const DATA_FILE = path.resolve(process.env.VITARA_REQUESTS_FILE || path.join(pro
 fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true, mode: 0o700 });
 
 const PORT = process.env.PORT || 3000;
-const services = createServices({ root: ROOT_DIR });
+const services = createServices({ root: ROOT_DIR, onParticipationChange: () => setImmediate(() => emitirEvento('participacion_actualizada', { changed: true })) });
 const DIAS_RETENCION = Number(process.env.DIAS_RETENCION || 30);
 const MAX_SOLICITUDES = 5000;
 const MAX_SSE = 80;
@@ -66,6 +66,8 @@ function guardarSolicitudesEnDisco(next = solicitudes) {
 
 // Manejador de Clientes SSE (Server-Sent Events)
 const clientesSSE = new Set();
+const conexionesSSEPorIP = new Map();
+const MAX_SSE_POR_IP = 16; // Admite siete visitantes y panel detrás de un mismo proxy.
 
 function emitirEvento(tipo, datos) {
   const payload = `event: ${tipo}\ndata: ${JSON.stringify(datos)}\n\n`;
@@ -345,7 +347,7 @@ function sanearRegistro(s) {
   return {
     codigo,
     item,
-    categoria: ['medicamento', 'equipo', 'dengue', 'otro'].includes(s.categoria) ? s.categoria : 'medicamento',
+    categoria: ['medicamento', 'equipo', 'dengue', 'servicio', 'otro'].includes(s.categoria) ? s.categoria : 'medicamento',
     alias: String(s.alias || 'Ciudadano anónimo').trim().slice(0, 60) || 'Ciudadano anónimo',
     esAcompanamiento: Boolean(s.esAcompanamiento),
     sede: String(s.sede || 'C.S. MOCHE').trim().slice(0, 120),
@@ -486,6 +488,11 @@ const server = http.createServer(async (req, res) => {
 
   // 2. Stream de Tiempo Real SSE (Server-Sent Events) (Consigna 9 & 7)
   if (req.method === 'GET' && pathname === '/api/eventos') {
+    const ip = req.socket.remoteAddress;
+    if ((conexionesSSEPorIP.get(ip) || 0) >= MAX_SSE_POR_IP) {
+      res.writeHead(429, { 'Content-Type': 'application/json', 'Retry-After': '15' });
+      res.end(JSON.stringify({ ok: false, error: 'Demasiadas conexiones de eventos desde esta conexión de red. Cierra pestañas duplicadas.' })); return;
+    }
     if (clientesSSE.size >= MAX_SSE) {
       res.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8' });
       res.end(JSON.stringify({ ok: false, error: 'Capacidad de conexiones en tiempo real completa. Reintente en unos segundos.' }));
@@ -498,6 +505,7 @@ const server = http.createServer(async (req, res) => {
     });
 
     clientesSSE.add(res);
+    conexionesSSEPorIP.set(ip, (conexionesSSEPorIP.get(ip) || 0) + 1);
 
     // Enviar bienvenida y estado actual
     res.write(`event: conectado\ndata: ${JSON.stringify({
@@ -509,7 +517,9 @@ const server = http.createServer(async (req, res) => {
 
     emitirConteoClientes();
 
-    req.on('close', () => {
+    res.on('close', () => {
+      conexionesSSEPorIP.set(ip, Math.max(0, (conexionesSSEPorIP.get(ip) || 1) - 1));
+      if (!conexionesSSEPorIP.get(ip)) conexionesSSEPorIP.delete(ip);
       clientesSSE.delete(res);
       emitirConteoClientes();
     });
@@ -617,7 +627,7 @@ const server = http.createServer(async (req, res) => {
         do { codigo = generarCodigoG3(); } while (solicitudes.some(s => s.codigo.toUpperCase() === codigo));
       }
 
-      const categoria = ['medicamento', 'equipo', 'dengue', 'otro'].includes(data.categoria) ? data.categoria : 'medicamento';
+      const categoria = ['medicamento', 'equipo', 'dengue', 'servicio', 'otro'].includes(data.categoria) ? data.categoria : 'medicamento';
       const nuevaSolicitud = {
         codigo,
         item,
@@ -874,6 +884,8 @@ const server = http.createServer(async (req, res) => {
   });
 });
 
+server.maxConnections = 200;
+server.keepAliveTimeout = 5000;
 server.headersTimeout = 15000;
 server.requestTimeout = 30000;
 server.maxHeadersCount = 100;

@@ -1,3 +1,5 @@
+> **Ampliación:** equipo identificado, entrada multicolor y actualizaciones de participación por eventos. Protección de red y configuración del anfitrión: [RED-SEGURA-CONCURSO.md](RED-SEGURA-CONCURSO.md).
+
 > **Código subido a GitHub (27/11/2026):** rama `arena/ccf66afb-vitara-oficial`, [pull request #1](https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/pull/1) abierto, sin fusionar `main`. Esto no es un despliegue de la aplicación. Consulta [PUBLICAR-VITARA.md](PUBLICAR-VITARA.md) antes de publicar. El panel, registro y chat necesitan Node; Pages/Hosting estático solo sirve la parte visual.
 
 > **Actualización vigente (27/11/2026):** nuevo estudio de dispositivos y proveedores con ilustraciones IA, comparación y fichas; Canales y Fuentes interactivos; acceso guiado a administración; mapas de Perú y La Libertad con polígonos extruidos, bienvenida con logo de partículas, base blanca conmutable, participación consentida de hasta 7 usuarios y orientación integrada. Configuración privada de administración e IA en [CONFIGURACION-VITARA.md](CONFIGURACION-VITARA.md). No hay credenciales demo; los apartados históricos de cumplimiento no sustituyen las pruebas actuales de [AUDITORIA-VITARA.md](AUDITORIA-VITARA.md).
@@ -15,12 +17,12 @@
 
 ## 👥 1. Identificación del Equipo y Responsabilidades (Consigna 16)
 
-| Integrante | Rol Oficial | Responsabilidades Clave |
+| Integrante | Rol propuesto (a confirmar por el equipo) | Responsabilidades Clave |
 |:---|:---|:---|
-| **Integrante 1 (nombre autorizado pendiente)** | **Gestión y Requisitos** | Definición de las 168 funciones del catálogo, investigación de cifras reales (INEI, DIGEMID, RENIPRESS), cronograma y documentación técnica. |
-| **Integrante 2 (nombre autorizado pendiente)** | **Frontend y UI/UX** | Diseño visual responsive, buscador "Google Salud", réplica del Tablero InfoSismedLL, motor 3D interactivo Three.js y opciones de accesibilidad (sin certificación WCAG). |
-| **Integrante 3 (nombre autorizado pendiente)** | **Backend e Integración** | Servidor HTTP nativo en Node.js, comunicación en tiempo real vía Server-Sent Events (SSE), almacenamiento atómico y gestión de concurrencia. |
-| **Integrante 4 (nombre autorizado pendiente)** | **QA, Pruebas e Integración** | Batería de pruebas de concurrencia multiusuario (≥ 7 dispositivos), matriz de Verificación y Validación (V&V), seguridad y recuperación ante fallos. |
+| **Daniela Arce** | **Gestión y Requisitos** | Definición de las 168 funciones del catálogo, investigación de cifras reales (INEI, DIGEMID, RENIPRESS), cronograma y documentación técnica. |
+| **Dharma Valle** | **Frontend y UI/UX** | Diseño visual responsive, buscador "Google Salud", réplica del Tablero InfoSismedLL, motor 3D interactivo Three.js y opciones de accesibilidad (sin certificación WCAG). |
+| **Zoe Cabrera** | **Backend e Integración** | Servidor HTTP nativo en Node.js, comunicación en tiempo real vía Server-Sent Events (SSE), almacenamiento atómico y gestión de concurrencia. |
+| **Rafael Carbajal** | **QA, Pruebas e Integración** | Batería de pruebas de concurrencia multiusuario (≥ 7 dispositivos), matriz de Verificación y Validación (V&V), seguridad y recuperación ante fallos. |
 
 ---
 
@@ -192,7 +194,7 @@ npm audit --audit-level=low
 - `test:security` ejecuta el servidor real en puerto y carpeta temporales: siete clientes SSE concurrentes, perfiles y solicitudes, privacidad, permisos, borrado, respaldo/recuperación y reinicio. No contamina el portal.
 - `npm test` ejecuta Playwright; no es la herramienta histórica ni una prueba de siete dispositivos físicos.
 - Resultados y pendientes: [V_AND_V_MATRIZ.md](V_AND_V_MATRIZ.md), [CONSIGNA-CUMPLIMIENTO.md](CONSIGNA-CUMPLIMIENTO.md), [SEGURIDAD.md](SEGURIDAD.md).
-- Pendientes para cumplimiento completo: cuatro nombres autorizados, permisos de medios aportados, ensayo físico LAN/WAN y enlace público gratuito con el servidor completo.
+- Pendientes para cumplimiento completo: confirmar la distribución de roles, permisos de medios aportados, ensayo físico LAN/WAN y enlace público gratuito con el servidor completo.
 
 ## 🔄 7. Procedimiento de Recuperación ante Interrupciones (Consignas 10.3 y 18.46)
 

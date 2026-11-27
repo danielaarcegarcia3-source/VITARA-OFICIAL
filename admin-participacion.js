@@ -21,19 +21,21 @@
     finally { button.disabled = false; }
   });
   const section = document.createElement('section'); section.className = 'admin-participation'; section.setAttribute('aria-labelledby','participants-title'); section.hidden = true;
-  section.innerHTML = '<header><div><span>PARTICIPACIÓN / REGISTROS REALES</span><h2 id="participants-title">Personas que conectan.</h2><p>En la demostración usa alias ficticios y correos example.test. Solo perfiles con consentimiento. Correo sin verificar; no equivale a identidad autenticada. No se registran mensajes del chat ni búsquedas.</p></div><button type="button" id="participants-refresh">Actualizar ↻</button></header><p id="participants-status" role="status"></p><div id="participants-summary" class="participants-summary"></div><div id="participants-list" class="participants-list"></div><footer>Actualización cada 15 s mientras el panel está visible. Activo: señal de presencia durante los últimos 90 s. Máximo 200 interacciones por perfil; retención de 30 días desde última actividad.</footer>';
+  section.innerHTML = '<header><div><span>PARTICIPACIÓN / REGISTROS REALES</span><h2 id="participants-title">Personas que conectan.</h2><p>En la demostración usa alias ficticios y correos example.test. Solo perfiles con consentimiento. Correo sin verificar; no equivale a identidad autenticada. No se registran mensajes del chat ni búsquedas.</p></div><button type="button" id="participants-refresh">Actualizar ↻</button></header><p id="participants-status" role="status"></p><div id="participants-summary" class="participants-summary"></div><div id="participants-list" class="participants-list"></div><footer>Actualización por eventos y consulta de respaldo cada 15 s mientras el panel está visible. Activo: señal de presencia durante los últimos 90 s. Máximo 200 interacciones por perfil; retención de 30 días desde última actividad.</footer>';
   document.querySelector('.admin-kpis')?.before(section);
-  let timer;
+  let timer, debounce, controller, generation = 0;
   const list = document.getElementById('participants-list');
   const names = { vista:'Módulo visitado',modelo:'Modelo abierto',mapa:'Mapa elegido',tema:'Tema elegido',chat:'Consulta al orientador' };
   function node(tag,text,className) { const element=document.createElement(tag); if(text!==undefined)element.textContent=text;if(className)element.className=className;return element; }
   const date = value => new Date(value).toLocaleString('es-PE');
   async function load() {
     const token = sessionStorage.getItem('g3_admin_auth_token'); if(!token) return;
+    const current = ++generation; controller?.abort(); controller = new AbortController();
     const state = document.getElementById('participants-status'); state.textContent='Consultando perfiles…';
     try {
-      const response=await fetch('/api/admin/usuarios',{headers:{Authorization:`Bearer ${token}`}});
+      const response=await fetch('/api/admin/usuarios',{signal:controller.signal,headers:{Authorization:`Bearer ${token}`}});
       const data=await response.json(); if(!response.ok) { if(response.status===401) { clearInterval(timer); sessionStorage.removeItem('g3_admin_auth_token'); window.dispatchEvent(new Event('vitara:admin-logout')); document.getElementById('loginOverlay').style.display='grid'; } throw new Error(data.error); }
+      if (current !== generation || sessionStorage.getItem('g3_admin_auth_token') !== token || section.hidden) return;
       state.textContent=`Última consulta: ${new Date().toLocaleTimeString('es-PE')}. Sin registros de ejemplo.`;
       const summary=document.getElementById('participants-summary');summary.replaceChildren();
       for(const [value,label] of [[`${data.users.length} / ${data.capacity}`,'Perfiles guardados'],[data.active,'Con presencia reciente'],[data.users.reduce((n,u)=>n+u.interactions.length,0),'Interacciones guardadas']]) { const card=node('div');card.append(node('strong',String(value)),node('span',label));summary.append(card); }
@@ -49,9 +51,11 @@
         const remove=node('button','Eliminar perfil y liberar plaza');remove.type='button';remove.className='participant-remove';
         remove.addEventListener('click',async()=>{if(!confirm(`¿Eliminar el perfil de ${user.nombre} y todas sus interacciones?`))return;try{const res=await fetch(`/api/admin/usuarios/${encodeURIComponent(user.id)}`,{method:'DELETE',headers:{Authorization:`Bearer ${token}`}});if(!res.ok)throw new Error('No se pudo eliminar el registro.');await load();}catch(error){state.textContent=error.message;}});card.append(remove);list.append(card);
       }
-    } catch(error) {state.textContent=error.message||'No se pudo consultar el servidor.';list.replaceChildren();document.getElementById('participants-summary').replaceChildren();}
+    } catch(error) {if(error.name==='AbortError'||current!==generation||sessionStorage.getItem('g3_admin_auth_token')!==token)return;state.textContent=error.message||'No se pudo consultar el servidor.';list.replaceChildren();document.getElementById('participants-summary').replaceChildren();}
   }
   window.addEventListener('vitara:admin-ready',()=>{section.hidden=false;load();clearInterval(timer);timer=setInterval(()=>{if(!document.hidden&&!document.getElementById('loginOverlay').checkVisibility())load();},15000);});
-  window.addEventListener('vitara:admin-logout',()=>{clearInterval(timer);list.replaceChildren();section.hidden=true;document.getElementById('participants-summary').replaceChildren();});
+  window.addEventListener('vitara:participants-updated',()=>{if(section.hidden||document.hidden)return;clearTimeout(debounce);debounce=setTimeout(load,180);});
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!section.hidden)load();});
+  window.addEventListener('vitara:admin-logout',()=>{++generation;controller?.abort();clearTimeout(debounce);clearInterval(timer);list.replaceChildren();section.hidden=true;document.getElementById('participants-summary').replaceChildren();});
   document.getElementById('participants-refresh').addEventListener('click',load);
 })();

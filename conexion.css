@@ -79,3 +79,14 @@ html[data-base=blanco] .rail__link[aria-current=page] { background:#d4f3e9; colo
 .splash__progress i{animation-duration:9s}.splash.welcome-logo-fallback>img{opacity:1!important;width:110px;height:110px;top:31%;left:calc(50% - 55px);z-index:2}
 #rail-close{display:none}#palette-close{font-size:25px;flex-shrink:0;width:34px;height:34px}
 @media(max-width:1024px){#rail-close{display:flex;position:absolute;right:10px;top:12px;width:32px;height:32px;font-size:25px;color:inherit;background:#a9cdbc22;border:1px solid #8fbaad55;z-index:3}.rail::before{padding-right:25px}}
+
+/* Energía multicolor: identidad turquesa intacta, órbitas y aurora de baja intensidad. */
+.splash::before{content:'';position:absolute;inset:-15%;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 24% 25%,#9d77ff19,transparent 42%),radial-gradient(ellipse at 80% 62%,#ff9e7a14,transparent 40%),radial-gradient(ellipse at 48% 45%,#36e8d616,transparent 47%);animation:welcome-aurora 12s ease-in-out infinite alternate}
+.splash>p.welcome-phase{top:89%;margin:0 20px;font:8px var(--v-mono,monospace);letter-spacing:.25em;color:#b8e7e0}
+.splash__progress i{background:linear-gradient(90deg,#77ffe0,#67d9ff,#c0a4ff,#ffbb9d,#ffe4a1);box-shadow:0 0 18px #65e9db50}
+.access__card:not([hidden]){animation:welcome-card .65s cubic-bezier(.2,.7,.2,1) both}
+@keyframes welcome-aurora{from{transform:translate(-1.5%,-1%) rotate(-3deg)}to{transform:translate(1.5%,1%) rotate(3deg)}}
+@keyframes welcome-card{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:550px){.splash>p.welcome-phase{font-size:6px;letter-spacing:.18em}}
+@media(prefers-reduced-motion:reduce){.splash::before,.access__card:not([hidden]){animation:none}}
+html[data-movimiento=reducido] .splash::before,html[data-movimiento=reducido] .access__card:not([hidden]){animation:none}
