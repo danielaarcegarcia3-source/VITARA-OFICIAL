@@ -17,7 +17,7 @@ Se leyó íntegramente el PDF de la consigna aportado el 27/11/2026. Matriz en `
 
 ### Pendientes de entrega y despliegue
 
-Subida explícita de esta rama y apertura de PR autorizadas por el usuario; verificar el resultado remoto al terminar, no confundir guardado automático con push. No fusionar `main` ni activar un despliegue estático como sustituto de Node. Falta publicar y verificar un enlace gratuito completo, identificar cuatro integrantes con sus nombres autorizados, confirmar permisos de medios aportados y ensayar siete dispositivos físicos, LAN sin WAN y recuperación integral. Sin proveedor externo de IA ni datos clínicos reales. La consulta de configuración administrativa de Actions devolvió 403; no se cambiaron políticas ni facturación.
+Subida explícita comprobada: commit de implementación `07b7f3043744e60bd9d59df684fdc7e2158cc961` en origin/arena/ccf66afb-vitara-oficial. [PR #1 abierto y fusionable](https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/pull/1); main sin fusionar. GitHub inició la verificación automática, cuyo resultado debe consultarse en el PR. No confundir las pruebas locales aprobadas con un resultado remoto aún pendiente. No fusionar `main` ni activar un despliegue estático como sustituto de Node. Falta publicar y verificar un enlace gratuito completo, identificar cuatro integrantes con sus nombres autorizados, confirmar permisos de medios aportados y ensayar siete dispositivos físicos, LAN sin WAN y recuperación integral. Sin proveedor externo de IA ni datos clínicos reales. La consulta de configuración administrativa de Actions devolvió 403; no se cambiaron políticas ni facturación.
 
 ## Revisión anterior · globo electrónico, cierres y puntos 3D
 

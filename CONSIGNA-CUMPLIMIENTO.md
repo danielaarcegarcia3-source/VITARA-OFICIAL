@@ -2,7 +2,7 @@
 
 Fuente contrastada: PDF aportado por el usuario, “Consigna Oficial Code Battle – Concurso final 2026”, Club Tech-Masters, Prof. Saúl Pajares. Entrega 27/11 y exposición 28/11/2026. Esta matriz no inventa validaciones ni reemplaza la evaluación del docente.
 
-**Estado:** código y comprobaciones locales preparados para revisión en GitHub. No se declara cumplimiento total: faltan enlace público completo validado, ensayo en siete dispositivos físicos, identificación autorizada de integrantes y confirmación de permisos de algunos medios. No se ha contratado ningún servicio ni activado facturación.
+**Estado:** código subido a la rama de sesión y [PR #1](https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/pull/1) abierto; comprobaciones locales aprobadas. No se declara cumplimiento total: faltan enlace público completo validado, ensayo en siete dispositivos físicos, identificación autorizada de integrantes y confirmación de permisos de algunos medios. No se ha contratado ningún servicio ni activado facturación.
 
 ## Requisitos y evidencias
 

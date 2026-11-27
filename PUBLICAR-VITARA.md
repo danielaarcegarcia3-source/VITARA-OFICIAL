@@ -2,7 +2,7 @@
 
 ## Estado comprobado en esta sesión
 
-La entrega se prepara en la rama **`arena/ccf66afb-vitara-oficial`**, mediante commit y push explícitos a GitHub. El envío y el pull request se verifican al finalizar la operación; guardar archivos en Arena por sí solo no los sube. No se cambia ni fusiona `main` sin aprobación. `main` había avanzado con los tres medios que ya se integraron en esta rama sin sobrescribir el proyecto.
+**Subida comprobada el 27/11/2026:** commit de implementación `07b7f3043744e60bd9d59df684fdc7e2158cc961` en `origin/arena/ccf66afb-vitara-oficial`. Pull request abierto y fusionable: **https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/pull/1**. Los cambios de documentación posteriores se entregan en la misma rama. No se ha fusionado ni modificado `main`. Las comprobaciones automáticas de GitHub se iniciaron; consultar su resultado en el PR, sin confundirlo con las pruebas locales aprobadas.
 
 **Repositorio de código no significa URL de la aplicación.** No se ha activado un alojamiento permanente ni contratado un servicio. La preview es temporal. La consulta de Pages no devolvió un sitio disponible y la integración no permitió consultar la política administrativa de Actions (HTTP 403); no se cambiaron ajustes de facturación ni permisos del repositorio.
 
@@ -10,7 +10,7 @@ La entrega se prepara en la rama **`arena/ccf66afb-vitara-oficial`**, mediante c
 
 - Repositorio: https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL
 - Rama: https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/tree/arena/ccf66afb-vitara-oficial
-- Revisar el pull request desde esta rama hacia `main`; no confundir abrirlo con haberlo fusionado.
+- Revisar el [pull request #1](https://github.com/danielaarcegarcia3-source/VITARA-OFICIAL/pull/1) desde esta rama hacia `main`; no confundir abrirlo con haberlo fusionado.
 - La carpeta `data/`, claves y respaldos no se incluyen. El archivo histórico `solicitudes.json` se conserva localmente pero se retira del índice: no se redistribuyen sus códigos ni se presentan sus registros precargados como acciones nuevas.
 - Una instalación nueva comienza con almacenamiento privado vacío. No se publica una clave inicial ni una cuenta de administrador.
 
