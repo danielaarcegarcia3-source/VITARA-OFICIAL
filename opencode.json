@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai",
+  "mcp": {
+    "blender": {
+      "type": "local",
+      "command": ["uvx", "blender-mcp"],
+      "enabled": true
+    }
+  }
+}

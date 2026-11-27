@@ -1,0 +1,42 @@
+# .gitignore — Ecosistema Digital · Grupo 3
+
+# Secretos y credenciales
+.env
+.env.local
+.env.production
+firebase-adminsdk*.json
+serviceAccountKey.json
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Firebase
+.firebase/
+firebase-debug.log
+.firebaserc.local
+
+# Build
+dist/
+build/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Logs y datos temporales
+logs/
+*.log
+backend/data/db.json.bak
+
+# Tests
+coverage/

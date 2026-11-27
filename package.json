@@ -1,0 +1,19 @@
+{
+  "name": "ecosistema-digital-ods",
+  "version": "1.0.0",
+  "description": "Ecosistema digital para ODS 3 y 9 - Club Tech-Masters 2026",
+  "type": "module",
+  "scripts": {
+    "start": "node backend/server.mjs",
+    "dev": "node backend/server.mjs",
+    "test": "node tests/probar-concurrencia.mjs"
+  },
+  "dependencies": {
+    "firebase": "^10.0.0",
+    "three": "^0.158.0",
+    "firebase-admin": "^11.0.0"
+  },
+  "devDependencies": {
+    "sirv-cli": "^2.0.0"
+  }
+}
