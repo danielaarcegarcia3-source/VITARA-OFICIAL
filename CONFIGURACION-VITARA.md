@@ -5,7 +5,7 @@
 1. En el servicio existente `vitara-oficial`, confirmar la rama `arena/ccf66afb-vitara-oficial`.
 2. Si no se inició despliegue automático, elegir **Manual Deploy → Deploy latest commit** y esperar **Live**. No es necesario cambiar claves, base de datos ni plan.
 3. Build vigente: `npm ci --include=dev && npm run build`; inicio: `npm start`.
-4. Abrir el sitio público y pulsar **Ctrl + F5**. En Mapas comprobar el selector de 24 departamentos y Callao; fuera de La Libertad la base puede no tener registros.
+4. Abrir el sitio público y pulsar **Ctrl + F5**. En Mapas comprobar el selector de 24 departamentos y Callao; ahora hay referencias documentales MINSA para todos los territorios. Seleccionar Arequipa, Cusco, Lima o Ucayali y abrir una ficha; comprobar fuente 14/03/2025, contacto publicado y advertencias. Los filtros pueden devolver cero coincidencias sin significar ausencia de servicios.
 5. En Tablero SISMED recorrer indicadores con las flechas del anillo, filtrar temas, abrir «Comparar dos redes» y explorar/reproducir el histórico. El botón de reproducción se desactiva si hay movimiento reducido; anterior/siguiente siguen disponibles. En Planos seleccionar un ambiente, alternar capas y acercar; en Inicio abrir los temas de medicamentos. En Comunidad activar/desactivar «Tamaño de texto grande»: el aumento se aplica solo al optar por él y se recuerda para la siguiente visita.
 6. Confirmar que `/api/salud` y el acceso administrativo siguen operativos. Las pruebas locales no sustituyen verificar el despliegue ni la persistencia tras reinicio.
 

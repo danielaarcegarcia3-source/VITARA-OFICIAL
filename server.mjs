@@ -876,7 +876,7 @@ async function routeRequest(req, res, urlParsed) {
   const nested = safePath.includes(path.sep);
   const publicFolder = /^(?:assets|vendor|3d-models)[/\\]/.test(safePath);
   const licenseFile = ['license.txt', 'CREDITOS.txt'].includes(safePath) || (publicFolder && /(?:LICENSE[^/\\]*\.txt|README\.md)$/i.test(safePath));
-  if ((nested && !publicFolder) || !(publicExt.has(path.extname(safePath)) || safePath === 'assets-manifest.json' || licenseFile) || path.resolve(FRONTEND_DIR, safePath) === DATA_FILE) {
+  if ((nested && !publicFolder) || !(publicExt.has(path.extname(safePath)) || safePath === 'assets-manifest.json' || safePath === path.join('assets', 'territorios', 'directorio-salud.json') || licenseFile) || path.resolve(FRONTEND_DIR, safePath) === DATA_FILE) {
     res.writeHead(404); res.end('No encontrado'); return;
   }
   const filePath = path.resolve(FRONTEND_DIR, safePath);

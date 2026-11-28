@@ -34,16 +34,18 @@ test("bienvenida separa con una y atlas recorre los 25 territorios sin inventar 
     .evaluateAll((nodes) => nodes.map((n) => n.value).filter(Boolean));
   expect(departments).toHaveLength(25);
   expect(departments).toContain("CALLAO");
+  await expect(page.locator("#mapa-real")).toHaveAttribute(
+    "data-research",
+    "loaded",
+  );
   for (const name of departments) {
     await page.locator("#atlas-department").selectOption(name);
     await expect(page.locator("#atlas-region-card strong")).toHaveText(name);
     await expect(page.locator("#atlas-region-card path")).not.toHaveCount(0);
-    if (name !== "LA LIBERTAD") {
-      await expect(page.locator(".atlas-place")).toHaveCount(0);
-      await expect(page.locator("#atlas-results")).toContainText(
-        "no significa que no existan",
-      );
-    }
+    await expect(page.locator(".atlas-place").first()).toBeVisible();
+    await expect(page.locator("#atlas-health-context")).toContainText(
+      "referencias MINSA",
+    );
   }
   await page.locator("#atlas-department").selectOption("LA LIBERTAD");
   await expect(page.locator(".atlas-place").first()).toBeVisible();

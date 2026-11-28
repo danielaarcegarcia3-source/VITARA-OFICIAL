@@ -1,6 +1,20 @@
 # VITARA · Activos, territorios y participación
 
-## Revisión vigente · observatorio estadístico creativo
+## Revisión vigente · referencias sanitarias en todo el Perú
+
+Petición: investigar y añadir información de otros departamentos, no limitar el atlas a los registros de La Libertad.
+
+**Investigación:** se consultó completa la página oficial MINSA «Solicitar servicios de oftalmología en establecimientos de salud en el Perú» (Gob.pe/14957), incluido su último cambio declarado **14/03/2025**, y el directorio nacional de Gob.pe que cita a RENIPRESS/SUSALUD. Se seleccionaron **45 referencias en los 24 departamentos y Callao** con nombre, dirección y un teléfono publicados; no se atribuyen servicios generales o capacidad actual a partir de una guía de especialidad. El directorio BVS/MINSA apareció en búsqueda pero falló su descarga; no se utiliza como fuente de los registros ni se mezclan sus contactos divergentes.
+
+- `assets/territorios/directorio-salud.json`: datos factuales de selección, identificadores internos (no códigos RENIPRESS), fuente por registro, fecha de fuente separada de la consulta documental 27/11/2026. No se añaden stock, disponibilidad, horarios, categorías clínicas ni coordenadas inferidas. Distritos no transcritos permanecen nulos; Lima conserva los ámbitos DIRIS y Lima Región de la fuente. Los 45 registros incluyen 41 hospitales, 3 centros y 1 instituto según sus nombres, no una clasificación de complejidad.
+- `mapa-real.js`: carga local bajo demanda, referencias y accesos rápidos por territorio, buscador por nombre/dirección, filtros de origen/tipo/distrito consignado, conteos explícitos de la selección (no totales sanitarios). Cada nueva ficha usa su fuente específica, dirección y teléfono con advertencia de vigencia, ausencia de horarios/stock y enlaces al documento y al directorio nacional. Se conservan las 25 entidades geográficas y los registros regionales existentes; no se modifica el tablero ni el inventario de La Libertad.
+- Fallo de carga distinto de falta de establecimientos, reintento funcional y base regional aún disponible. Los vacíos de filtros no se interpretan como ausencia de servicios. No requiere un servicio de mapas, scraper, nueva clave ni conexión externa durante la exploración: el JSON documentado se distribuye con el proyecto.
+- Registro de Fuentes ampliado con el alcance y fechas de esta selección. Metodología pública en `assets/territorios/README.md`. Los contactos de una guía de 2025 requieren reconfirmación antes de desplazarse.
+- Servidor: se agrega a la lista pública **solo la ruta exacta** `assets/territorios/directorio-salud.json`. No se habilita la descarga general de JSON, perfiles, solicitudes o credenciales. No hay escrituras de estos registros en Neon ni cambios de autenticación.
+
+**Pruebas:** cuatro nuevas para integridad/procedencia y los 25 territorios, consultas/filtros/inspector/accesos rápidos, error/reintento y móvil. Se actualiza la expectativa histórica del atlas que antes exigía cero registros fuera de La Libertad y el conteo del registro de Fuentes (ahora 10). **Resultado local: 43/43 UI aprobadas** (Chromium, un worker, 7,1 min), 34 comprobaciones de servicios, 96 de seguridad, 61 activos/25 hashes de texturas, build, diff y npm audit (0 vulnerabilidades detectadas). PostgreSQL y despliegue remoto no se revalidan en esta iteración; el almacenamiento no cambia. No se verifica telefónicamente la vigencia ni se afirma una investigación exhaustiva del padrón nacional.
+
+## Revisión anterior · observatorio estadístico creativo
 
 Petición: cambiar de forma sustancial la presentación del tablero, con más animación e interactividad profesional. Se añaden `estadisticas-experiencia.js` y `estadisticas-experiencia.css` después del renderer existente; no se sustituye la arquitectura, los datos, las tablas ni los mapas.
 
