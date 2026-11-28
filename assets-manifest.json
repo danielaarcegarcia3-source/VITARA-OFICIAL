@@ -3,7 +3,8 @@
   "identity": {
     "logo": "logo VITARA.jpeg",
     "regionalMap": "MAPADELALIBERTAD3D.png",
-    "nationalMap": "mapadelperu3d.png"
+    "nationalMap": "mapadelperu3d.png",
+    "googleSignInMark": "assets/identity/google-g.svg"
   },
   "models": {
     "dna": {
@@ -91,7 +92,8 @@
       "assets/devices/infusion.png",
       "assets/devices/defibrillator.png"
     ],
-    "welcomeReference": "assets/welcome/globo-referencia.png"
+    "welcomeReference": "assets/welcome/globo-referencia.png",
+    "medicationFraming": "assets/illustrations/medicamentos-encuadrado.png"
   },
   "media": {
     "loginVideo": "VIDEOBANNER.mp4",

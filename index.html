@@ -16,22 +16,25 @@
   <link rel="stylesheet" href="./descubrir.css?v=4">
   <link rel="stylesheet" href="./portal-ajustes.css?v=3">
   <link rel="stylesheet" href="./estadisticas-experiencia.css?v=1">
-  <link rel="stylesheet" href="./experiencia-guiada.css?v=1">
+  <link rel="stylesheet" href="./experiencia-guiada.css?v=2">
+  <link rel="stylesheet" href="./portal-correcciones.css?v=1">
 </head>
 <body class="access-locked">
 <section class="access" id="access" aria-label="Acceso a VITARA">
-  <div class="access__ambient" aria-hidden="true"><video id="access-video" muted preload="none" hidden></video></div>
+  <div class="access__ambient" aria-hidden="true"><video id="access-video" muted loop playsinline preload="none" data-source="./VIDEOBANNER.mp4"></video></div>
   <a class="access__brand" href="#" aria-label="VITARA"><img src="./logo%20VITARA.jpeg" alt="Logo oficial VITARA"><span>VITARA<small>ECOSISTEMA DIGITAL DE SALUD</small></span></a>
   <div class="access__story"><p class="overline">SALUD CONECTADA. VIDAS TRANSFORMADAS.</p><h1>Más cerca.<br>Más humano.<br><em>Más salud.</em></h1><p>La tecnología cobra sentido cuando nos acerca a lo que más importa: tu bienestar.</p><span class="access__territory">PERÚ · SALUD QUE CONECTA</span></div>
   <div class="access__card" id="login-card" hidden>
     <span class="access__step">01 / TU PUNTO DE PARTIDA</span><img class="access__logo" src="./logo%20VITARA.jpeg" alt="VITARA">
-    <h2>Bienvenido a VITARA.</h2><p>Conecta tu cuenta. Elige tu experiencia.</p><button type="button" id="google-connect" disabled>Conexión con Google · comprobando configuración</button><p id="google-status" role="status">Puedes explorar sin conectar una cuenta.</p>
-    <form id="access-form"><label for="access-name">Tu alias de participante</label><input id="access-name" name="nombre" required minlength="2" maxlength="50" autocomplete="nickname" placeholder="Ej. Equipo visitante 1" aria-describedby="access-privacy">
-    <details id="access-demo"><summary>Modo de prueba del concurso</summary><label for="access-email">Correo verificado o de prueba</label><input id="access-email" name="email" type="email" maxlength="254" autocomplete="email" placeholder="equipo1@example.test"><p>El modo de prueba solo admite example.test. Un Gmail real se conecta con el botón de Google.</p></details>
-    <label for="access-role">¿Cómo usarás VITARA?</label><select id="access-role"><option value="CIU">Ciudadano</option><option value="POSTA">Personal de posta o salud</option><option value="AGC">Gestor</option></select>
-    <label class="access-consent"><input id="access-sync" type="checkbox"><span>Sincronizar mi perfil y actividad con administración (hasta 7 participantes, 30 días). Al marcar acepto guardar alias, correo, perfil elegido y visitas a módulos. No se guardan consultas ni mensajes del chat.</span></label><p id="access-status" role="status"></p>
-    <button type="submit">Entrar al ecosistema <span>↗</span></button></form>
-    <p class="access__privacy" id="access-privacy">Con Google se verifica tu cuenta, no tu profesión. No accedemos a tus mensajes de Gmail. Solo se sincronizan perfil y actividad si das tu consentimiento. Explorar como visitante no verifica identidad ni otorga acceso administrativo. No escribas DNI ni datos clínicos.</p>
+    <h2>Tu próxima conexión<br>empieza aquí.</h2><p>Un espacio para encontrar, consultar y dar seguimiento.</p>
+    <form id="access-form"><label for="access-name">Nombre de usuario</label><input id="access-name" name="nombre" required minlength="2" maxlength="50" autocomplete="nickname" placeholder="¿Cómo te llamamos?" aria-describedby="access-privacy">
+    <label for="access-email">Correo de Google</label><input id="access-email" name="email" type="email" maxlength="254" autocomplete="email" placeholder="tuusuario@gmail.com" aria-describedby="google-status">
+    <button type="button" id="google-connect"><img src="./assets/identity/google-g.svg" width="20" height="20" alt=""><span>Continuar con Google</span></button><p id="google-status" role="status">Comprobando conexión segura con Google…</p>
+    <select id="access-role" hidden aria-label="Experiencia inicial"><option value="CIU">Ciudadanía</option><option value="POSTA">Personal de posta o salud</option><option value="AGC">Gestión</option></select>
+    <details class="access-privacy-options"><summary>Privacidad y sincronización</summary><label class="access-consent"><input id="access-sync" type="checkbox"><span>Guardar mi perfil y actividad con consentimiento, hasta 30 días y 7 perfiles. Administración ve usuario, correo y módulos visitados, no mensajes ni búsquedas. Puedes eliminarlo desde Participación.</span></label></details><p id="access-status" role="status"></p>
+    <button type="submit">Entrar a VITARA <span>↗</span></button></form>
+    <button type="button" id="access-visitor">Explorar sin conectar una cuenta →</button>
+    <p class="access__privacy" id="access-privacy">Solo Google puede verificar tu cuenta. No leemos tu buzón ni pedimos tu contraseña. Puedes explorar sin conectar una cuenta; eso no verifica identidad ni concede permisos administrativos.</p>
     <div class="access__card-foot"><span class="live-dot"></span> Información con fuente. Atención con propósito.</div>
   </div>
   <footer class="access__footer"><span>DISEÑADO PARA CONECTAR, CREADO PARA CUIDAR.</span><span>ODS 03 · 09 · 10</span></footer>
@@ -991,10 +994,11 @@ La información educativa sigue disponible en los botones laterales.</p>
 <script src="./movimiento.js" defer></script>
 <script src="./conexion.js?v=6" defer></script>
 <script src="./bienvenida-holografica.js?v=6" defer></script>
-<script src="./ecosistema.js?v=guiado-3" defer></script>
+<script src="./ecosistema.js?v=video-4" defer></script>
 <script src="./experiencia.js?v=conexiones-2" defer></script>
 <script src="./descubrir.js?v=4" defer></script>
 <script src="./exploracion-mejoras.js?v=1" defer></script>
-<script src="./experiencia-guiada.js?v=1" defer></script>
+<script src="./experiencia-guiada.js?v=2" defer></script>
+<script src="./estadisticas-acciones.js?v=1" defer></script>
 </body>
 </html>

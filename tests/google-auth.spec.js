@@ -273,3 +273,5 @@ test("backend integra identidad del proveedor simulado: recuperación, rotación
     await server.dispose();
   }
 });
+
+ test('inicio desde preview redirige al dominio del callback antes de crear cookies',async()=>{const auth=createGoogleAuth({env});const res=response();const request=req('/api/google/start');request.headers.host='preview.example.test';await auth.handle(request,res,new URL('https://preview.example.test/api/google/start'));expect(res.headers.Location).toBe('https://vitara.example.test/api/google/start');expect(res.headers['Set-Cookie']).toBeUndefined();});

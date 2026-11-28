@@ -8,7 +8,7 @@ test.afterAll(async()=>{await isolated?.dispose();});
 async function enter(page){await page.emulateMedia({reducedMotion:'reduce'});await page.goto(base);await page.evaluate(()=>document.querySelector('#splash-skip').click());await page.locator('#access-name').fill('Persona de prueba');}
 
 test('perfil consentido persistente, actividad real y eliminación',async({page,request})=>{
-  await enter(page);await page.locator('#access-demo summary').click();await page.locator('#access-email').fill('persona@example.test');await page.locator('#access-sync').check();await page.locator('#access-form [type=submit]').click();await expect(page.locator('#access')).toBeHidden();
+  await enter(page);await page.locator('#access-form [type=submit]').click();const seeded=await request.post(base+'/api/perfiles',{data:{nombre:'Persona de prueba',email:'persona@example.test',rol:'CIU',consent:true}});expect(seeded.status()).toBe(201);const identity=await seeded.json();await page.evaluate(({token})=>{localStorage.setItem('vitara.participant.token',JSON.stringify(token));localStorage.setItem('vitara.participant.active','true');window.dispatchEvent(new Event('vitara:session'));},identity);await expect(page.locator('#access')).toBeHidden();
   await page.locator('[data-view-link=mapas]').click();
   await expect(page.locator('#mapa-svg-wrap canvas')).toHaveAttribute('data-regions','25', { timeout: 20000 });
   await page.locator('#participation-open').click();await expect(page.locator('#participation-details')).toContainText('persona@example.test');

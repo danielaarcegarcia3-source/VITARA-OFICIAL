@@ -1,6 +1,6 @@
 # Conectar Gmail con VITARA
 
-La interfaz y el backend están preparados, pero **Google no está activado automáticamente**. Se necesita una aplicación OAuth propia del equipo. No basta escribir una dirección `gmail.com`; VITARA no consulta buzones ni inventa que una dirección existe.
+El acceso ya tiene usuario, correo y botón con el símbolo multicolor de Google, sin modo de concurso ni correos ficticios en la interfaz. El vídeo original vuelve a reproducirse. El backend OAuth está preparado, pero **Google no está activado automáticamente**. Se necesita una aplicación OAuth propia del equipo. No basta escribir una dirección `gmail.com`; VITARA no consulta buzones ni inventa que una dirección existe.
 
 ## Pasos en la nube (sin contraseñas en el código)
 
@@ -18,8 +18,12 @@ La interfaz y el backend están preparados, pero **Google no está activado auto
    | `GOOGLE_REDIRECT_URI` | `https://vitara-oficial.onrender.com/api/google/callback` |
 
    No pegues el secreto en conversaciones, HTML, capturas, repositorio o variables públicas de frontend. Guarda y vuelve a desplegar el servicio. No se necesita modificar tu PC, router, Neon ni las contraseñas de administración. No habilites servicios de pago para esta integración sin revisarlo por separado.
-5. Comprueba en la web pública: el botón debe decir **Continuar con Google**. Si indica pendiente, revisa las tres variables y la coincidencia exacta del callback. Conéctate, elige cuenta en Google y regresa a VITARA. Se muestra la cuenta verificada; elige ciudadanía, personal de posta/salud o gestión y decide si autorizas la sincronización. La profesión declarada **no da permisos** en administración.
-6. Si solo quieres explorar, no necesitas Google ni sincronizar. El modo del concurso admite correos `example.test`, claramente **sin verificar**, para mantener las pruebas aisladas existentes. No admite un Gmail real escrito a mano. Los perfiles históricos no se marcan automáticamente como verificados.
+5. Comprueba en la web pública: el botón debe decir **Continuar con Google**. Si el aviso indica configuración pendiente, revisa las tres variables y la coincidencia exacta del callback. Conéctate, elige cuenta en Google y regresa a VITARA. Se muestra la cuenta verificada; confirma tu usuario y decide si autorizas la sincronización. Una vez dentro puedes elegir la experiencia de ciudadanía, personal de posta/salud o gestión. La profesión declarada **no da permisos** en administración.
+6. Si solo quieres explorar, pulsa **Explorar sin conectar una cuenta**: no necesitas correo ni sincronización. Ese botón borra el correo del formulario antes de entrar y no lo hace pasar por verificado. En el sitio normal no se admiten perfiles `example.test`; solo las pruebas automáticas aisladas pueden habilitarlos con `NODE_ENV=test` y `VITARA_ALLOW_DEMO_PROFILES=1`. Los perfiles históricos no se marcan automáticamente como verificados.
+
+## Abrir desde Arena y dominio del callback
+
+Las cookies de Arena y las de Render pertenecen a dominios distintos. Si el servidor tiene OAuth configurado y se inicia desde otra dirección, `/api/google/start` redirige primero al origen configurado del callback, antes de crear el estado y las cookies. Así el retorno de Google llega al mismo dominio que inició la autorización. El dominio público también debe estar desplegado con esta versión y con las tres variables privadas. La vista previa sin credenciales no puede activar por sí sola la aplicación de Google del propietario ni verificar cuentas; ofrece la entrada sin cuenta y explica la configuración que falta. La corrección de dominio tiene una prueba automatizada, no sustituye el inicio real pendiente.
 
 ## Comprobación manual pendiente del propietario
 

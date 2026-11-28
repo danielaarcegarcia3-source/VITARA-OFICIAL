@@ -122,6 +122,15 @@ export function createGoogleAuth({
         back(res, "pendiente");
         return true;
       }
+      // El callback y el inicio deben compartir dominio: una preview no puede leer las cookies de Render.
+      if (req.headers.host && req.headers.host !== redirect.host) {
+        res.writeHead(303, {
+          Location: redirect.origin + "/api/google/start",
+          "Cache-Control": "no-store",
+        });
+        res.end();
+        return true;
+      }
       const ip = req.socket?.remoteAddress || "unknown";
       const recent = limits.get(ip);
       if (recent && recent.exp > now() && recent.count >= 10) {

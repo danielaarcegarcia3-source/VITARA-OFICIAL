@@ -15,7 +15,7 @@ const reservation = http.createServer(); reservation.listen(0, '127.0.0.1'); awa
 const port = reservation.address().port; await new Promise(r => reservation.close(r));
 const base = `http://127.0.0.1:${port}`;
 const password = crypto.randomBytes(24).toString('base64url');
-const env = { ...process.env, PORT: String(port), VITARA_DATA_DIR: dir, ADMIN_USUARIO: 'operador_aislado', ADMIN_CLAVE: password };
+const env = { ...process.env, NODE_ENV:'test',VITARA_ALLOW_DEMO_PROFILES:'1',PORT: String(port), VITARA_DATA_DIR: dir, ADMIN_USUARIO: 'operador_aislado', ADMIN_CLAVE: password };
 for (const key of ['DATABASE_URL','RENDER','VITARA_PG_LOCAL_TEST','ADMIN_TOKEN','VITARA_SETUP_KEY','VITARA_REQUESTS_FILE','VITARA_AI_ENDPOINT','VITARA_AI_MODEL','VITARA_AI_KEY']) delete env[key];
 let child, output = '', count = 0;
 const streams = [];

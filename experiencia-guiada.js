@@ -261,8 +261,13 @@
   // Google nunca se simula con la sintaxis de un correo.
   const googleButton = $("#google-connect"),
     googleStatus = $("#google-status");
+  let googleConfigured=false;
+  const googleLabel=text=>googleButton.querySelector('span').textContent=text;
   googleButton.onclick = () => {
-    location.href = "/api/google/start";
+    if(!googleConfigured){googleStatus.textContent='Google aún necesita activación en este servidor. Puedes entrar ahora con «Explorar sin conectar una cuenta». No se verificará ni guardará tu correo.';$('#access-status').textContent='Conexión con Google pendiente de configuración del propietario.';return;}
+    if(!$('#access-name').reportValidity() || !$('#access-email').reportValidity())return;
+    sessionStorage.setItem('vitara.access.alias',$('#access-name').value.trim());
+    location.assign('/api/google/start');
   };
   fetch("/api/google/session", { cache: "no-store" })
     .then((response) => {
@@ -270,25 +275,23 @@
       return response.json();
     })
     .then((data) => {
-      googleButton.disabled = !data.configured;
-      googleButton.textContent = data.configured
-        ? "Continuar con Google"
-        : "Google · pendiente de configuración";
+      googleConfigured=!!data.configured;googleButton.disabled=false;googleButton.setAttribute("aria-describedby","google-status");
+      googleLabel("Continuar con Google");
       googleStatus.textContent = data.configured
         ? "Google verifica tu cuenta. No leemos tus correos."
-        : "El acceso con Google aún no está activado en este servidor. Puedes explorar como visitante o usar la prueba del concurso.";
+        : "El acceso con Google aún no está activado en este servidor. Puedes entrar sin conectar una cuenta; no se verificará ningún correo.";
       if (data.identity?.verified) {
         window.VitaraGoogleIdentity = data.identity;
         window.dispatchEvent(new Event("vitara:google-ready"));
         $("#access-email").value = data.identity.email;
         $("#access-email").readOnly = true;
-        $("#access-name").value = data.identity.nombre;
-        $("#access-demo").open = true;
-        googleButton.textContent = "Cambiar cuenta de Google";
+        $("#access-name").value = sessionStorage.getItem("vitara.access.alias") || data.identity.nombre;sessionStorage.removeItem("vitara.access.alias");
+
+        googleLabel("Cambiar cuenta de Google");
         googleStatus.textContent =
           "Cuenta verificada por Google: " +
           data.identity.email +
-          ". Elige tu experiencia y decide si deseas sincronizar.";
+          ". Confirma tu usuario y decide si deseas sincronizar. Puedes cambiar tu experiencia dentro del portal.";
       }
       const result = new URLSearchParams(location.search).get("google");
       if (result && result !== "conectado")
@@ -301,8 +304,7 @@
       }
     })
     .catch(() => {
-      googleButton.disabled = true;
-      googleButton.textContent = "Google no disponible en esta conexión";
+      googleConfigured=false;googleButton.disabled=false;googleLabel("Revisar conexión con Google");
       googleStatus.textContent =
         "Puedes continuar como visitante. No se confirma ningún correo sin verificar.";
     });

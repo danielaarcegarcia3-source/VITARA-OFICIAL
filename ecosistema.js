@@ -7,18 +7,26 @@
   const access = $('#access'), app = $('#app'), form = $('#access-form');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let splashTimer;
+  const video=$('#access-video');
+  function syncVideo(){
+    const canPlay=!access.hidden && $('#splash').hidden && !document.hidden && !reduced.matches && !V.A11Y.movimiento && video.dataset.userPaused!=='true';
+    if(canPlay){if(!video.getAttribute('src'))video.src=video.dataset.source;video.autoplay=true;video.play().catch(()=>{});}
+    else {video.autoplay=false;video.pause();}
+  }
+  document.addEventListener('visibilitychange',syncVideo);reduced.addEventListener('change',syncVideo);
+  new MutationObserver(syncVideo).observe(document.documentElement,{attributes:true,attributeFilter:['data-movimiento']});
   function welcome() {
     $('#splash').hidden = true;
     $('#login-card').hidden = false;
     clearTimeout(splashTimer);
     const profile = V.store.get('g3.perfil', {});
     $('#access-name').value = window.VitaraGoogleIdentity?.nombre || profile?.nombre || '';
-    $('#access-email').value = window.VitaraGoogleIdentity?.email || (/@example\.test$/i.test(profile?.email || '')?profile.email:'');
+    $('#access-email').value = window.VitaraGoogleIdentity?.email || '';
 
     $('#access-sync').checked = !!V.store.get('vitara.participant.token', '');
     $('#access-email').required = $('#access-sync').checked;
     $('#access-role').value = profile?.rol && ['CIU', 'POSTA', 'AGC'].includes(profile.rol) ? profile.rol : 'CIU';
-    $('#access-name').focus({ preventScroll: true });
+    $('#access-name').focus({ preventScroll: true });syncVideo();
 
   }
   function refreshName() {
@@ -31,7 +39,7 @@
     access.hidden = true;
     app.inert = false;
     document.body.classList.remove('access-locked');
-    $('#access-video').pause();
+    video.autoplay=false;video.pause();
     refreshName();
     window.dispatchEvent(new Event('vitara:session'));
     window.dispatchEvent(new Event('resize'));
@@ -46,14 +54,15 @@
     splashTimer = setTimeout(welcome, reduced.matches ? 500 : 9000);
   });
   $('#access-sync').addEventListener('change', () => { $('#access-email').required = $('#access-sync').checked; });
+  $('#access-visitor').addEventListener('click',()=>{ $('#access-sync').checked=false;$('#access-email').required=false;$('#access-email').value='';if(!$('#access-name').value.trim())$('#access-name').value='Visitante';form.requestSubmit(); });
   form.addEventListener('submit', async event => {
     event.preventDefault();
     const input = $('#access-name');
     const name = input.value.trim().replace(/\s+/g, ' ');
     input.setCustomValidity(name.length < 2 ? 'Escribe al menos dos caracteres, no solo espacios.' : /^\d{8}$/.test(name) ? 'Usa un nombre de usuario, no un DNI.' : '');
     if (!form.reportValidity()) return;
-    const email=$('#access-email').value.trim();
-    if(email && !/@example\.test$/i.test(email) && email!==window.VitaraGoogleIdentity?.email){$('#access-status').textContent='Conecta esa cuenta con Google para verificarla. No se admite un Gmail escrito sin verificar.';return;}
+    const email=$('#access-email').value.trim().toLowerCase();
+    if(email && email!==window.VitaraGoogleIdentity?.email){$('#google-connect').click();return;}
     const profile = { nombre: name, email, distrito: '', rol: $('#access-role').value };
     const submit = form.querySelector('[type="submit"]'); submit.disabled = true;
     $('#access-status').textContent = '';

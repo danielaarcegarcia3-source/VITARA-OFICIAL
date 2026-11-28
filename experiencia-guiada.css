@@ -13,8 +13,7 @@
     linear-gradient(90deg, #bde0d409 1px, transparent 1px);
   background-size: 64px 64px;
 }
-.access__ambient img,
-.access__ambient video {
+.access__ambient img {
   display: none !important;
 }
 #login-card {

@@ -129,7 +129,7 @@
     const q = V.norm(filtro);
     const lista = IPRESS.filter((p) => !q || V.norm([p.nombre, p.red, p.microred, p.distrito, p.categoria, p.cod].join(' ')).includes(q));
     body.innerHTML = lista.length ? lista.map(filaIPRESS).join('')
-      : `<tr><td colspan="7" class="table-empty">Sin establecimientos que coincidan con «${esc(filtro)}».</td></tr>`;
+      : `<tr><td colspan="8" class="table-empty">Sin establecimientos que coincidan con «${esc(filtro)}».</td></tr>`;
     body.querySelectorAll('[data-ipress]').forEach((tr) => {
       const abrir = () => detalleIPRESS(tr.dataset.ipress);
       tr.addEventListener('click', abrir);

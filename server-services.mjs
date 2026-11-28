@@ -118,7 +118,7 @@ export function createServices({ root, onParticipationChange = () => {}, persist
         const nombre = clean(body.nombre), email = clean(body.email, 254).toLowerCase(), distrito = '', rol = String(body.rol || 'CIU');
         if (nombre.length < 2 || /^\d{8}$/.test(nombre) || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !['CIU','POSTA','AGC'].includes(rol)) throw error(400, 'Revisa nombre, correo y rol. No uses tu DNI como nombre.');
         const googleIdentity=google.readIdentity(req);const emailVerified=!!(googleIdentity && googleIdentity.email===email);
-        if(!emailVerified && !/^[^\s@]+@example\.test$/i.test(email))throw error(403,'Para sincronizar una cuenta real, conéctala con Google. Escribir un correo no verifica que exista. Para la prueba local utiliza example.test.');
+        if(!emailVerified && !(process.env.NODE_ENV==='test' && process.env.VITARA_ALLOW_DEMO_PROFILES==='1' && /^[^\s@]+@example\.test$/i.test(email)))throw error(403,'Para sincronizar una cuenta real, conéctala con Google. Escribir un correo no verifica que exista. Puedes explorar sin conectar una cuenta.');
         if (body.consent !== true) throw error(400, 'Necesitamos tu consentimiento para guardar el perfil y compartir la actividad con administración.');
         let previous = null; try { previous = profileFor(req); } catch { /* Registration does not impersonate an existing email. */ }
         if(emailVerified && !previous)previous=state.profiles.find(p=>p.email===email);

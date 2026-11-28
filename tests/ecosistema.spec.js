@@ -6,7 +6,7 @@ async function login(page, name = 'Daniela') {
   await page.goto('/');
   await page.evaluate(() => document.querySelector('#splash-skip').click());
   await page.locator('#access-name').fill(name);
-  await page.locator('#access-form button').click();
+  await page.locator('#access-form [type=submit]').click();
   await expect(page.locator('#access')).toBeHidden();
 }
 
@@ -17,17 +17,17 @@ test('secuencia obligatoria, validación, perfil persistente y cierre local', as
   await page.evaluate(() => document.querySelector('#splash-skip').click());
   await expect(page.locator('#login-card')).toBeVisible();
   await page.locator('#access-name').fill('   ');
-  await page.locator('#access-form button').click();
+  await page.locator('#access-form [type=submit]').click();
   await expect(page.locator('#access')).toBeVisible();
   await page.locator('#access-name').fill('Daniela');
-  await page.locator('#access-form button').click();
+  await page.locator('#access-form [type=submit]').click();
   await expect(page.locator('#welcome-name')).toContainText('Daniela');
   await expect(page.locator('#profile-nom')).toHaveText('Daniela');
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('g3.perfil')).nombre)).toBe('Daniela');
   await page.reload();
   await page.evaluate(() => document.querySelector('#splash-skip').click());
   await expect(page.locator('#access-name')).toHaveValue('Daniela');
-  await page.locator('#access-form button').click();
+  await page.locator('#access-form [type=submit]').click();
   await page.locator('#btn-profile').click();
   await page.locator('[data-session-logout]').click();
   await expect(page.locator('#login-card')).toBeVisible();

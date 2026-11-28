@@ -13,9 +13,9 @@ async function enter(page, role = "CIU") {
   await page.goto(base);
   await page.locator("#splash-skip").evaluate((e) => e.click());
   await page.locator("#access-name").fill("Prueba de experiencia");
-  await page.locator("#access-role").selectOption(role);
   await page.locator("#access-form [type=submit]").click();
   await expect(page.locator("#access")).toBeHidden();
+  if(role!=="CIU")await page.locator("#guided-role").selectOption(role);
 }
 
 test("acceso sin imagen ni distrito, Gmail sin verificar no entra y Google pendiente es explícito", async ({
@@ -25,8 +25,8 @@ test("acceso sin imagen ni distrito, Gmail sin verificar no entra y Google pendi
   await page.locator("#splash-skip").evaluate((e) => e.click());
   await expect(page.locator(".access__ambient img")).toHaveCount(0);
   await expect(page.locator("#access-district")).toHaveCount(0);
-  await expect(page.locator("#google-connect")).toBeDisabled();
-  await page.locator("#access-demo summary").click();
+  await expect(page.locator("#google-connect img")).toHaveAttribute("src","./assets/identity/google-g.svg");
+  await expect(page.locator("#access-demo")).toHaveCount(0);
   await page.locator("#access-name").fill("Prueba");
   await page.locator("#access-email").fill("inventado@gmail.com");
   await page.locator("#access-form [type=submit]").click();

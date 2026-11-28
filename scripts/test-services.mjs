@@ -6,6 +6,7 @@ import path from 'node:path';
 import { createServices } from '../server-services.mjs';
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vitara-services-'));
 const oldDir = process.env.VITARA_DATA_DIR, oldSetup = process.env.VITARA_SETUP_KEY;
+process.env.NODE_ENV='test';process.env.VITARA_ALLOW_DEMO_PROFILES='1';
 process.env.VITARA_DATA_DIR = dir;
 process.env.VITARA_SETUP_KEY = 'private-test-bootstrap-only';
 let service = createServices({ root: dir });
