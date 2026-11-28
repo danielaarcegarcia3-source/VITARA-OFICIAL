@@ -1,6 +1,19 @@
 # VITARA · Activos, territorios y participación
 
-## Revisión vigente · atlas completo, espacios y medicamentos
+## Revisión vigente · observatorio estadístico creativo
+
+Petición: cambiar de forma sustancial la presentación del tablero, con más animación e interactividad profesional. Se añaden `estadisticas-experiencia.js` y `estadisticas-experiencia.css` después del renderer existente; no se sustituye la arquitectura, los datos, las tablas ni los mapas.
+
+- Cabecera editorial petróleo, menta y amarillo suave: indicador destacado, anillo en escala 0–100 y navegación anterior/siguiente. Los 339 establecimientos se presentan como conteo, sin arco porcentual. Tarjetas numeradas con acentos por tema, medidores a escala real, selección y botón de desglose al inspector existente.
+- Filtros Todos/Abastecimiento/Puntos de atención/Cobertura, con contador de indicadores visibles. El indicador destacado se mantiene dentro del grupo activo. Los ocho valores originales se verifican literalmente en pruebas; no hay conteo animado que pase por cifras inventadas ni miniseries ficticias.
+- Comparador desplegable de dos de las 12 redes: barras con valores registrados, cálculo explícito `|A − B|` en puntos porcentuales, caso de misma red y aclaración de que no es un ranking de calidad asistencial. Cerrar devuelve el foco al botón de apertura.
+- Histórico con anterior/siguiente y reproducción manual de meses reales cada 1,5 s, sin interpolación. Pausa al salir del tablero, ocultar la página, manipular el deslizador o los puntos y activar movimiento reducido. No arranca solo; el control de reproducción se desactiva con movimiento reducido y los controles manuales siguen disponibles.
+- Referencia regional de 91 % señalada en las barras; no se presenta como una meta individual certificada por red. Las acciones Fuentes y método y Explorar los 12 meses navegan a destinos funcionales. Repetir animación reinicia únicamente la presentación, sin alterar datos ni hacer solicitudes de red.
+- Presentación inicial con revelado escalonado, crecimiento de medidores y trazado del anillo; transiciones de selección y hover. Sin bucles decorativos continuos. Preferencia del sistema y ajuste interno de movimiento reducido respetados. Diseño móvil comprobado a 390 px, también con texto ampliado, sin desborde horizontal.
+
+**Verificación local:** 39/39 UI aprobadas (Chromium, un worker, 6,8 min), incluidas cuatro nuevas del observatorio; 34 servicios, 96 seguridad, 61 activos/25 hashes de texturas, build, `git diff --check` y npm audit (0 vulnerabilidades detectadas). Inspección visual de escritorio y móvil. No se cambiaron backend, credenciales ni registros; PostgreSQL no se revalida en esta iteración de presentación. Despliegue remoto y siete dispositivos físicos no verificados.
+
+## Revisión anterior · atlas completo, espacios y medicamentos
 
 Nueva petición explícita: los puntos del ADN vuelven a tratar medicamentos, no biología. Se conserva el GLB original y se indica que es un soporte visual, sin localizaciones moleculares ni prescripciones. Los cinco temas son genéricos/DCI, verificación de disponibilidad, conservación, uso responsable y vencimiento/trazabilidad. Acciones a búsqueda, solicitudes, fuentes y orientación; portal oficial de DIGEMID enlazado. La respuesta local de orientación describe el cambio.
 
