@@ -34,27 +34,38 @@
       const raw = c.k === 'ipressMonitoreadas' ? { valor: SIS.ipressMonitoreadas, etiqueta: 'IPRESS monitoreadas' } : (KPIS[c.k] || {});
       const v = raw.valor;
       const unidad = c.k === 'ipressMonitoreadas' ? '' : '%';
-      return `<article class="kpi kpi--${c.clase}">
+      return `<article class="kpi kpi--${c.clase}" data-indicator="${c.k}">
         <p class="kpi__l">${esc(raw.etiqueta || c.k)}</p>
         <p class="kpi__v">${c.k === 'ipressMonitoreadas' ? num(v) : num(v, 2)}<small>${unidad}</small></p>
         <p class="kpi__f">${esc(raw.descripcion || c.nota)}</p>
         <p class="source" style="margin-top:5px">${esc(SRC.sismed.texto)} · ${esc(FECHA)}</p>
+        <button type="button" class="kpi-explain" data-metric="${c.k}">Entender este indicador</button>
       </article>`;
     }).join('');
+    cont.querySelectorAll('[data-metric]').forEach(button => button.addEventListener('click', () => {
+      const definition = cards.find(card => card.k === button.dataset.metric);
+      const raw = definition.k === 'ipressMonitoreadas' ? {etiqueta:'IPRESS monitoreadas',valor:SIS.ipressMonitoreadas} : KPIS[definition.k];
+      V.abrirInspector('Cómo leer el indicador', `<div class="inspector-card"><h4>${esc(raw.etiqueta)}</h4><p>${num(raw.valor,definition.k === 'ipressMonitoreadas' ? 0 : 2)}${definition.k === 'ipressMonitoreadas' ? '' : '%'}</p><p>${esc(raw.descripcion || definition.nota)}</p></div><p>${esc(definition.nota)}</p><p class="source">${esc(SRC.sismed.texto)} · corte ${esc(FECHA)}</p><p>Reporte regional de La Libertad, no una cifra nacional ni stock en tiempo real. Un valor agregado no confirma existencias en una sede concreta.</p>`);
+    }));
   }
 
   function pintarBarras() {
     const cont = $('#bars-redes');
     if (!cont) return;
-    const orden = REDES.slice().sort((a, b) => b.dispo - a.dispo);
-    cont.innerHTML = orden.map((r) => {
-      const clase = r.dispo < 80 ? ' low' : r.dispo < 91 ? ' warn' : '';
-      return `<div class="bar-row${clase}" title="${esc(r.nombre)}: ${pct(r.dispo)} de disponibilidad">
+    const order = $('#stats-sort')?.value || 'desc';
+    const orden = REDES.slice().sort((a,b) => order === 'nombre' ? a.nombre.localeCompare(b.nombre,'es') : order === 'asc' ? a.dispo-b.dispo : b.dispo-a.dispo);
+    cont.innerHTML = orden.map((r,i) => {
+      const clase = r.dispo < 80 ? ' bar-row--low' : r.dispo < 91 ? ' bar-row--warn' : '';
+      return `<button type="button" class="bar-row${clase}" data-network="${esc(r.id)}" style="--row:${i}" title="${esc(r.nombre)}: ${pct(r.dispo)} de disponibilidad">
         <span class="bar-row__l">${esc(r.nombre.replace(/^RED /, ''))}</span>
         <span class="bar-row__track" role="img" aria-label="${pct(r.dispo)}"><span class="bar-row__fill" style="width:${Math.max(2, Math.min(100, r.dispo))}%"></span></span>
         <span class="bar-row__v">${pct(r.dispo)}</span>
-      </div>`;
+      </button>`;
     }).join('');
+    cont.querySelectorAll('[data-network]').forEach(button => button.addEventListener('click', () => {
+      const r=REDES.find(row=>row.id===button.dataset.network);
+      V.abrirInspector('Red de salud · '+r.nombre, `<div class="inspector-card"><h4>${esc(r.nombre)}</h4><p>Disponibilidad: ${pct(r.dispo)}</p></div><dl class="kv"><dt>Normostock</dt><dd>${pct(r.normo)}</dd><dt>Sobrestock</dt><dd>${pct(r.sobre)}</dd><dt>Substock</dt><dd>${pct(r.sub)}</dd><dt>Desabastecido</dt><dd>${pct(r.desab)}</dd></dl><p class="source">${esc(SRC.sismed.texto)} · corte ${esc(FECHA)}</p><p>Referencia regional; no acredita disponibilidad actual en un establecimiento.</p>`);
+    }));
   }
 
   function pintarLinea() {
@@ -73,13 +84,30 @@
       grid += `<line class="grid" x1="${L}" y1="${y(v).toFixed(1)}" x2="${W - R}" y2="${y(v).toFixed(1)}"/>
         <text class="axis" x="2" y="${(y(v) + 3).toFixed(1)}">${v}%</text>`;
     }
-    const dots = hist.map((h, i) => `<circle class="punto" cx="${x(i).toFixed(1)}" cy="${y(h.dispo).toFixed(1)}" r="2.6"><title>${esc(h.mes)}: ${pct(h.dispo)}</title></circle>`).join('');
+    const dots = hist.map((h, i) => `<circle class="punto" data-month="${i}" cx="${x(i).toFixed(1)}" cy="${y(h.dispo).toFixed(1)}" r="2.6"><title>${esc(h.mes)}: ${pct(h.dispo)}</title></circle>`).join('');
     const labels = hist.map((h, i) => (i % 2 === 0 || i === hist.length - 1)
       ? `<text class="axis" x="${x(i).toFixed(1)}" y="${H - 14}" text-anchor="middle">${esc(h.mes.replace(' 20', ' '))}</text>` : '').join('');
     svg.innerHTML = `<defs><linearGradient id="areaVerde" x1="0" x2="0" y1="0" y2="1">
         <stop offset="0%" stop-color="#2FA982" stop-opacity=".28"/><stop offset="100%" stop-color="#2FA982" stop-opacity="0"/>
       </linearGradient></defs>
       ${grid}<polygon class="area" points="${area}"/><polyline class="linea" points="${puntos}"/>${dots}${labels}`;
+    let control = $('#stats-month-control');
+    if (!control) {
+      control = document.createElement('div'); control.className='stats-month'; control.id='stats-month-control';
+      control.innerHTML='<label for="stats-month">Explora un mes del reporte</label><input type="range" id="stats-month" min="0" step="1"><output id="stats-month-value" for="stats-month" aria-live="polite"></output><p>Cifras del reporte histórico, no mediciones en vivo. Usa las flechas del teclado para recorrer los meses.</p>';
+      svg.after(control);
+    }
+    const slider=$('#stats-month');slider.max=String(hist.length-1);slider.value=String(hist.length-1);
+    const selectMonth=index=>{
+      const value=hist[index]; if(!value)return;
+      const text=value.mes+' · '+pct(value.dispo)+' de disponibilidad';
+      $('#stats-month-value').textContent=text;slider.value=String(index);slider.setAttribute('aria-valuetext',text);
+      svg.querySelectorAll('.punto').forEach((point,i)=>point.classList.toggle('is-selected',i===index));
+    };
+    slider.oninput=()=>selectMonth(Number(slider.value));
+    svg.querySelectorAll('[data-month]').forEach(point=>{point.addEventListener('pointerenter',()=>selectMonth(Number(point.dataset.month)));point.addEventListener('click',()=>selectMonth(Number(point.dataset.month)));});
+    selectMonth(hist.length-1);
+
   }
 
   function filaIPRESS(p) {
@@ -120,6 +148,10 @@
   }
 
   function initTablero() {
+    if (!$('#stats-sort')) {
+      const controls=document.createElement('div');controls.className='stats-controls';controls.innerHTML='<label for="stats-sort">Ordenar redes</label><select id="stats-sort"><option value="desc">Mayor disponibilidad primero</option><option value="asc">Menor disponibilidad primero</option><option value="nombre">Por nombre</option></select><span>Selecciona una red para ver su detalle.</span>';
+      $('#bars-redes')?.before(controls);$('#stats-sort')?.addEventListener('change',pintarBarras);
+    }
     pintarKpis();
     pintarBarras();
     pintarLinea();

@@ -1,0 +1,214 @@
+/* Ajustes del portal: base apenas cálida, sin alterar superficies oscuras. */
+html[data-base="blanco"] {
+  --studio-paper: #faf8f3;
+  --v-bg: #faf8f3;
+  --v-surface: #fffdf8;
+  --v-panel: #fffdf8;
+}
+html[data-base="blanco"] :is(.viewport, .tabs, .topbar, .rail) {
+  background: #faf8f3;
+}
+html[data-base="blanco"] .home-hero,
+html[data-base="blanco"] .home-hero.is-panel {
+  background: #f8f8ef;
+  border-color: #e2e6d8;
+}
+html[data-base="blanco"] :is(.kpi, .chart-card, .table-wrap) {
+  background: #fffdf9;
+}
+/* Los títulos tenían un color global oscuro sobre una tarjeta oscura. */
+#view-fuentes .evidence-lab :is(h3, h4) {
+  color: #fff8e5;
+}
+#view-fuentes .evidence-lab p {
+  color: #d4e3d2;
+  font-size: 13px;
+}
+#view-fuentes .evidence-lab #evidence-feedback {
+  color: #ffecae;
+}
+#view-fuentes .evidence-lab #evidence-answers button {
+  color: #f1f6df;
+  border-color: #8cae9b;
+  background: #ffffff09;
+  font-size: 13px;
+  min-height: 48px;
+}
+#view-fuentes .evidence-lab #evidence-answers button:hover,
+#view-fuentes .evidence-lab #evidence-answers button:focus-visible {
+  background: #ffffff1c;
+  border-color: #d9e7bb;
+}
+#view-fuentes .evidence-lab #evidence-answers button[data-correct="false"] {
+  opacity: 1;
+  color: #ffe1cf;
+  border-color: #ceab96;
+}
+#view-fuentes .evidence-lab #evidence-next {
+  font-size: 12px;
+  color: #f5f0c7;
+  min-height: 44px;
+}
+#view-fuentes .evidence-hero h2 {
+  color: #234c3d;
+}
+/* Métricas: las cifras permanecen exactas; solo se anima la presentación. */
+#kpis-sismed .kpi {
+  position: relative;
+  transition:
+    transform 0.24s,
+    box-shadow 0.24s,
+    border-color 0.24s;
+  overflow: hidden;
+}
+#kpis-sismed .kpi:hover,
+#kpis-sismed .kpi:focus-within {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 28px #244e3914;
+  border-color: #83bca4;
+}
+.kpi-explain {
+  border: 0;
+  background: transparent;
+  color: #236d59;
+  font-size: 11px;
+  font-weight: 650;
+  cursor: pointer;
+  padding: 9px 0;
+  margin-top: 6px;
+  min-height: 40px;
+}
+.kpi-explain::after {
+  content: " ↗";
+  display: inline-block;
+  transition: translate 0.2s;
+}
+.kpi-explain:hover::after {
+  translate: 3px -3px;
+}
+.stats-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0 18px;
+  font-size: 12px;
+  color: #375e51;
+}
+.stats-controls select {
+  padding: 8px 10px;
+  border: 1px solid #c3d5c6;
+  border-radius: 9px;
+  background: #fffdf7;
+  color: #264e40;
+  max-width: 100%;
+}
+#bars-redes .bar-row {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  text-align: left;
+  padding: 9px 7px;
+  cursor: pointer;
+  font: inherit;
+  min-height: 44px;
+}
+#bars-redes .bar-row:hover,
+#bars-redes .bar-row:focus-visible {
+  background: #eaf2e5;
+  border-color: #bdd5bd;
+}
+#bars-redes .bar-row__track,
+#bars-redes .bar-row__fill {
+  display: block;
+}
+#bars-redes .bar-row__fill {
+  transform-origin: left;
+  animation: stats-grow 0.85s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+  animation-delay: calc(var(--row, 0) * 35ms);
+}
+#line-historico .linea {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+  animation: stats-line 1.5s ease both;
+}
+#line-historico .punto {
+  transition:
+    r 0.2s,
+    fill 0.2s;
+  cursor: crosshair;
+}
+#line-historico .punto:hover,
+#line-historico .punto.is-selected {
+  r: 5;
+  fill: #f2c877;
+  stroke: #125848;
+  stroke-width: 2;
+}
+.stats-month {
+  display: grid;
+  gap: 9px;
+  margin-top: 8px;
+  padding: 14px;
+  background: #f2f4e9;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #315847;
+}
+.stats-month input {
+  width: 100%;
+  accent-color: #21775d;
+  cursor: pointer;
+  min-height: 32px;
+}
+.stats-month output {
+  font-weight: 650;
+}
+.stats-month p {
+  font-size: 11px;
+  line-height: 1.6;
+}
+@keyframes stats-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes stats-line {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #view-tablero *,
+  #view-tablero *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  #kpis-sismed .kpi:hover {
+    transform: none;
+  }
+}
+html[data-movimiento="reducido"] #view-tablero *,
+html[data-movimiento="reducido"] #view-tablero *::after {
+  animation: none !important;
+  transition: none !important;
+}
+@media (max-width: 600px) {
+  .stats-controls {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  #kpis-sismed .kpi-explain {
+    font-size: 11px;
+  }
+  .evidence-lab h3 {
+    font-size: 29px;
+  }
+}

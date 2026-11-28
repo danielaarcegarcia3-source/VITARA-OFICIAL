@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { localKnowledge } from './orientation-knowledge.mjs';
 
 const VIEWS = new Set(['inicio','buscar','tablero','mapas','planos','equipos','solicitudes','canales','comunidad','fuentes','tecnologia']);
 const DETAILS = new Set(['hospital','or','vr','peru','ll','blanco','editorial','local','ia']);
@@ -157,9 +158,11 @@ export function createServices({ root, onParticipationChange = () => {}, persist
 }
 function localAnswer(message) {
   const q = message.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const knowledge = localKnowledge(q);
   let answer, action;
   if (/suicid|hacerme dano|matarme|no quiero vivir/.test(q)) answer = 'Siento que estés pasando por esto. Si podrías hacerte daño ahora, busca atención de emergencia y pide a alguien de confianza que permanezca contigo. En Perú puedes llamar al 106 (SAMU, según cobertura) o acudir a una emergencia. La Línea 113 puede orientarte sobre servicios de salud mental. Este chat no contacta servicios ni sustituye ayuda inmediata.';
   else if (/no pued[oe] respirar|dolor (fuerte )?de pecho|inconscient|convulsion|sangrado abundante|emergencia/.test(q)) answer = 'Si esto está ocurriendo ahora, busca atención de emergencia. En Perú, llama al 106 (SAMU donde haya cobertura) o acude al servicio de emergencia más cercano. No esperes una respuesta de este chat. No puedo evaluar gravedad ni enviar una ambulancia.';
+  else if (knowledge) ({ answer, action } = knowledge);
   else if (/mapa|libertad|territorio|provincia|peru/.test(q)) { answer = 'En Mapas puedes explorar el Perú por departamentos y La Libertad por provincias. La geometría proviene de polígonos GeoJSON simplificados y se muestra con volumen 3D. Puedes girar, acercar y elegir un territorio. Los colores distinguen territorios, no niveles de stock. El atlas inferior conserva las imágenes originales.'; action = 'mapas'; }
   else if (/proveedor|dispositivo|ecografo|monitor multiparametro|bomba de infusion|desfibrilador/.test(q)) { answer = 'En Dispositivos y proveedores encontrarás ilustraciones genéricas creadas con IA, fichas educativas, una comparación de hasta tres tipos de equipo y referencias a páginas oficiales de fabricantes. No son ofertas ni verificamos precio, stock, distribución autorizada o registro sanitario de un producto. Antes de adquirir, revisa necesidad clínica, requisitos regulatorios, soporte y consumibles.'; action = 'tecnologia'; }
   else if (/medic|pastilla|stock|farmacia|dosis|paracetamol|amoxicilina/.test(q)) { answer = 'El buscador permite consultar los medicamentos incluidos en la base local y sus fechas de referencia. No tengo stock en tiempo real ni puedo recomendarte una dosis o tratamiento personalizado. Confirma el recurso con la sede; si no hay verificación, usa Solicitudes. No te automediques a partir del chat.'; action = 'buscar'; }

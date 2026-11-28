@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#f5f9f7">
-  <meta name="description" content="VITARA · Ecosistema digital de acceso a la salud por microrred en La Libertad, Perú. Disponibilidad, medicamentos, mapas, canales oficiales y solicitudes anónimas con fuente y fecha. ODS 3, 9 y 10.">
+  <meta name="description" content="VITARA · Ecosistema digital de acceso a la salud en el Perú, con información regional de La Libertad. Disponibilidad, medicamentos, mapas, canales oficiales y solicitudes anónimas con fuente y fecha. ODS 3, 9 y 10.">
   <title>VITARA · Salud verificable por microrred · Grupo 3</title>
   <link rel="stylesheet" href="./tokens.css">
   <link rel="stylesheet" href="./vitara.css">
@@ -14,12 +14,13 @@
   <link rel="stylesheet" href="./experiencia.css?v=conexiones-2">
   <link rel="stylesheet" href="./conexion.css?v=6">
   <link rel="stylesheet" href="./descubrir.css?v=4">
+  <link rel="stylesheet" href="./portal-ajustes.css?v=1">
 </head>
 <body class="access-locked">
 <section class="access" id="access" aria-label="Acceso a VITARA">
   <div class="access__ambient"><img src="./imagenmanosysalud.jpg" alt="Manos que cuidan de la salud" class="access__photo"><video id="access-video" muted loop playsinline preload="none" poster="./imagenmanosysalud.jpg" hidden></video></div>
   <a class="access__brand" href="#" aria-label="VITARA"><img src="./logo%20VITARA.jpeg" alt="Logo oficial VITARA"><span>VITARA<small>ECOSISTEMA DIGITAL DE SALUD</small></span></a>
-  <div class="access__story"><p class="overline">SALUD CONECTADA. VIDAS TRANSFORMADAS.</p><h1>Más cerca.<br>Más humano.<br><em>Más salud.</em></h1><p>La tecnología cobra sentido cuando nos acerca a lo que más importa: tu bienestar.</p><span class="access__territory">PERÚ <b>↗</b> LA LIBERTAD</span></div>
+  <div class="access__story"><p class="overline">SALUD CONECTADA. VIDAS TRANSFORMADAS.</p><h1>Más cerca.<br>Más humano.<br><em>Más salud.</em></h1><p>La tecnología cobra sentido cuando nos acerca a lo que más importa: tu bienestar.</p><span class="access__territory">PERÚ · SALUD QUE CONECTA</span></div>
   <div class="access__card" id="login-card" hidden>
     <span class="access__step">01 / TU PUNTO DE PARTIDA</span><img class="access__logo" src="./logo%20VITARA.jpeg" alt="VITARA">
     <h2>La salud conecta.<br><em>VITARA transforma.</em></h2><p>Tu red de salud, en un solo lugar.</p>
@@ -95,7 +96,7 @@
   <header class="topbar">
     <a class="brand" href="#inicio" data-go="inicio" aria-label="VITARA · Ir al inicio">
       <img class="brand__logo" src="./logo%20VITARA.jpeg" alt="">
-      <span class="brand__txt"><span class="brand__name">VITARA</span><span class="brand__sub">Salud verificable · La Libertad</span></span>
+      <span class="brand__txt"><span class="brand__name">VITARA</span><span class="brand__sub">Salud verificable · Perú</span></span>
       <button class="brand__collapse" type="button" id="rail-collapse" aria-label="Colapsar la navegación lateral" title="Colapsar navegación">
         <svg class="i i--sm"><use href="#i-columns"/></svg>
       </button>
@@ -184,13 +185,13 @@
       <div class="viewport" id="viewport" tabindex="-1">
         <!-- ============ INICIO ============ -->
         <section class="view is-active" id="view-inicio" data-view="inicio" aria-labelledby="home-title">
-          <div class="home"><div class="welcome-bar"><div><p class="overline">TU ECOSISTEMA DE SALUD</p><h2 id="welcome-name">Bienvenido a VITARA <span>✳</span></h2></div><div class="territory-pill"><svg class="i"><use href="#i-pin"/></svg> La Libertad, Perú</div></div>
+          <div class="home"><div class="welcome-bar"><div><p class="overline">TU ECOSISTEMA DE SALUD</p><h2 id="welcome-name">Bienvenido a VITARA <span>✳</span></h2></div><div class="territory-pill"><svg class="i"><use href="#i-pin"/></svg> Perú</div></div>
             <div class="home-hero" id="home-hero">
               <div class="home-copy">
                 <p class="eyebrow"><span class="live-dot"></span> EL FUTURO DE LA SALUD ES CONECTAR</p>
                 <h1 id="home-title" data-palabras>La salud de tu distrito, <em class="resalta">clara</em> antes de salir.</h1>
                 <p class="lede">
-                  Consulta disponibilidad, medicamentos, equipos y canales oficiales de La Libertad.
+                  Explora recursos de salud, medicamentos, equipos y canales oficiales del Perú, con información regional de La Libertad.
                   Cada dato muestra su fuente y su fecha; si no hay verificación, lo decimos.
                 </p>
                 <div class="home-actions">
@@ -223,7 +224,7 @@
                     <span class="stage__badge"><svg class="i i--sm"><use href="#i-dna"/></svg> Doble hélice · modelo 3D</span>
                     <span class="stage__hint">Arrastra para girar · rueda para acercar</span>
                   </div>
-                  <div class="dna-targets" id="dna-targets" role="group" aria-label="Dianas moleculares del modelo">
+                  <div class="dna-targets" id="dna-targets" role="group" aria-label="Temas educativos sobre el ADN">
                     <!-- vitara-home.js -->
                   </div>
                   <div class="stage__controls">
@@ -241,10 +242,10 @@
                   <div class="stage-loader" id="dna-loader"><div class="spinner" aria-hidden="true"></div><span>Cargando hélice 3D…</span></div>
                   <div class="stage-fallback" id="dna-fallback" hidden>
                     <p><strong>No se pudo cargar el modelo 3D.</strong>
-La información de las dianas sigue disponible en los botones laterales.</p>
+La información sobre el ADN sigue disponible en los botones laterales.</p>
                   </div>
                 </div>
-                <aside class="dna-panel" id="dna-panel" hidden aria-live="polite" aria-label="Información de la diana seleccionada">
+                <aside class="dna-panel" id="dna-panel" hidden aria-live="polite" aria-label="Información del ADN seleccionada">
                   <!-- vitara-home.js -->
                 </aside>
               </div>
@@ -550,7 +551,7 @@ La información de las dianas sigue disponible en los botones laterales.</p>
           <div class="view-head">
             <div>
               <p class="eyebrow">Red oficial de asistencia</p>
-              <h2 id="canales-title">Canales reales, no botones decorativos</h2>
+              <h2 id="canales-title">Canales reales para orientarte</h2>
               <p class="lede">Enlaces telefónicos y plataformas del Estado peruano. VITARA orienta al canal; no diagnostica ni prescribe.</p>
             </div>
             <span class="tag tag--ok"><span class="dot"></span> Enlaces verificados</span>

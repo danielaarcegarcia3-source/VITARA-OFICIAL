@@ -1,3 +1,5 @@
+> **Correcciones del portal:** identidad nacional (Perú) con información regional de La Libertad preservada; base apenas beige, contraste de Fuentes corregido, estadísticas explorables y ADN con cinco temas de biología pertinentes. Guía local ampliada sin simular IA externa. Verificación local: 32 UI, 34 servicios, 96 seguridad y 63 PostgreSQL aprobadas. Esta revisión necesita su propio despliegue en Render.
+
 > **Panel renovado y publicación:** administración con nueva interfaz clara, navegación, búsqueda, filtros y efectos accesibles. El propietario mostró despliegue exitoso, salud PostgreSQL y acceso al panel en https://vitara-oficial.onrender.com. Falta comprobar el nuevo diseño allí, la persistencia tras reinicio del alojamiento y siete dispositivos físicos. Guía: [DESPLEGAR-RENDER-NEON.md](DESPLEGAR-RENDER-NEON.md). Sin `DATABASE_URL` se conserva el modo local independiente; no hay sincronización automática con la nube.
 
 > **Ampliación:** equipo identificado, entrada multicolor y actualizaciones de participación por eventos. Protección de red y configuración del anfitrión: [RED-SEGURA-CONCURSO.md](RED-SEGURA-CONCURSO.md).

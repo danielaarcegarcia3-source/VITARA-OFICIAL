@@ -59,7 +59,7 @@ Una vez creado el administrador, el alta se cierra y la contraseña queda proteg
 
 ## Orientador y preguntas abiertas
 
-El chat integrado funciona como **guía local de alcance limitado** sin proveedor de pago: navegación, mapas, perfiles, privacidad, solicitudes y orientación general. Ante una pregunta desconocida dice que no tiene información; no aparenta una IA general.
+El chat integrado funciona como **guía local de alcance limitado** sin proveedor de pago: navegación, mapas, perfiles, privacidad, solicitudes y orientación general. La ampliación en `orientation-knowledge.mjs` incluye ADN, lectura de SISMED, SIS, canales 113/106 y SUSALUD, DCI, IPRESS/RENIPRESS, respaldos y funcionamiento del alojamiento. Son respuestas preparadas y acotadas, no búsqueda web, interpretación clínica ni un modelo generativo. Ante una pregunta desconocida dice que no tiene información; no aparenta una IA general.
 
 La ruta real de IA admite un proveedor compatible con Chat Completions. Configura únicamente en el servidor y reinicia:
 

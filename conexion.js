@@ -38,14 +38,14 @@
   setInterval(() => { if (!document.hidden) record('presencia'); }, 60000);
 
   const tools = document.createElement('div'); tools.className = 'connection-tools';
-  tools.innerHTML = '<button type="button" id="theme-switch" aria-pressed="true">◐ <span>Base blanca</span></button><button type="button" id="participation-open">◎ <span>Participación</span></button><button type="button" id="chat-open" aria-expanded="false" aria-controls="orientation-chat">✳ <span>Orientación</span></button>';
+  tools.innerHTML = '<button type="button" id="theme-switch" aria-pressed="true">◐ <span>Base cálida</span></button><button type="button" id="participation-open">◎ <span>Participación</span></button><button type="button" id="chat-open" aria-expanded="false" aria-controls="orientation-chat">✳ <span>Orientación</span></button>';
   document.body.append(tools);
   function theme(value) {
     document.documentElement.dataset.base = value;
     V.store.set('vitara.theme', value);
     const white = value === 'blanco';
     document.getElementById('theme-switch').setAttribute('aria-pressed', String(white));
-    document.querySelector('#theme-switch span').textContent = white ? 'Base blanca' : 'Base editorial';
+    document.querySelector('#theme-switch span').textContent = white ? 'Base cálida' : 'Base editorial';
   }
   theme(V.store.get('vitara.theme', 'blanco'));
   document.getElementById('theme-switch').addEventListener('click', () => { const next = document.documentElement.dataset.base === 'blanco' ? 'editorial' : 'blanco'; theme(next); record('tema', next); });
@@ -76,7 +76,7 @@
   });
 
   const chat = document.createElement('section'); chat.id = 'orientation-chat'; chat.className = 'orientation-chat'; chat.hidden = true; chat.setAttribute('aria-label', 'Chat de orientación VITARA');
-  chat.innerHTML = '<header><div><span class="overline">UN PRIMER PASO, CONTIGO</span><h2>Hablemos de lo que necesitas.</h2></div><button type="button" id="chat-close" aria-label="Cerrar orientación">×</button></header><p class="chat-mode" id="chat-mode">Guía local · sin IA externa conectada</p><label class="chat-ai"><input type="checkbox" id="chat-ai" disabled> Usar IA externa para preguntas abiertas (envía tu consulta al proveedor; no incluyas datos personales).</label><div class="chat-messages" id="chat-messages" role="log" aria-label="Conversación" aria-live="polite"></div><div class="chat-prompts"><button type="button">¿Cómo exploro los mapas?</button><button type="button">¿Cómo se guardan mis datos?</button><button type="button">Necesito orientación de salud</button></div><form id="chat-form"><label class="sr-only" for="chat-input">Tu consulta</label><textarea id="chat-input" maxlength="2000" rows="2" required placeholder="Escribe tu pregunta, sin DNI ni datos clínicos…"></textarea><button type="submit" aria-label="Enviar consulta">↗</button></form><footer>Sin historial persistente. Orientación, no diagnóstico. En emergencia: 106 (según cobertura); orientación sanitaria: 113.</footer>';
+  chat.innerHTML = '<header><div><span class="overline">UN PRIMER PASO, CONTIGO</span><h2>Hablemos de lo que necesitas.</h2></div><button type="button" id="chat-close" aria-label="Cerrar orientación">×</button></header><p class="chat-mode" id="chat-mode">Guía local · sin IA externa conectada</p><label class="chat-ai"><input type="checkbox" id="chat-ai" disabled> Usar IA externa para preguntas abiertas (envía tu consulta al proveedor; no incluyas datos personales).</label><div class="chat-messages" id="chat-messages" role="log" aria-label="Conversación" aria-live="polite"></div><div class="chat-prompts"><button type="button">¿Cómo exploro los mapas?</button><button type="button">¿Cómo se guardan mis datos?</button><button type="button">Necesito orientación de salud</button><button type="button">¿Qué es el ADN?</button><button type="button">¿Cómo leo el tablero SISMED?</button></div><form id="chat-form"><label class="sr-only" for="chat-input">Tu consulta</label><textarea id="chat-input" maxlength="2000" rows="2" required placeholder="Escribe tu pregunta, sin DNI ni datos clínicos…"></textarea><button type="submit" aria-label="Enviar consulta">↗</button></form><footer>Sin historial persistente. Orientación, no diagnóstico. En emergencia: 106 (según cobertura); orientación sanitaria: 113.</footer>';
   document.body.append(chat);
   const log = document.getElementById('chat-messages');
   function bubble(text, who, action) {

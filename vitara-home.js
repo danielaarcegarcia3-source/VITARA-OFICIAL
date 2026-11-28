@@ -1,5 +1,5 @@
 /**
- * vitara-home.js — hélice de ADN 3D, dianas moleculares y panel lateral.
+ * vitara-home.js — hélice de ADN 3D, conceptos de biología y panel lateral.
  * Usa exclusivamente el GLB real; conserva información accesible si WebGL falla.
  */
 (function () {
@@ -8,67 +8,57 @@
   const $ = (s, r = document) => r.querySelector(s);
 
   const TARGETS = [
-    {
-      id: 'pbp',
-      n: '01',
-      label: 'PBP · pared bacteriana',
-      title: 'PBP · Transpeptidasa bacteriana',
-      mechanism: 'La enzima PBP entrecruza el peptidoglicano de la pared bacteriana. Los betalactámicos se unen a ella e impiden ese entrecruzamiento; la bacteria pierde resistencia osmótica y se lisa.',
-      clinical: 'Diana de referencia para amoxicilina y bencilpenicilina en infecciones respiratorias y odontológicas atendidas en el primer nivel. La prescripción siempre corresponde a un profesional de salud.',
-      link: 'Amoxicilina 500 mg',
-      query: 'amoxicilina',
-      source: 'IETSI · DIGEMID · base local',
-      note: 'Diana ilustrativa. No representa un fármaco real ni una recomendación de tratamiento.'
-    },
-    {
-      id: 'cox2',
-      n: '02',
-      label: 'COX-2 · fiebre y dolor',
-      title: 'COX-2 · ciclooxigenasa inflamatoria',
-      mechanism: 'La COX-2 convierte el ácido araquidónico en prostaglandinas que median fiebre, dolor e inflamación. Su inhibición reduce esos mediadores sin bloquear por completo la protección gástrica.',
-      clinical: 'Diana asociada al paracetamol en el manejo sintomático de fiebre y dolor. En dengue, el paracetamol es el antipirético de referencia; los antiinflamatorios requieren valoración médica.',
-      link: 'Paracetamol 500 mg',
-      query: 'paracetamol',
-      source: 'MINSA · guía dengue · base local',
-      note: 'El modelo no evalúa eficacia clínica ni sustituye la consulta médica.'
-    },
-    {
-      id: 'denv',
-      n: '03',
-      label: 'DENV NS1 · diagnóstico',
-      title: 'DENV NS1 · antígeno viral',
-      mechanism: 'La proteína no estructural NS1 circula en los primeros días de la infección por dengue. Las pruebas rápidas la detectan para orientar el diagnóstico temprano y activar la vigilancia.',
-      clinical: 'Un resultado positivo no define por sí solo la gravedad. La hidratación y los signos de alarma se evalúan en la sede; el suero fisiológico y las sales de rehidratación son insumos críticos del kit dengue.',
-      link: 'Kit dengue · prueba NS1',
-      query: 'dengue',
-      source: 'InfoSismedLL · MINSA/CDC · corte 31/10/2026',
-      note: 'Ilustración del antígeno. No es un test real ni reemplaza una prueba de laboratorio.'
-    },
-    {
-      id: 'arnm',
-      n: '04',
-      label: 'ARNm · cadena de frío',
-      title: 'Plataforma ARNm · inmunógenos',
-      mechanism: 'El ARN mensajero entrega instrucciones temporales para que la célula produzca un antígeno y active la respuesta inmune. Su estabilidad depende de una cadena de frío controlada.',
-      clinical: 'La vacunación y los biológicos regulados requieren refrigeración entre +2 °C y +8 °C. La farmacia de la posta registra la temperatura y la sede confirma la disponibilidad antes de citar.',
-      link: 'Cadena de frío · +2 a +8 °C',
-      query: 'vacuna',
-      source: 'MINSA · IETSI · base local',
-      note: 'Esquema conceptual. No representa una vacuna específica ni un lote autorizado.'
-    },
-    {
-      id: 'hmg',
-      n: '05',
-      label: 'HMG-CoA · colesterol',
-      title: 'HMG-CoA reductasa hepática',
-      mechanism: 'La HMG-CoA reductasa es el paso limitante de la síntesis de colesterol. Las estatinas la inhiben y aumentan la captación hepática de LDL.',
-      clinical: 'Diana de atorvastatina para prevención cardiovascular. La comparación de precios es una referencia: el genérico puede costar una fracción del de marca, pero el mes de corte no siempre está publicado en la base local.',
-      link: 'Atorvastatina 20 mg',
-      query: 'atorvastatina',
-      source: 'DIGEMID/OPP · estudio IDL · base local',
-      note: 'Precio de referencia, no cotización. La adherencia y la dosis las define el profesional tratante.'
-    }
-  ];
+  {
+    "id": "doble-helice",
+    "n": "01",
+    "label": "Doble hélice",
+    "title": "Dos cadenas, una doble hélice",
+    "mechanism": "El ADN, o ácido desoxirribonucleico, está formado por dos cadenas que se enrollan una alrededor de la otra. Esta organización se conoce como doble hélice.",
+    "clinical": "Las cadenas son antiparalelas: sus orientaciones químicas son opuestas. El modelo ayuda a imaginar la forma general, pero no muestra cada átomo a escala.",
+    "source": "Referencia educativa: NHGRI · ficha sobre ADN",
+    "note": "Punto temático sobre el ADN; su anclaje no identifica un átomo ni una estructura molecular certificada."
+  },
+  {
+    "id": "nucleotidos",
+    "n": "02",
+    "label": "Nucleótidos",
+    "title": "Las unidades que forman el ADN",
+    "mechanism": "Cada nucleótido contiene un azúcar llamado desoxirribosa, un grupo fosfato y una base nitrogenada. Muchos nucleótidos unidos forman una cadena de ADN.",
+    "clinical": "El azúcar y el fosfato constituyen el esqueleto de cada cadena. Las bases quedan orientadas hacia el interior de la doble hélice.",
+    "source": "Referencia educativa: NHGRI · ficha sobre ADN",
+    "note": "Punto temático sobre el ADN; su anclaje no identifica un átomo ni una estructura molecular certificada."
+  },
+  {
+    "id": "bases",
+    "n": "03",
+    "label": "Bases complementarias",
+    "title": "A con T; C con G",
+    "mechanism": "Las bases del ADN son adenina (A), timina (T), citosina (C) y guanina (G). En la doble hélice, A se empareja con T y C con G.",
+    "clinical": "Los pares se estabilizan mediante puentes de hidrógeno, junto con otras interacciones de la molécula. Los colores del modelo son una convención visual: no identifican por sí solos cada base.",
+    "source": "Referencia educativa: NHGRI · ficha sobre ADN",
+    "note": "Punto temático sobre el ADN; su anclaje no identifica un átomo ni una estructura molecular certificada."
+  },
+  {
+    "id": "informacion",
+    "n": "04",
+    "label": "Información genética",
+    "title": "El orden también comunica",
+    "mechanism": "La secuencia de bases almacena información genética. Los genes son segmentos de ADN; muchos contienen instrucciones para producir ARN y proteínas.",
+    "clinical": "El ADN no es una lista de enfermedades. La salud depende de múltiples factores, incluidos el ambiente y los hábitos; esta visualización no interpreta pruebas genéticas.",
+    "source": "Referencia educativa: NHGRI · ficha sobre ADN",
+    "note": "Punto temático sobre el ADN; su anclaje no identifica un átomo ni una estructura molecular certificada."
+  },
+  {
+    "id": "replicacion",
+    "n": "05",
+    "label": "Replicación",
+    "title": "Copiar para transmitir",
+    "mechanism": "Antes de una división celular, el ADN se replica. Las cadenas se separan y cada una sirve como molde para sintetizar una cadena complementaria.",
+    "clinical": "Cada doble hélice resultante conserva una cadena previa y una nueva: replicación semiconservativa. El botón Desdoblar es una ayuda visual, no una simulación molecular exacta.",
+    "source": "Referencia educativa: NHGRI · ficha sobre ADN",
+    "note": "Punto temático sobre el ADN; su anclaje no identifica un átomo ni una estructura molecular certificada."
+  }
+];
 
   const state = {
     renderer: null,
@@ -101,17 +91,13 @@
     document.querySelectorAll('.dna-target').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.target === id)));
     panel.innerHTML = `
       <div class="dna-panel__head">
-        <div><p class="dna-panel__n">Diana ${t.n} · modelo ilustrativo</p><h3>${t.title}</h3></div>
-        <button class="dna-panel__close" type="button" id="dna-panel-close" aria-label="Cerrar información de la diana"><svg class="i i--sm"><use href="#i-close"/></svg></button>
+        <div><p class="dna-panel__n">ADN / ${t.n} · punto educativo</p><h3>${t.title}</h3></div>
+        <button class="dna-panel__close" type="button" id="dna-panel-close" aria-label="Cerrar información del ADN"><svg class="i i--sm"><use href="#i-close"/></svg></button>
       </div>
       <div class="dna-panel__body">
-        <div><p class="dna-panel__k">Mecanismo</p><p>${t.mechanism}</p></div>
-        <div><p class="dna-panel__k">Relevancia en la posta</p><p>${t.clinical}</p></div>
-        <div><p class="dna-panel__k">Recurso relacionado</p><p><strong>${t.link}</strong></p><span class="source">${t.source}</span></div>
-        <div class="dna-panel__actions">
-          <button class="btn btn--primary btn--sm" type="button" data-dna-go="buscar" data-dna-query="${t.query}">Buscar «${t.link}» <svg class="i i--sm"><use href="#i-arrow-right"/></svg></button>
-          <button class="btn btn--ghost btn--sm" type="button" data-dna-go="solicitudes" data-dna-query="${t.link}">Solicitar verificación en una sede</button>
-        </div>
+        <div><p class="dna-panel__k">Cómo se organiza</p><p>${t.mechanism}</p></div>
+        <div><p class="dna-panel__k">Para comprenderlo</p><p>${t.clinical}</p></div>
+        <div class="dna-panel__actions"><a class="btn btn--ghost btn--sm" href="https://www.genome.gov/about-genomics/fact-sheets/Deoxyribonucleic-Acid-Fact-Sheet" target="_blank" rel="noopener noreferrer">Leer sobre ADN en NHGRI ↗</a></div><p class="source">${t.source}</p>
         <p class="dna-panel__note">${t.note}</p>
       </div>`;
     panel.hidden = false;

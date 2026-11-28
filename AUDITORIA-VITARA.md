@@ -1,6 +1,20 @@
 # VITARA · Activos, territorios y participación
 
-## Revisión vigente · renovación del panel administrativo
+## Revisión vigente · alcance nacional, lectura y exploración del portal
+
+Petición explícita posterior al panel: retirar La Libertad de la identidad de acceso y marca, suavizar el blanco, corregir texto ilegible en Fuentes, hacer interactivo el tablero, corregir los temas del ADN y ampliar la orientación.
+
+- Acceso y marca identifican Perú. Se conservan los datos de La Libertad con su alcance regional, fuente y corte; no se convierten en estadísticas nacionales. Se elimina la expresión «botones decorativos» del título de Canales.
+- `portal-ajustes.css`: base cálida muy leve `#faf8f3`, superficies casi blancas, títulos claros sobre el bloque oscuro de Fuentes y respuestas legibles también al equivocarse en el ejercicio. No cambia el diseño administrativo.
+- SISMED: explicaciones de ocho indicadores en inspector, detalle por red, orden ascendente/descendente/alfabético y selector mensual accesible por teclado. Animaciones de barras y línea y hovers, sin interpolar cifras ni fabricar mediciones. Se corrige el span de relleno de barras que no tenía display de bloque. Movimiento reducido conserva el dato final sin animación.
+- Cinco puntos sobre el GLB original del ADN: doble hélice, nucleótidos, complementariedad A–T/C–G, información genética y replicación semiconservativa. Se retiran PBP, COX-2, NS1, vacunas y estatinas de ese visor, incluidas acciones de solicitar fármacos. Los puntos se presentan como temas educativos, no localizaciones atómicas verificadas. Se añade enlace educativo NHGRI; no se afirma nueva validación del modelo ni de todos sus átomos.
+- `orientation-knowledge.mjs` amplía la guía local: ADN, SISMED, SIS, 113/106, SUSALUD, bienestar mental, dengue, DCI, IPRESS/RENIPRESS, respaldos, alojamiento, IA y fuentes. Prioridad de emergencias preservada; no diagnostica, prescribe ni consulta stock. No se integra un proveedor de IA externo ni se simula IA general. Preguntas desconocidas y fallos conservan respuestas honestas. El módulo no se publica por HTTP; el chat no guarda historial persistente.
+
+**Verificación:** 32/32 UI aprobadas (Chromium, un worker, 5,7 min), incluidas cuatro nuevas de identidad/ADN, indicadores/redes/meses, contraste/canales/móvil y conocimiento/urgencias/IA no configurada. También 34 comprobaciones de servicios, 96 de seguridad y 63 de PostgreSQL con base local desechable, 61 activos/25 coincidencias de texturas, build, diff y npm audit 0 aprobados. Inspección visual de Fuentes y gráfico; ningún dato de prueba se escribe en Neon. No son siete dispositivos físicos ni certificación clínica/WCAG.
+
+Se actualiza la misma rama y PR #1, sin fusionar main. El usuario debe esperar el despliegue de este nuevo commit en Render y verificar el portal real; no se modifican secretos ni se garantiza el resultado remoto por las pruebas locales. Entrevista aún sin archivo recibido, no añadida.
+
+## Revisión anterior · renovación del panel administrativo
 
 El usuario eligió renovar **solo administración**, no el portal público. Se conserva el backend, PostgreSQL/JSON, autenticación, datos, modelos y rutas. El usuario aportó capturas de Render con despliegue exitoso, `/api/salud` operativo en modo `publico_postgres` y acceso administrativo correcto en https://vitara-oficial.onrender.com. No se recibió ninguna contraseña ni conexión privada. La persistencia tras reinicio del alojamiento, recuperación integral y siete dispositivos físicos siguen sin acreditarse.
 
