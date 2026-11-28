@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="./experiencia.css?v=conexiones-2">
   <link rel="stylesheet" href="./conexion.css?v=6">
   <link rel="stylesheet" href="./descubrir.css?v=4">
-  <link rel="stylesheet" href="./portal-ajustes.css?v=1">
+  <link rel="stylesheet" href="./portal-ajustes.css?v=2">
 </head>
 <body class="access-locked">
 <section class="access" id="access" aria-label="Acceso a VITARA">
@@ -34,7 +34,7 @@
     <div class="access__card-foot"><span class="live-dot"></span> Información con fuente. Atención con propósito.</div>
   </div>
   <footer class="access__footer"><span>DISEÑADO PARA CONECTAR, CREADO PARA CUIDAR.</span><span>ODS 03 · 09 · 10</span></footer>
-  <div class="splash" id="splash" role="status" aria-label="Bienvenida a VITARA"><canvas id="welcome-particles" aria-hidden="true"></canvas><div class="holo-hud" aria-hidden="true"><span>VITARA / CONEXIÓN HUMANA</span><span>SECUENCIA DE ENSAMBLAJE</span><i></i><b>PERSONAS · TERRITORIO · CUIDADO</b></div><div class="splash__network" aria-hidden="true"></div><svg class="welcome-links" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M0 140 Q250 140 500 350 T1000 560 M0 560 Q250 560 500 350 T1000 140 M500 0V700"/><path d="M170 0 Q170 350 500 350 T830 700"/></svg><span class="welcome-node welcome-node--one">Personas</span><span class="welcome-node welcome-node--two">Territorio</span><span class="welcome-node welcome-node--three">Cuidado</span><span class="splash__eyebrow">BIENVENIDO A TU ECOSISTEMA DE SALUD</span><img src="./logo%20VITARA.jpeg" alt="VITARA"><h2>Todo empieza con<br>una <em>conexión.</em></h2><p>La salud conecta. VITARA transforma.</p><div class="splash__progress"><i></i></div><p class="welcome-phase" id="welcome-phase" aria-hidden="true">ENCENDIENDO CONEXIONES</p><button id="splash-skip" type="button">Saltar bienvenida ↗</button></div>
+  <div class="splash" id="splash" role="status" aria-label="Bienvenida a VITARA"><canvas id="welcome-particles" aria-hidden="true"></canvas><div class="holo-hud" aria-hidden="true"><span>VITARA / CONEXIÓN HUMANA</span><span>SECUENCIA DE ENSAMBLAJE</span><i></i><b>PERSONAS · TERRITORIO · CUIDADO</b></div><div class="splash__network" aria-hidden="true"></div><svg class="welcome-links" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><path d="M0 140 Q250 140 500 350 T1000 560 M0 560 Q250 560 500 350 T1000 140 M500 0V700"/><path d="M170 0 Q170 350 500 350 T830 700"/></svg><span class="welcome-node welcome-node--one">Personas</span><span class="welcome-node welcome-node--two">Territorio</span><span class="welcome-node welcome-node--three">Cuidado</span><span class="splash__eyebrow">BIENVENIDO A TU ECOSISTEMA DE SALUD</span><img src="./logo%20VITARA.jpeg" alt="VITARA"><h2>Todo empieza <span class="welcome-phrase">con una</span> <em>conexión.</em></h2><p>La salud conecta. VITARA transforma.</p><div class="splash__progress"><i></i></div><p class="welcome-phase" id="welcome-phase" aria-hidden="true">ENCENDIENDO CONEXIONES</p><button id="splash-skip" type="button">Saltar bienvenida ↗</button></div>
 </section>
 <a class="skip-link" href="#viewport">Saltar al contenido principal</a>
 <!-- ======================================================================
@@ -221,10 +221,10 @@
                 <div class="stage" id="dna-stage">
                   <canvas id="dna-canvas" role="img" aria-label="Hélice de ADN tridimensional, giratoria. Usa las flechas para rotar y las teclas más y menos para acercar."></canvas>
                   <div class="stage__top">
-                    <span class="stage__badge"><svg class="i i--sm"><use href="#i-dna"/></svg> Doble hélice · modelo 3D</span>
+                    <span class="stage__badge"><svg class="i i--sm"><use href="#i-dna"/></svg> Medicamentos · guía sobre modelo ADN</span>
                     <span class="stage__hint">Arrastra para girar · rueda para acercar</span>
                   </div>
-                  <div class="dna-targets" id="dna-targets" role="group" aria-label="Temas educativos sobre el ADN">
+                  <div class="dna-targets" id="dna-targets" role="group" aria-label="Temas educativos sobre medicamentos">
                     <!-- vitara-home.js -->
                   </div>
                   <div class="stage__controls">
@@ -242,10 +242,10 @@
                   <div class="stage-loader" id="dna-loader"><div class="spinner" aria-hidden="true"></div><span>Cargando hélice 3D…</span></div>
                   <div class="stage-fallback" id="dna-fallback" hidden>
                     <p><strong>No se pudo cargar el modelo 3D.</strong>
-La información sobre el ADN sigue disponible en los botones laterales.</p>
+La información sobre medicamentos sigue disponible en los botones laterales.</p>
                   </div>
                 </div>
-                <aside class="dna-panel" id="dna-panel" hidden aria-live="polite" aria-label="Información del ADN seleccionada">
+                <aside class="dna-panel" id="dna-panel" hidden aria-live="polite" aria-label="Información de medicamentos seleccionada">
                   <!-- vitara-home.js -->
                 </aside>
               </div>
@@ -456,7 +456,7 @@ La información sobre el ADN sigue disponible en los botones laterales.</p>
           </div>
           <div class="card">
             <div class="card__head">
-              <div><h3>Atlas visual · Perú y La Libertad</h3><p>Inspecciona los recursos territoriales originales. Ilustraciones referenciales, no cartografía georreferenciada.</p></div>
+              <div><h3>Atlas visual · todos los departamentos del Perú</h3><p>Explora los 24 departamentos y el Callao. Imágenes originales con profundidad visual y polígonos territoriales de referencia.</p></div>
               <span class="tag tag--new">Territorio · inspección</span>
             </div>
             <div id="mapa-real"></div>
@@ -650,7 +650,7 @@ La información sobre el ADN sigue disponible en los botones laterales.</p>
               </div>
               <div class="floor-card">
                 <div class="card__head">
-                  <div><h3>Plano funcional · posta I-3</h3><p>Escala gráfica 1 m = 40 px · seis ambientes del modelo</p></div>
+                  <div><h3>Plano funcional · posta I-3</h3><p>Seis ambientes seleccionables · capas y mobiliario ilustrativos</p></div>
                   <span class="tag tag--grey">Esquema</span>
                 </div>
                 <svg class="floor-svg" viewBox="0 0 920 570" role="img" aria-label="Plano esquemático de una posta con farmacia, consultorio, sala de espera, telesalud, equipos y patio. Incluye medidas en metros.">
@@ -661,7 +661,7 @@ La información sobre el ADN sigue disponible en los botones laterales.</p>
                   </defs>
                   <rect x="0" y="0" width="920" height="570" fill="#FFFFFF"/>
                   <text x="30" y="28" fill="#234A3D" font-size="11" font-weight="700" font-family="Segoe UI, sans-serif">CORTE FUNCIONAL · POSTA I-3</text>
-                  <text x="30" y="42" fill="#70827A" font-size="8" font-family="Segoe UI, sans-serif">Modelo demo · medidas referenciales · NTS N° 110-MINSA</text>
+                  <text x="30" y="42" fill="#70827A" font-size="8" font-family="Segoe UI, sans-serif">Modelo demo · medidas referenciales · no acredita cumplimiento normativo</text>
                   <!-- Edificio -->
                   <rect x="30" y="60" width="860" height="400" fill="#FBFDFC" stroke="#8FB8A7" stroke-width="1.5"/>
                   <!-- Ambientes -->
@@ -1013,5 +1013,6 @@ La información sobre el ADN sigue disponible en los botones laterales.</p>
 <script src="./ecosistema.js?v=conexiones-2" defer></script>
 <script src="./experiencia.js?v=conexiones-2" defer></script>
 <script src="./descubrir.js?v=4" defer></script>
+<script src="./exploracion-mejoras.js?v=1" defer></script>
 </body>
 </html>

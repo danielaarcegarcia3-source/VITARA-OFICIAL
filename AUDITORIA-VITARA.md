@@ -1,6 +1,19 @@
 # VITARA · Activos, territorios y participación
 
-## Revisión vigente · alcance nacional, lectura y exploración del portal
+## Revisión vigente · atlas completo, espacios y medicamentos
+
+Nueva petición explícita: los puntos del ADN vuelven a tratar medicamentos, no biología. Se conserva el GLB original y se indica que es un soporte visual, sin localizaciones moleculares ni prescripciones. Los cinco temas son genéricos/DCI, verificación de disponibilidad, conservación, uso responsable y vencimiento/trazabilidad. Acciones a búsqueda, solicitudes, fuentes y orientación; portal oficial de DIGEMID enlazado. La respuesta local de orientación describe el cambio.
+
+- Atlas: selector de 24 departamentos y Callao a partir del GeoJSON existente, ficha de forma territorial con atribución MPL 2.0, filtro del directorio por territorio y vacío explícito en lugares sin registros. No se inventan IPRESS ni imágenes departamentales. Se conservan las dos imágenes aportadas, con perspectiva, inclinación al puntero, flotación pausada fuera de vista, zoom y arrastre. Movimiento desactivable y respetuoso de preferencias. Los polígonos no son relieve ni cartografía legal actualizada.
+- Bienvenida: «con una» es un grupo de palabras con espacio explícito; ya no depende de ocultar un salto de línea entre palabras contiguas.
+- Modelos: seis focos por escena sobre acceso/fachada/cubierta/volúmenes/circulación del hospital, mesa/luminarias/carros/brazos/armarios/superficies del quirófano y estructura/equipamiento de Charité. No se añaden interiores inexistentes al hospital exterior; las anclas siguen siendo temáticas, no coordenadas técnicas verificadas. Charité conserva atribución y restricción no comercial.
+- Plano: geometría, cotas y ambientes originales conservados. Seis selecciones por botón o teclado sobre el SVG, ficha explicativa, mobiliario ilustrativo reversible, recorrido conceptual opcional y acercamiento de selección/reencuadre. Se explicita que no acredita cumplimiento normativo ni es un plano de obra/inventario real.
+- Accesibilidad: `exploracion-mejoras.js` aplica un aumento del 30 % a textos HTML incluso si sus reglas usan px, solo con `data-texto=grande`. Restaura estilos originales al desactivar, cubre contenido añadido y cambios de breakpoint, sin acumular aumentos. Las letras dentro de imágenes/SVG no se reinterpretan; el plano ofrece zoom y fichas HTML. Preferencia persistente existente y reflujo móvil preservados.
+- Entrevista: `ENTREVISTA-SOCIOS-EN-SALUD.md` contiene exactamente tres preguntas exploratorias (barreras, proceso de recursos y evaluación crítica de VITARA). No se ha entrevistado a nadie ni se atribuyen opiniones, colaboración o aval institucional.
+
+**Comprobaciones de esta revisión:** 35/35 UI aprobadas (Chromium, un worker, 6,2 min; incluye tres pruebas nuevas: 25 territorios y estados vacíos, capas/teclado/zoom del plano, texto opt-in/persistencia/restauración y navegación móvil); pruebas 3D existentes actualizadas a los nuevos contenidos. También aprobadas 34 comprobaciones de servicios, 96 de seguridad, 61 activos/25 hashes de texturas, build y npm audit (0 vulnerabilidades). PostgreSQL no se altera ni se revalida en esta iteración de presentación. Las 63 pruebas PostgreSQL pertenecen a la revisión anterior. No se prueba el despliegue remoto ni siete dispositivos físicos.
+
+## Revisión anterior · alcance nacional, lectura y exploración del portal
 
 Petición explícita posterior al panel: retirar La Libertad de la identidad de acceso y marca, suavizar el blanco, corregir texto ilegible en Fuentes, hacer interactivo el tablero, corregir los temas del ADN y ampliar la orientación.
 

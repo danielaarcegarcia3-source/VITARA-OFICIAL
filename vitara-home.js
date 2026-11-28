@@ -1,64 +1,94 @@
 /**
- * vitara-home.js — hélice de ADN 3D, conceptos de biología y panel lateral.
+ * vitara-home.js — hélice de ADN 3D, temas de acceso y uso responsable de medicamentos.
  * Usa exclusivamente el GLB real; conserva información accesible si WebGL falla.
  */
 (function () {
-  'use strict';
+  "use strict";
 
   const $ = (s, r = document) => r.querySelector(s);
 
   const TARGETS = [
-  {
-    "id": "doble-helice",
-    "n": "01",
-    "label": "Doble hélice",
-    "title": "Dos cadenas, una doble hélice",
-    "mechanism": "El ADN, o ácido desoxirribonucleico, está formado por dos cadenas que se enrollan una alrededor de la otra. Esta organización se conoce como doble hélice.",
-    "clinical": "Las cadenas son antiparalelas: sus orientaciones químicas son opuestas. El modelo ayuda a imaginar la forma general, pero no muestra cada átomo a escala.",
-    "source": "Referencia educativa: NHGRI · ficha sobre ADN",
-    "note": "Punto temático sobre el ADN; su anclaje no identifica un átomo ni una estructura molecular certificada."
-  },
-  {
-    "id": "nucleotidos",
-    "n": "02",
-    "label": "Nucleótidos",
-    "title": "Las unidades que forman el ADN",
-    "mechanism": "Cada nucleótido contiene un azúcar llamado desoxirribosa, un grupo fosfato y una base nitrogenada. Muchos nucleótidos unidos forman una cadena de ADN.",
-    "clinical": "El azúcar y el fosfato constituyen el esqueleto de cada cadena. Las bases quedan orientadas hacia el interior de la doble hélice.",
-    "source": "Referencia educativa: NHGRI · ficha sobre ADN",
-    "note": "Punto temático sobre el ADN; su anclaje no identifica un átomo ni una estructura molecular certificada."
-  },
-  {
-    "id": "bases",
-    "n": "03",
-    "label": "Bases complementarias",
-    "title": "A con T; C con G",
-    "mechanism": "Las bases del ADN son adenina (A), timina (T), citosina (C) y guanina (G). En la doble hélice, A se empareja con T y C con G.",
-    "clinical": "Los pares se estabilizan mediante puentes de hidrógeno, junto con otras interacciones de la molécula. Los colores del modelo son una convención visual: no identifican por sí solos cada base.",
-    "source": "Referencia educativa: NHGRI · ficha sobre ADN",
-    "note": "Punto temático sobre el ADN; su anclaje no identifica un átomo ni una estructura molecular certificada."
-  },
-  {
-    "id": "informacion",
-    "n": "04",
-    "label": "Información genética",
-    "title": "El orden también comunica",
-    "mechanism": "La secuencia de bases almacena información genética. Los genes son segmentos de ADN; muchos contienen instrucciones para producir ARN y proteínas.",
-    "clinical": "El ADN no es una lista de enfermedades. La salud depende de múltiples factores, incluidos el ambiente y los hábitos; esta visualización no interpreta pruebas genéticas.",
-    "source": "Referencia educativa: NHGRI · ficha sobre ADN",
-    "note": "Punto temático sobre el ADN; su anclaje no identifica un átomo ni una estructura molecular certificada."
-  },
-  {
-    "id": "replicacion",
-    "n": "05",
-    "label": "Replicación",
-    "title": "Copiar para transmitir",
-    "mechanism": "Antes de una división celular, el ADN se replica. Las cadenas se separan y cada una sirve como molde para sintetizar una cadena complementaria.",
-    "clinical": "Cada doble hélice resultante conserva una cadena previa y una nueva: replicación semiconservativa. El botón Desdoblar es una ayuda visual, no una simulación molecular exacta.",
-    "source": "Referencia educativa: NHGRI · ficha sobre ADN",
-    "note": "Punto temático sobre el ADN; su anclaje no identifica un átomo ni una estructura molecular certificada."
-  }
-];
+    {
+      id: "generico",
+      n: "01",
+      label: "Genérico y principio activo",
+      title: "El nombre que importa",
+      mechanism:
+        "La denominación común internacional (DCI) identifica el principio activo. Al comparar medicamentos, revisa también concentración, forma farmacéutica y presentación: compartir un nombre no basta.",
+      clinical:
+        "Consulta a un profesional antes de sustituir un tratamiento. El catálogo ofrece referencias, no recomendaciones individuales.",
+      link: "Comparar referencias",
+      view: "buscar",
+      query: "paracetamol",
+      source:
+        "Orientación educativa sobre medicamentos · verifica siempre el producto y la fuente oficial.",
+      note: "El ADN es un soporte visual: este punto trata de medicamentos, no identifica una parte de la molécula ni una diana farmacológica.",
+    },
+    {
+      id: "disponibilidad",
+      n: "02",
+      label: "Disponibilidad y verificación",
+      title: "Consultar no es encontrar stock",
+      mechanism:
+        "Una cifra regional de disponibilidad no confirma existencias en una farmacia concreta. Revisa la fuente y el corte, y confirma con el establecimiento antes de desplazarte.",
+      clinical:
+        "Si necesitas aclarar un recurso, puedes enviar una solicitud de verificación al operador de la demostración. No se envía automáticamente a una sede.",
+      link: "Pedir verificación",
+      view: "solicitudes",
+      query: "",
+      source:
+        "Orientación educativa sobre medicamentos · verifica siempre el producto y la fuente oficial.",
+      note: "El ADN es un soporte visual: este punto trata de medicamentos, no identifica una parte de la molécula ni una diana farmacológica.",
+    },
+    {
+      id: "conservacion",
+      n: "03",
+      label: "Conservación segura",
+      title: "Conservar también es cuidar",
+      mechanism:
+        "Sigue las condiciones del envase y del fabricante. Protege los medicamentos según su indicación de temperatura, luz y humedad, y mantenlos fuera del alcance de niños.",
+      clinical:
+        "No todos necesitan refrigeración. Las condiciones de productos de cadena de frío deben verificarse específicamente; no se deducen de este modelo.",
+      link: "Revisar fuentes",
+      view: "fuentes",
+      query: "",
+      source:
+        "Orientación educativa sobre medicamentos · verifica siempre el producto y la fuente oficial.",
+      note: "El ADN es un soporte visual: este punto trata de medicamentos, no identifica una parte de la molécula ni una diana farmacológica.",
+    },
+    {
+      id: "uso-seguro",
+      n: "04",
+      label: "Uso responsable",
+      title: "Sin automedicación ni dosis por chat",
+      mechanism:
+        "Un medicamento puede tener contraindicaciones e interacciones. No compartas recetas ni utilices antibióticos para cualquier malestar: una evaluación profesional debe decidir cuándo corresponden.",
+      clinical:
+        "VITARA no prescribe, calcula dosis ni sustituye una consulta. Para orientación general revisa los canales oficiales.",
+      link: "Buscar orientación",
+      view: "canales",
+      query: "",
+      source:
+        "Orientación educativa sobre medicamentos · verifica siempre el producto y la fuente oficial.",
+      note: "El ADN es un soporte visual: este punto trata de medicamentos, no identifica una parte de la molécula ni una diana farmacológica.",
+    },
+    {
+      id: "vencimiento",
+      n: "05",
+      label: "Vencimiento y trazabilidad",
+      title: "Revisa antes de utilizar",
+      mechanism:
+        "Comprueba fecha de vencimiento, envase íntegro, nombre, concentración e instrucciones. Compra o recibe medicamentos por canales autorizados.",
+      clinical:
+        "Si observas un producto sospechoso, no lo uses y consulta al químico farmacéutico o al canal oficial de DIGEMID. Los precios del catálogo no acreditan autenticidad ni existencias.",
+      link: "Explorar el catálogo",
+      view: "buscar",
+      query: "",
+      source:
+        "Orientación educativa sobre medicamentos · verifica siempre el producto y la fuente oficial.",
+      note: "El ADN es un soporte visual: este punto trata de medicamentos, no identifica una parte de la molécula ni una diana farmacológica.",
+    },
+  ];
 
   const state = {
     renderer: null,
@@ -78,61 +108,76 @@
     modelEscala: 1,
     raf: 0,
     selected: null,
-    resizeObserver: null
+    resizeObserver: null,
   };
 
   function actualizarPanel(id) {
-    const panel = $('#dna-panel');
-    const hero = $('#home-hero');
+    const panel = $("#dna-panel");
+    const hero = $("#home-hero");
     if (!panel || !hero) return;
     const t = TARGETS.find((x) => x.id === id);
     if (!t) return;
     state.selected = id;
-    document.querySelectorAll('.dna-target').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.target === id)));
+    document
+      .querySelectorAll(".dna-target")
+      .forEach((b) =>
+        b.setAttribute("aria-pressed", String(b.dataset.target === id)),
+      );
     panel.innerHTML = `
       <div class="dna-panel__head">
-        <div><p class="dna-panel__n">ADN / ${t.n} · punto educativo</p><h3>${t.title}</h3></div>
-        <button class="dna-panel__close" type="button" id="dna-panel-close" aria-label="Cerrar información del ADN"><svg class="i i--sm"><use href="#i-close"/></svg></button>
+        <div><p class="dna-panel__n">MEDICAMENTOS / ${t.n} · guía educativa</p><h3>${t.title}</h3></div>
+        <button class="dna-panel__close" type="button" id="dna-panel-close" aria-label="Cerrar información de medicamentos"><svg class="i i--sm"><use href="#i-close"/></svg></button>
       </div>
       <div class="dna-panel__body">
-        <div><p class="dna-panel__k">Cómo se organiza</p><p>${t.mechanism}</p></div>
-        <div><p class="dna-panel__k">Para comprenderlo</p><p>${t.clinical}</p></div>
-        <div class="dna-panel__actions"><a class="btn btn--ghost btn--sm" href="https://www.genome.gov/about-genomics/fact-sheets/Deoxyribonucleic-Acid-Fact-Sheet" target="_blank" rel="noopener noreferrer">Leer sobre ADN en NHGRI ↗</a></div><p class="source">${t.source}</p>
+        <div><p class="dna-panel__k">Qué conviene saber</p><p>${t.mechanism}</p></div>
+        <div><p class="dna-panel__k">Antes de tomar una decisión</p><p>${t.clinical}</p></div>
+        <div class="dna-panel__actions"><button class="btn btn--primary btn--sm" type="button" data-dna-go="${t.view}" data-dna-query="${t.query}">${t.link} ↗</button></div><p class="source">${t.source} <a href="https://www.digemid.minsa.gob.pe/" target="_blank" rel="noopener noreferrer">DIGEMID · portal oficial ↗</a></p>
         <p class="dna-panel__note">${t.note}</p>
       </div>`;
     panel.hidden = false;
-    hero.classList.add('is-panel');
-    $('#dna-panel-close')?.addEventListener('click', cerrarPanel);
-    panel.querySelectorAll('[data-dna-go]').forEach((b) => {
-      b.addEventListener('click', () => {
-        window.dispatchEvent(new CustomEvent('vitara:go', { detail: { view: b.dataset.dnaGo, query: b.dataset.dnaQuery } }));
+    hero.classList.add("is-panel");
+    $("#dna-panel-close")?.addEventListener("click", cerrarPanel);
+    panel.querySelectorAll("[data-dna-go]").forEach((b) => {
+      b.addEventListener("click", () => {
+        window.dispatchEvent(
+          new CustomEvent("vitara:go", {
+            detail: { view: b.dataset.dnaGo, query: b.dataset.dnaQuery },
+          }),
+        );
       });
     });
     // En pantallas estrechas, bajamos suavemente hasta el panel.
-    if (window.matchMedia('(max-width: 1180px)').matches) {
-      setTimeout(() => panel.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 60);
+    if (window.matchMedia("(max-width: 1180px)").matches) {
+      setTimeout(
+        () => panel.scrollIntoView({ block: "nearest", behavior: "smooth" }),
+        60,
+      );
     }
   }
 
   function cerrarPanel() {
-    const panel = $('#dna-panel');
-    const hero = $('#home-hero');
+    const panel = $("#dna-panel");
+    const hero = $("#home-hero");
     if (!panel || !hero) return;
     panel.hidden = true;
-    hero.classList.remove('is-panel');
+    hero.classList.remove("is-panel");
     state.selected = null;
-    document.querySelectorAll('.dna-target').forEach((b) => b.setAttribute('aria-pressed', 'false'));
+    document
+      .querySelectorAll(".dna-target")
+      .forEach((b) => b.setAttribute("aria-pressed", "false"));
   }
 
   function renderTargets() {
-    const cont = $('#dna-targets');
+    const cont = $("#dna-targets");
     if (!cont) return;
-    cont.innerHTML = TARGETS.map((t) => `
+    cont.innerHTML = TARGETS.map(
+      (t) => `
       <button class="dna-target" type="button" aria-label="${t.label}" title="${t.label}" data-target="${t.id}" aria-pressed="false" aria-controls="dna-panel">
         <span class="dna-target__n">${t.n}</span><span>${t.label}</span><span class="dna-target__dot" aria-hidden="true"></span>
-      </button>`).join('');
-    cont.addEventListener('click', (e) => {
-      const b = e.target.closest('[data-target]');
+      </button>`,
+    ).join("");
+    cont.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-target]");
       if (!b) return;
       if (state.selected === b.dataset.target) cerrarPanel();
       else actualizarPanel(b.dataset.target);
@@ -142,29 +187,65 @@
   function materialPorNombre(nombre) {
     const n = nombre.toLowerCase();
     const base = { roughness: 0.38, metalness: 0.03, emissiveIntensity: 0.05 };
-    if (n.includes('hydrogen') || n.includes('bond') || n.includes('hidr')) return new THREE.MeshStandardMaterial({ color: 0xBFD8CB, roughness: .5, metalness: 0, transparent: true, opacity: .55 });
-    if (n.includes('adenine')) return new THREE.MeshStandardMaterial({ color: 0xF09A8B, emissive: 0x3A120E, ...base });
-    if (n.includes('thymine')) return new THREE.MeshStandardMaterial({ color: 0xF0C46A, emissive: 0x3B2A08, ...base });
-    if (n.includes('guanine')) return new THREE.MeshStandardMaterial({ color: 0x7AC9A9, emissive: 0x0C2A20, ...base });
-    if (n.includes('cytosine')) return new THREE.MeshStandardMaterial({ color: 0x86B7E8, emissive: 0x0B1E33, ...base });
-    if (n.includes('phosphate') || n.includes('pentose') || n.includes('sugar')) return new THREE.MeshStandardMaterial({ color: 0xE3EEE8, roughness: .55, metalness: .02 });
-    return new THREE.MeshStandardMaterial({ color: 0xC9DAD2, roughness: .5, metalness: .03 });
+    if (n.includes("hydrogen") || n.includes("bond") || n.includes("hidr"))
+      return new THREE.MeshStandardMaterial({
+        color: 0xbfd8cb,
+        roughness: 0.5,
+        metalness: 0,
+        transparent: true,
+        opacity: 0.55,
+      });
+    if (n.includes("adenine"))
+      return new THREE.MeshStandardMaterial({
+        color: 0xf09a8b,
+        emissive: 0x3a120e,
+        ...base,
+      });
+    if (n.includes("thymine"))
+      return new THREE.MeshStandardMaterial({
+        color: 0xf0c46a,
+        emissive: 0x3b2a08,
+        ...base,
+      });
+    if (n.includes("guanine"))
+      return new THREE.MeshStandardMaterial({
+        color: 0x7ac9a9,
+        emissive: 0x0c2a20,
+        ...base,
+      });
+    if (n.includes("cytosine"))
+      return new THREE.MeshStandardMaterial({
+        color: 0x86b7e8,
+        emissive: 0x0b1e33,
+        ...base,
+      });
+    if (n.includes("phosphate") || n.includes("pentose") || n.includes("sugar"))
+      return new THREE.MeshStandardMaterial({
+        color: 0xe3eee8,
+        roughness: 0.55,
+        metalness: 0.02,
+      });
+    return new THREE.MeshStandardMaterial({
+      color: 0xc9dad2,
+      roughness: 0.5,
+      metalness: 0.03,
+    });
   }
 
   function iluminar() {
     const scene = state.scene;
-    scene.add(new THREE.HemisphereLight(0xffffff, 0xCDE6DA, 1.35));
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xcde6da, 1.35));
     const key = new THREE.DirectionalLight(0xffffff, 2.2);
     key.position.set(4.5, 8, 7);
     scene.add(key);
-    const fill = new THREE.DirectionalLight(0xBEE4FF, 0.75);
+    const fill = new THREE.DirectionalLight(0xbee4ff, 0.75);
     fill.position.set(-6, -2, 5);
     scene.add(fill);
-    const rim = new THREE.PointLight(0x2BB7A8, 32, 26, 2);
+    const rim = new THREE.PointLight(0x2bb7a8, 32, 26, 2);
     rim.position.set(-3, 1.5, 5);
     scene.add(rim);
     state.rim = rim;
-    const rim2 = new THREE.PointLight(0xF3B8A8, 18, 22, 2);
+    const rim2 = new THREE.PointLight(0xf3b8a8, 18, 22, 2);
     rim2.position.set(3, -2, 4);
     scene.add(rim2);
   }
@@ -174,7 +255,11 @@
     const posiciones = [-0.36, -0.18, 0, 0.18, 0.36];
     posiciones.forEach((p, i) => {
       const geo = new THREE.TorusGeometry(radio + 0.16, 0.012, 6, 64);
-      const mat = new THREE.MeshBasicMaterial({ color: 0x1FAE9F, transparent: true, opacity: 0.34 });
+      const mat = new THREE.MeshBasicMaterial({
+        color: 0x1fae9f,
+        transparent: true,
+        opacity: 0.34,
+      });
       const ring = new THREE.Mesh(geo, mat);
       ring.rotation.x = Math.PI / 2;
       ring.position.y = p * altura;
@@ -196,8 +281,15 @@
       pos[i * 3 + 2] = Math.sin(ang) * r;
     }
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const mat = new THREE.PointsMaterial({ color: 0x79CBB1, size: 0.035, transparent: true, opacity: 0.55, depthWrite: false, blending: THREE.AdditiveBlending });
+    geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    const mat = new THREE.PointsMaterial({
+      color: 0x79cbb1,
+      size: 0.035,
+      transparent: true,
+      opacity: 0.55,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
     return new THREE.Points(geo, mat);
   }
 
@@ -213,8 +305,11 @@
       const centros = [];
       const nombres = [m.name];
       let p = m.parent;
-      while (p && nombres.length < 5) { if (p.name) nombres.push(p.name); p = p.parent; }
-      m.material = materialPorNombre(nombres.join(' '));
+      while (p && nombres.length < 5) {
+        if (p.name) nombres.push(p.name);
+        p = p.parent;
+      }
+      m.material = materialPorNombre(nombres.join(" "));
       m.geometry.computeBoundingBox();
       const c = new THREE.Vector3();
       m.geometry.boundingBox.getCenter(c);
@@ -232,18 +327,31 @@
   }
 
   function iniciarEscena() {
-    const canvas = $('#dna-canvas');
-    const stage = $('#dna-stage');
+    const canvas = $("#dna-canvas");
+    const stage = $("#dna-stage");
     if (!canvas || !stage) return;
-    stage?.addEventListener('pointerenter', () => { state.hover = true; });
-    stage?.addEventListener('pointerleave', () => { state.hover = false; });
-    const fallo = () => { stage.classList.add('is-unavailable'); $('#dna-loader')?.classList.add('is-hidden'); $('#dna-fallback')?.removeAttribute('hidden'); };
+    stage?.addEventListener("pointerenter", () => {
+      state.hover = true;
+    });
+    stage?.addEventListener("pointerleave", () => {
+      state.hover = false;
+    });
+    const fallo = () => {
+      stage.classList.add("is-unavailable");
+      $("#dna-loader")?.classList.add("is-hidden");
+      $("#dna-fallback")?.removeAttribute("hidden");
+    };
     if (!window.THREE) {
       fallo();
       return;
     }
     try {
-      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+      const renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance",
+      });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.setClearColor(0x000000, 0);
@@ -263,8 +371,8 @@
       const cargar = async () => {
         let modelo;
         try {
-          if (!window.VitaraGLB) throw new Error('Sin cargador GLB');
-          const r = await window.VitaraGLB.load('./adn.glb');
+          if (!window.VitaraGLB) throw new Error("Sin cargador GLB");
+          const r = await window.VitaraGLB.load("./adn.glb");
           modelo = r.group;
           pivot.add(modelo);
           // Encuadre
@@ -283,28 +391,48 @@
           scene.add(state.particles);
           const base = new THREE.Mesh(
             new THREE.TorusGeometry(radio * 1.36, 0.008, 6, 90),
-            new THREE.MeshBasicMaterial({ color: 0x8FCBB7, transparent: true, opacity: .28 })
+            new THREE.MeshBasicMaterial({
+              color: 0x8fcbb7,
+              transparent: true,
+              opacity: 0.28,
+            }),
           );
           base.rotation.x = Math.PI / 2;
           base.position.y = -4.38;
           scene.add(base);
           state.baseRing = base;
         } catch (err) {
-          console.warn('[VITARA] No se pudo cargar ADN.', err);
+          console.warn("[VITARA] No se pudo cargar ADN.", err);
           fallo();
-          const button = document.createElement('button');
-          button.className = 'btn btn--ghost btn--sm'; button.type = 'button'; button.textContent = 'Reintentar modelo';
-          button.addEventListener('click', () => { button.remove(); $('#dna-fallback').hidden = true; $('#dna-loader').classList.remove('is-hidden'); cargar(); }, { once: true });
-          $('#dna-fallback')?.appendChild(button);
+          const button = document.createElement("button");
+          button.className = "btn btn--ghost btn--sm";
+          button.type = "button";
+          button.textContent = "Reintentar modelo";
+          button.addEventListener(
+            "click",
+            () => {
+              button.remove();
+              $("#dna-fallback").hidden = true;
+              $("#dna-loader").classList.remove("is-hidden");
+              cargar();
+            },
+            { once: true },
+          );
+          $("#dna-fallback")?.appendChild(button);
           return;
         }
-        stage.classList.remove('is-unavailable');
+        stage.classList.remove("is-unavailable");
         state.ready = true;
-        $('#dna-loader')?.classList.add('is-hidden');
-        if (state.fallback) $('#dna-fallback')?.setAttribute('hidden', '');
-        const ocultarError = $('#dna-fallback');
+        $("#dna-loader")?.classList.add("is-hidden");
+        if (state.fallback) $("#dna-fallback")?.setAttribute("hidden", "");
+        const ocultarError = $("#dna-fallback");
         if (ocultarError) ocultarError.hidden = true;
-        state.orbit = window.VitaraGLB?.orbit(pivot, canvas, { camera, rotY: 0.15, zoom: 1, autoRotate: true });
+        state.orbit = window.VitaraGLB?.orbit(pivot, canvas, {
+          camera,
+          rotY: 0.15,
+          zoom: 1,
+          autoRotate: true,
+        });
       };
       cargar();
 
@@ -319,23 +447,28 @@
       ajustar();
       state.resizeObserver = new ResizeObserver(ajustar);
       state.resizeObserver.observe(stage);
-      window.addEventListener('resize', ajustar);
+      window.addEventListener("resize", ajustar);
 
       let t = 0;
       const animar = () => {
         state.raf = requestAnimationFrame(animar);
-        const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.movimiento === 'reducido';
+        const reduced =
+          matchMedia("(prefers-reduced-motion: reduce)").matches ||
+          document.documentElement.dataset.movimiento === "reducido";
         if (!reduced) t += 0.016;
         // desdoblamiento suave
         state.unzip += (state.unzipTarget - state.unzip) * (reduced ? 1 : 0.08);
         if (state.meshes.length) {
           const desplazamiento = state.unzipOffset || 0.72;
           state.meshes.forEach((m) => {
-            m.position.x = m.userData.base.x + m.userData.sign * state.unzip * desplazamiento;
+            m.position.x =
+              m.userData.base.x +
+              m.userData.sign * state.unzip * desplazamiento;
           });
         } else if (state.fallback && state.model) {
           state.model.children.forEach((c) => {
-            if (c.userData.hebra == null && c.position.x !== 0) c.userData.hebra = c.position.x >= 0 ? 1 : -1;
+            if (c.userData.hebra == null && c.position.x !== 0)
+              c.userData.hebra = c.position.x >= 0 ? 1 : -1;
           });
         }
         const intensidadHover = state.hover ? 0.34 : 0;
@@ -345,67 +478,94 @@
         }
         if (state.baseRing) {
           const objetivoBase = state.hover ? 0.52 : 0.28;
-          state.baseRing.material.opacity += (objetivoBase - state.baseRing.material.opacity) * 0.06;
+          state.baseRing.material.opacity +=
+            (objetivoBase - state.baseRing.material.opacity) * 0.06;
         }
         if (state.particles) {
           if (!reduced) state.particles.rotation.y -= 0.0007;
           const mat = state.particles.material;
-          const base = typeof mat.opacity === 'number' ? mat.opacity : 0.55;
-          mat.opacity += ((base + intensidadHover) - mat.opacity) * 0.06;
+          const base = typeof mat.opacity === "number" ? mat.opacity : 0.55;
+          mat.opacity += (base + intensidadHover - mat.opacity) * 0.06;
         }
         if (state.rings.length) {
           state.rings.forEach((r, i) => {
-            const base = state.selected === TARGETS[i]?.id ? 0.75 : 0.28 + Math.sin(t * 1.1 + r.userData.fase) * 0.07;
+            const base =
+              state.selected === TARGETS[i]?.id
+                ? 0.75
+                : 0.28 + Math.sin(t * 1.1 + r.userData.fase) * 0.07;
             const objetivo = Math.min(0.97, base + intensidadHover);
             r.material.opacity += (objetivo - r.material.opacity) * 0.08;
             r.scale.setScalar(1 + Math.sin(t * 1.1 + r.userData.fase) * 0.012);
           });
         }
         if (state.model) {
-          const objetivoEscala = state.modelEscala != null ? state.modelEscala : 1;
+          const objetivoEscala =
+            state.modelEscala != null ? state.modelEscala : 1;
           const escalaActual = state.model.scale.x;
-          state.model.scale.setScalar(escalaActual + (objetivoEscala - escalaActual) * (reduced ? 1 : 0.07));
+          state.model.scale.setScalar(
+            escalaActual +
+              (objetivoEscala - escalaActual) * (reduced ? 1 : 0.07),
+          );
         }
         if (state.ready) {
           pivot.updateMatrixWorld(true);
-          document.querySelectorAll('.dna-target').forEach((button, index) => {
+          document.querySelectorAll(".dna-target").forEach((button, index) => {
             const angle = index * 1.8;
-            const point = new THREE.Vector3(Math.cos(angle) * 1.2, 3.1 - index * 1.55, Math.sin(angle) * 1.2);
+            const point = new THREE.Vector3(
+              Math.cos(angle) * 1.2,
+              3.1 - index * 1.55,
+              Math.sin(angle) * 1.2,
+            );
             point.applyMatrix4(pivot.matrixWorld).project(camera);
             button.style.left = `${(point.x * 0.5 + 0.5) * 100}%`;
             button.style.top = `${(-point.y * 0.5 + 0.5) * 100}%`;
-            button.style.visibility = Math.abs(point.x) < 0.9 && Math.abs(point.y) < 0.85 && point.z < 1 ? 'visible' : 'hidden';
+            button.style.visibility =
+              Math.abs(point.x) < 0.9 && Math.abs(point.y) < 0.85 && point.z < 1
+                ? "visible"
+                : "hidden";
           });
         }
-        if (!document.hidden && canvas.getClientRects().length && !document.body.classList.contains('access-locked')) renderer.render(scene, camera);
+        if (
+          !document.hidden &&
+          canvas.getClientRects().length &&
+          !document.body.classList.contains("access-locked")
+        )
+          renderer.render(scene, camera);
       };
       animar();
     } catch (err) {
-      console.warn('[VITARA] WebGL no disponible.', err);
+      console.warn("[VITARA] WebGL no disponible.", err);
       fallo();
     }
 
     const controles = () => {
-      $('#dna-unzip')?.addEventListener('click', (e) => {
+      $("#dna-unzip")?.addEventListener("click", (e) => {
         state.unzipTarget = state.unzipTarget ? 0 : 1;
-        e.currentTarget.setAttribute('aria-pressed', String(!!state.unzipTarget));
+        e.currentTarget.setAttribute(
+          "aria-pressed",
+          String(!!state.unzipTarget),
+        );
         if (state.fallback && state.orbit) {
           // En la versión ilustrativa el desdoblamiento se aproxima separando el pivote.
           state.orbit.estado.zoom = state.unzipTarget ? 0.86 : 1;
         }
       });
-      $('#dna-rotate')?.addEventListener('click', (e) => {
+      $("#dna-rotate")?.addEventListener("click", (e) => {
         if (!state.orbit) return;
-        const activo = e.currentTarget.getAttribute('aria-pressed') === 'true';
-        e.currentTarget.setAttribute('aria-pressed', String(!activo));
+        const activo = e.currentTarget.getAttribute("aria-pressed") === "true";
+        e.currentTarget.setAttribute("aria-pressed", String(!activo));
         state.orbit.setAutoRotate(!activo);
       });
-      $('#dna-zoom-in')?.addEventListener('click', () => state.orbit?.zoom(1.1));
-      $('#dna-zoom-out')?.addEventListener('click', () => state.orbit?.zoom(0.9));
-      $('#dna-reset')?.addEventListener('click', () => {
+      $("#dna-zoom-in")?.addEventListener("click", () =>
+        state.orbit?.zoom(1.1),
+      );
+      $("#dna-zoom-out")?.addEventListener("click", () =>
+        state.orbit?.zoom(0.9),
+      );
+      $("#dna-reset")?.addEventListener("click", () => {
         state.orbit?.reencuadrar();
         state.unzipTarget = 0;
-        $('#dna-unzip')?.setAttribute('aria-pressed', 'false');
+        $("#dna-unzip")?.setAttribute("aria-pressed", "false");
         if (state.selected) cerrarPanel();
       });
     };
@@ -415,11 +575,12 @@
   function iniciar() {
     renderTargets();
     iniciarEscena();
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && state.selected) cerrarPanel();
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && state.selected) cerrarPanel();
     });
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar);
+  if (document.readyState === "loading")
+    document.addEventListener("DOMContentLoaded", iniciar);
   else iniciar();
 })();

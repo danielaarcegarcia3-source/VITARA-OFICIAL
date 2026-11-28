@@ -92,7 +92,7 @@ test('modelos reales, normalización, glTF externo y controles', async ({ page }
   await page.locator('#load-hospital').click();
   await expect(page.locator('#hospital-canvas')).toHaveAttribute('data-cargado', '1', { timeout: 30000 });
   await page.locator('#viewer-hospital .scene-pin').first().click();
-  await expect(page.locator('#viewer-hospital .hotspot-story')).toContainText('Acceso y circulación');
+  await expect(page.locator('#viewer-hospital .hotspot-story')).toContainText('Entrada y vestíbulo');
   expect(errors).toEqual([]);
 });
 
@@ -158,6 +158,8 @@ test('los dos nuevos modelos cargan y sus puntos educativos permiten recorrer ca
     await page.locator(`#viewer-${id} .scene-pin`).first().click();
     const story = page.locator(`#viewer-${id} .hotspot-story`);
     await expect(story).toBeVisible();
+    await expect(story).toContainText(id === 'or' ? 'Mesa de operaciones' : 'Zona de mesa y trabajo');
+    await expect(story).not.toContainText('Información y privacidad');
     await expect(story.locator('.hotspot-story__top')).toContainText('01 / 06');
     await story.locator('[data-story-next]').click();
     await expect(story.locator('.hotspot-story__top')).toContainText('02 / 06');

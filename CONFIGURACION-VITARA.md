@@ -1,5 +1,16 @@
 # VITARA · Conexión y participación
 
+## Actualizar esta revisión del portal en Render
+
+1. En el servicio existente `vitara-oficial`, confirmar la rama `arena/ccf66afb-vitara-oficial`.
+2. Si no se inició despliegue automático, elegir **Manual Deploy → Deploy latest commit** y esperar **Live**. No es necesario cambiar claves, base de datos ni plan.
+3. Build vigente: `npm ci --include=dev && npm run build`; inicio: `npm start`.
+4. Abrir el sitio público y pulsar **Ctrl + F5**. En Mapas comprobar el selector de 24 departamentos y Callao; fuera de La Libertad la base puede no tener registros.
+5. En Planos seleccionar un ambiente, alternar capas y acercar; en Inicio abrir los temas de medicamentos. En Comunidad activar/desactivar «Tamaño de texto grande»: el aumento se aplica solo al optar por él y se recuerda para la siguiente visita.
+6. Confirmar que `/api/salud` y el acceso administrativo siguen operativos. Las pruebas locales no sustituyen verificar el despliegue ni la persistencia tras reinicio.
+
+La guía de entrevista está en `ENTREVISTA-SOCIOS-EN-SALUD.md`: todavía no contiene respuestas ni autorización institucional.
+
 ## Publicación independiente de la laptop
 
 Guía vigente: [DESPLEGAR-RENDER-NEON.md](DESPLEGAR-RENDER-NEON.md). Con `DATABASE_URL` privada, el backend utiliza PostgreSQL con TLS verificado, conserva los datos fuera de Render y no escribe participación ni solicitudes en el disco efímero. Si la conexión falla, no sustituye los datos por JSON. Sin esta variable se mantiene el modo local descrito abajo; Render exige PostgreSQL para arrancar. Nube y local son almacenamientos independientes, no sincronizados. El propietario aportó capturas del despliegue público operativo con PostgreSQL y acceso administrativo en https://vitara-oficial.onrender.com. Falta comprobar persistencia tras reinicio del alojamiento, recuperación integral y siete dispositivos físicos. El rediseño del panel requiere actualizar el servicio desde esta rama.

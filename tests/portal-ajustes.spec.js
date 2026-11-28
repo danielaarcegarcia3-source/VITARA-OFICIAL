@@ -17,7 +17,7 @@ async function enter(page) {
   await expect(page.locator("#access")).toBeHidden();
 }
 
-test("identidad nacional, base apenas cálida y cinco puntos centrados en ADN", async ({
+test("identidad nacional, base apenas cálida y cinco temas de medicamentos sobre ADN", async ({
   page,
 }) => {
   await page.goto(base);
@@ -35,11 +35,11 @@ test("identidad nacional, base apenas cálida y cinco puntos centrados en ADN", 
   ).toBe("rgb(250, 248, 243)");
   await expect(page.locator(".dna-target")).toHaveCount(5);
   const titles = [
-    "Dos cadenas",
-    "Las unidades",
-    "A con T",
-    "El orden",
-    "Copiar para transmitir",
+    "El nombre que importa",
+    "Consultar no es encontrar stock",
+    "Conservar también es cuidar",
+    "Sin automedicación",
+    "Revisa antes de utilizar",
   ];
   for (let i = 0; i < 5; i++) {
     await page
@@ -47,11 +47,8 @@ test("identidad nacional, base apenas cálida y cinco puntos centrados en ADN", 
       .nth(i)
       .evaluate((e) => e.click());
     await expect(page.locator("#dna-panel h3")).toContainText(titles[i]);
-    await expect(page.locator("#dna-panel")).not.toContainText(
-      /amoxicilina|paracetamol|atorvastatina|NS1|cadena de frío/,
-    );
     await expect(page.locator("#dna-panel")).toContainText(
-      "Punto temático sobre el ADN",
+      "El ADN es un soporte visual",
     );
     await page.locator("#dna-panel-close").click();
   }
