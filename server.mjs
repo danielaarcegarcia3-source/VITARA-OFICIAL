@@ -334,6 +334,7 @@ function solicitudPublica(s) {
     codigo: s.codigo,
     item: s.item,
     categoria: s.categoria,
+    cantidad: s.cantidad ?? null, unidad: s.unidad ?? null, pregunta:s.pregunta || 'disponibilidad', imagenRecurso:s.imagenRecurso || null,
     alias: s.alias,
     esAcompanamiento: s.esAcompanamiento,
     sede: s.sede,
@@ -355,6 +356,10 @@ function sanearRegistro(s) {
   return {
     codigo,
     item,
+    cantidad:Number.isInteger(s.cantidad) && s.cantidad>=1 && s.cantidad<=10000 && ['unidades','cajas','blisteres','frascos','equipos','atenciones'].includes(s.unidad)?s.cantidad:null,
+    unidad:['unidades','cajas','blisteres','frascos','equipos','atenciones'].includes(s.unidad)?s.unidad:null,
+    pregunta:['disponibilidad','horario','requisitos','accesorios'].includes(s.pregunta)?s.pregunta:'disponibilidad',
+    imagenRecurso:['monitor','infusion','ultrasound','defibrillator','hospital'].includes(s.imagenRecurso)?s.imagenRecurso:null,
     categoria: ['medicamento', 'equipo', 'dengue', 'servicio', 'otro'].includes(s.categoria) ? s.categoria : 'medicamento',
     alias: String(s.alias || 'Ciudadano anónimo').trim().slice(0, 60) || 'Ciudadano anónimo',
     esAcompanamiento: Boolean(s.esAcompanamiento),
@@ -401,7 +406,7 @@ const server = http.createServer(async (req, res) => {
   aplicarCabecerasSeguridad(res);
 
   // Rechazar orígenes ajenos antes de cualquier ruta, incluidas las administrativas.
-  // Los tokens viajan en Authorization, nunca en URL ni en cookies implícitas.
+  // Las claves de administración/participación viajan en Authorization; Google usa cookies firmadas HttpOnly.
   const origen = req.headers.origin;
   if (origen) {
     let permitido = false;
@@ -645,6 +650,9 @@ async function routeRequest(req, res, urlParsed) {
         return;
       }
 
+      if(data.cantidad!=null && (typeof data.cantidad!=='number' || !Number.isInteger(data.cantidad) || data.cantidad<1 || data.cantidad>10000 || !['unidades','cajas','blisteres','frascos','equipos','atenciones'].includes(data.unidad))){res.writeHead(400);res.end(JSON.stringify({ok:false,error:'Indica una cantidad entera entre 1 y 10000 y una unidad válida; no es una dosis.'}));return;}
+      if(data.pregunta!=null && !['disponibilidad','horario','requisitos','accesorios'].includes(data.pregunta)){res.writeHead(400);res.end(JSON.stringify({ok:false,error:'Selecciona una pregunta de verificación válida.'}));return;}
+      if(data.imagenRecurso!=null && !['monitor','infusion','ultrasound','defibrillator','hospital'].includes(data.imagenRecurso)){res.writeHead(400);res.end(JSON.stringify({ok:false,error:'Selecciona una referencia visual del catálogo; no se admiten imágenes externas.'}));return;}
       if (solicitudes.length >= MAX_SOLICITUDES) {
         res.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8', 'Retry-After': '3600' });
         res.end(JSON.stringify({ ok: false, error: 'Capacidad temporal de registros completa. Reintente más tarde.' }));
@@ -679,6 +687,7 @@ async function routeRequest(req, res, urlParsed) {
         codigo,
         item,
         categoria,
+        cantidad:data.cantidad ?? null, unidad:data.cantidad!=null?data.unidad:null, pregunta:data.pregunta || 'disponibilidad', imagenRecurso:data.imagenRecurso || null,
         alias: String(data.alias || 'Ciudadano anónimo').trim().slice(0, 60) || 'Ciudadano anónimo',
         esAcompanamiento: Boolean(data.esAcompanamiento),
         sede: String(data.sede || 'C.S. MOCHE').trim().slice(0, 120),

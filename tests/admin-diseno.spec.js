@@ -1,4 +1,6 @@
 import { test, expect } from "@playwright/test";
+// Recorridos de regresión en modo expandido; la nueva navegación inicial se prueba aparte.
+test.beforeEach(async ({ page }) => { await page.addInitScript(() => localStorage.setItem('vitara.navigation.all', 'true')); });
 import fs from "node:fs";
 import { startIsolatedServer } from "./helpers/server.mjs";
 let isolated, base;

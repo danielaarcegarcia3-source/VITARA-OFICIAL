@@ -38,7 +38,7 @@
   setInterval(() => { if (!document.hidden) record('presencia'); }, 60000);
 
   const tools = document.createElement('div'); tools.className = 'connection-tools';
-  tools.innerHTML = '<button type="button" id="theme-switch" aria-pressed="true">◐ <span>Base cálida</span></button><button type="button" id="participation-open">◎ <span>Participación</span></button><button type="button" id="chat-open" aria-expanded="false" aria-controls="orientation-chat">✳ <span>Orientación</span></button>';
+  tools.innerHTML = '<button type="button" id="theme-switch" aria-pressed="true">◐ <span>Base cálida</span></button><button type="button" id="participation-open">◎ <span>Participación</span></button><button type="button" id="chat-open" aria-expanded="false" aria-controls="orientation-chat">↗ <span>Orientación</span></button>';
   document.body.append(tools);
   function theme(value) {
     document.documentElement.dataset.base = value;
@@ -51,7 +51,7 @@
   document.getElementById('theme-switch').addEventListener('click', () => { const next = document.documentElement.dataset.base === 'blanco' ? 'editorial' : 'blanco'; theme(next); record('tema', next); });
 
   const profile = document.createElement('dialog'); profile.className = 'participation-dialog'; profile.setAttribute('aria-labelledby', 'participation-title');
-  profile.innerHTML = '<form method="dialog"><button aria-label="Cerrar participación" class="dialog-close">×</button></form><span class="overline">TÚ DECIDES QUÉ COMPARTIR</span><h2 id="participation-title">Tu participación</h2><p id="participation-status" role="status"></p><dl id="participation-details"></dl><p>Hasta 7 perfiles. Retención máxima de 30 días desde tu última actividad. Administración ve los módulos visitados, modelos abiertos, cambios de tema y uso del chat; no ve el texto de tus mensajes ni búsquedas. El correo no está verificado y no es una cuenta institucional.</p><button type="button" id="participation-delete">Eliminar mi perfil del servidor y de este dispositivo</button><p>Si solo cierras sesión, el registro del servidor permanece hasta su eliminación o caducidad.</p>';
+  profile.innerHTML = '<form method="dialog"><button aria-label="Cerrar participación" class="dialog-close">×</button></form><span class="overline">TÚ DECIDES QUÉ COMPARTIR</span><h2 id="participation-title">Tu participación</h2><p id="participation-status" role="status"></p><dl id="participation-details"></dl><p>Hasta 7 perfiles. Retención máxima de 30 días desde tu última actividad. Administración ve los módulos visitados, modelos abiertos, cambios de tema y uso del chat; no ve el texto de tus mensajes ni búsquedas. Solo los perfiles conectados con Google tienen correo verificado; los de prueba no verifican identidad. Elegir una profesión no acredita un cargo ni da permisos institucionales.</p><button type="button" id="participation-delete">Eliminar mi perfil del servidor y de este dispositivo</button><p>Si solo cierras sesión, el registro del servidor permanece hasta su eliminación o caducidad.</p>';
   document.body.append(profile);
   document.getElementById('participation-open').addEventListener('click', async () => {
     profile.showModal(); const status = document.getElementById('participation-status'), details = document.getElementById('participation-details'); details.replaceChildren();
@@ -60,7 +60,7 @@
     try {
       const result = await api('/api/perfil');
       status.textContent = 'Registro guardado en el servidor. La clave de acceso permanece en este dispositivo: no la compartas.';
-      for (const [label, value] of [['Nombre',result.profile.nombre],['Correo',result.profile.email],['Territorio',result.profile.distrito || 'No indicado'],['Interacciones guardadas',String(result.profile.interactions.length)]]) {
+      for (const [label, value] of [['Nombre',result.profile.nombre],['Correo',result.profile.email],['Identidad',result.profile.emailVerified?'Correo verificado por Google':'Prueba o perfil histórico sin verificación'],['Interacciones guardadas',String(result.profile.interactions.length)]]) {
         const dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = label; dd.textContent = value; details.append(dt,dd);
       }
     } catch (error) { status.textContent = error.message; }

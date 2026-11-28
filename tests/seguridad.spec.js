@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+// Recorridos de regresión en modo expandido; la nueva navegación inicial se prueba aparte.
+test.beforeEach(async ({ page }) => { await page.addInitScript(() => localStorage.setItem('vitara.navigation.all', 'true')); });
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import http from 'node:http';
@@ -39,12 +41,12 @@ test('panel real: escape de registros históricos, actualización SSE privada y 
 
 test('solicitud completa: formulario visitante, respuesta del panel y seguimiento persistente',async({page,browser})=>{
   await page.goto(base+'/admin.html');await page.locator('#loginUsuario').fill('operador_pruebas');await page.locator('#loginClave').fill(password);await page.locator('#btnLogin').click();await expect(page.locator('#loginOverlay')).toBeHidden();
-  const context=await browser.newContext({reducedMotion:'reduce'});const visitor=await context.newPage();
+  const context=await browser.newContext({reducedMotion:'reduce'});await context.addInitScript(()=>localStorage.setItem('vitara.navigation.all','true'));const visitor=await context.newPage();
   try{
     await visitor.goto(base);await visitor.evaluate(()=>document.querySelector('#splash-skip').click());await visitor.locator('#access-name').fill('Equipo visitante');await visitor.locator('#access-form [type=submit]').click();
-    await visitor.locator('[data-view-link=solicitudes]').click();await visitor.locator('#sol-item').fill('Ambiente para prueba educativa');await visitor.locator('#sol-cat').selectOption('servicio');await visitor.locator('#sol-alias').fill('Equipo visitante');await visitor.locator('#sol-submit').click();
+    await visitor.locator('[data-view-link=solicitudes]').click();await visitor.locator('#sol-item').fill('Ambiente para prueba educativa');await visitor.locator('#sol-cat').selectOption('servicio');await visitor.locator('#sol-cantidad').fill('4');await visitor.locator('#sol-unidad').selectOption('atenciones');await visitor.locator('#sol-pregunta').selectOption('requisitos');await visitor.locator('#sol-imagen').selectOption('hospital');await visitor.locator('#sol-alias').fill('Equipo visitante');await visitor.locator('#sol-submit').click();
     const result=visitor.locator('#solicitud-resultado .code-box__v');await expect(result).toHaveText(/^G3-[A-Z0-9]{6}$/);const code=(await result.textContent()).trim();
-    const respond=page.locator(`[data-codigo="${code}"]`);await expect(respond).toBeVisible({timeout:5000});await respond.click();await page.locator('#modalRespEstado').selectOption('respondido');await page.locator('#modalRespTexto').fill('Respuesta de ensayo: consulta recibida, sin disponibilidad clínica certificada.');await page.locator('#formResponderSolicitud [type=submit]').click();await expect(page.locator('#modalResponder')).toBeHidden();
+    const respond=page.locator(`[data-codigo="${code}"]`);await expect(respond).toBeVisible({timeout:5000});await expect(respond.locator('..')).toContainText('4 atenciones');await expect(respond.locator('..').locator('img')).toHaveAttribute('src','./assets/previews/hospital.png');await respond.click();await page.locator('#modalRespEstado').selectOption('respondido');await page.locator('#modalRespTexto').fill('Respuesta de ensayo: consulta recibida, sin disponibilidad clínica certificada.');await page.locator('#formResponderSolicitud [type=submit]').click();await expect(page.locator('#modalResponder')).toBeHidden();
     await visitor.locator('#tracker-code').fill(code);await visitor.locator('#form-tracker [type=submit]').click();await expect(visitor.locator('#tracker-resultado')).toContainText('Respuesta de ensayo');
     await visitor.reload();await visitor.evaluate(()=>document.querySelector('#splash-skip').click());await visitor.locator('#access-form [type=submit]').click();await expect(visitor.locator('#access')).toBeHidden();await visitor.locator('[data-view-link=solicitudes]').click();await visitor.locator('#tracker-code').fill(code);await visitor.locator('#form-tracker [type=submit]').click();await expect(visitor.locator('#tracker-resultado')).toContainText('Respuesta de ensayo');
   }finally{await context.close();}

@@ -1794,3 +1794,4 @@ main[id] {
 .admin-locked {
   min-height: 100svh;
 }
+.admin-quantity-summary{padding:14px 18px;border:1px solid #d0dfcf;border-radius:10px;background:#eff4e9;color:#426451;font-size:12px;line-height:1.7;margin:0 0 20px}.admin-resource-heading{display:flex;align-items:center;gap:16px;margin:14px 0}.admin-resource-heading figure{margin:0;flex:none;width:88px;text-align:center}.admin-resource-heading img{width:88px;height:70px;object-fit:contain;border-radius:10px;border:1px solid #d4e2d4;background:#f3f4e9}.admin-resource-heading figcaption{font-size:8px;line-height:1.5;color:#5e786a}.admin-resource-symbol{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:#e8f1df;color:#347865;font-size:30px}.admin-request-quantity{font-size:18px;font-weight:700;color:#2e6756;margin:8px 0}.admin-request-question{font-size:12px;color:#607465;line-height:1.7}

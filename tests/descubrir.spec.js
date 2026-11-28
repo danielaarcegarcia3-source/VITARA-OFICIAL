@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+// Recorridos de regresión en modo expandido; la nueva navegación inicial se prueba aparte.
+test.beforeEach(async ({ page }) => { await page.addInitScript(() => localStorage.setItem('vitara.navigation.all', 'true')); });
 async function enter(page){await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');await page.evaluate(()=>document.querySelector('#splash-skip').click());await page.locator('#access-name').fill('Exploradora');await page.locator('#access-form [type=submit]').click();await expect(page.locator('#access')).toBeHidden();}
 
 test('galería IA, fichas, filtros y comparación educativa sin cotizaciones ficticias',async({page})=>{

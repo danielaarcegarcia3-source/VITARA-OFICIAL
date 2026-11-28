@@ -92,7 +92,9 @@
       toast('El filtro de privacidad bloquea números de 8 dígitos. Quita cualquier documento del texto.', 'warn', 7000);
       return;
     }
-    const fields = { item, categoria, sede, alias, esAcompanamiento };
+    const cantidad=$('#sol-cantidad').value===''?null:Number($('#sol-cantidad').value);const unidad=$('#sol-unidad').value;const pregunta=$('#sol-pregunta').value;
+    if(cantidad!=null && (!Number.isInteger(cantidad)||cantidad<1||cantidad>10000)){toast('Usa una cantidad entera entre 1 y 10000, no una dosis.','warn');return;}
+    const fields = { item, categoria, sede, alias, esAcompanamiento, cantidad, unidad, pregunta, imagenRecurso:$('#sol-imagen').value || null };
     const signature = JSON.stringify(fields);
     if (!pendingRequest || pendingRequest.signature !== signature) {
       const bytes = new Uint8Array(16); crypto.getRandomValues(bytes);
@@ -115,7 +117,7 @@
       V.addNotif(`Solicitud ${s.codigo} recibida. La sede puede responderla desde el panel institucional.`);
       toast(data.duplicadoPrevenido ? 'Esa solicitud ya existía. Recuperamos el mismo código.' : 'Solicitud registrada. Guarda tu código.');
       $('#sol-item').value = '';
-      $('#sol-alias').value = '';
+      $('#sol-alias').value = '';$('#sol-cantidad').value='';
     } catch (err) {
       const cont = $('#solicitud-resultado');
       if (cont) cont.innerHTML = `<div class="privacy-inline" style="background:var(--v-rose-soft);border-color:#F5D2DA"><svg class="i i--sm" style="color:var(--v-rose)" aria-hidden="true"><use href="#i-alert"/></svg><p style="color:#7C2B3D"><strong>No se pudo registrar la solicitud.</strong> ${esc(err.message)} Verifica que el servidor local esté activo (<span class="mono">npm start</span>) e inténtalo otra vez. No mostramos un código falso.</p></div>`;
@@ -153,7 +155,7 @@
     const rr = respuestaTexto(s);
     cont.innerHTML = `<article class="ticket">
       <div class="ticket__top">
-        <div><p class="ticket__code">${esc(s.codigo)}</p><p class="ticket__item">${esc(s.item)}</p>
+        <div><p class="ticket__code">${esc(s.codigo)}</p><p class="ticket__item">${esc(s.item)}</p><p>${s.cantidad!=null?esc(s.cantidad)+' '+esc(s.unidad):'Cantidad no especificada'} · ${esc(s.pregunta || 'disponibilidad')}</p>
           <p class="ticket__meta">${esc(s.sede || 'Sede no indicada')} · ${esc(V.fecha(s.fecha))} ${esc(V.hora(s.fecha))}</p></div>
         ${V.estadoTag(s.estado)}
       </div>

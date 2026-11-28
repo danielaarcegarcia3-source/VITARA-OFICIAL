@@ -16,22 +16,22 @@
   <link rel="stylesheet" href="./descubrir.css?v=4">
   <link rel="stylesheet" href="./portal-ajustes.css?v=3">
   <link rel="stylesheet" href="./estadisticas-experiencia.css?v=1">
+  <link rel="stylesheet" href="./experiencia-guiada.css?v=1">
 </head>
 <body class="access-locked">
 <section class="access" id="access" aria-label="Acceso a VITARA">
-  <div class="access__ambient"><img src="./imagenmanosysalud.jpg" alt="Manos que cuidan de la salud" class="access__photo"><video id="access-video" muted loop playsinline preload="none" poster="./imagenmanosysalud.jpg" hidden></video></div>
+  <div class="access__ambient" aria-hidden="true"><video id="access-video" muted preload="none" hidden></video></div>
   <a class="access__brand" href="#" aria-label="VITARA"><img src="./logo%20VITARA.jpeg" alt="Logo oficial VITARA"><span>VITARA<small>ECOSISTEMA DIGITAL DE SALUD</small></span></a>
   <div class="access__story"><p class="overline">SALUD CONECTADA. VIDAS TRANSFORMADAS.</p><h1>Más cerca.<br>Más humano.<br><em>Más salud.</em></h1><p>La tecnología cobra sentido cuando nos acerca a lo que más importa: tu bienestar.</p><span class="access__territory">PERÚ · SALUD QUE CONECTA</span></div>
   <div class="access__card" id="login-card" hidden>
     <span class="access__step">01 / TU PUNTO DE PARTIDA</span><img class="access__logo" src="./logo%20VITARA.jpeg" alt="VITARA">
-    <h2>La salud conecta.<br><em>VITARA transforma.</em></h2><p>Tu red de salud, en un solo lugar.</p>
+    <h2>Bienvenido a VITARA.</h2><p>Conecta tu cuenta. Elige tu experiencia.</p><button type="button" id="google-connect" disabled>Conexión con Google · comprobando configuración</button><p id="google-status" role="status">Puedes explorar sin conectar una cuenta.</p>
     <form id="access-form"><label for="access-name">Tu alias de participante</label><input id="access-name" name="nombre" required minlength="2" maxlength="50" autocomplete="nickname" placeholder="Ej. Equipo visitante 1" aria-describedby="access-privacy">
-    <label for="access-email">Correo electrónico</label><input id="access-email" name="email" type="email" maxlength="254" autocomplete="email" placeholder="equipo1@example.test">
-    <label for="access-district">Distrito o provincia <span>(opcional)</span></label><input id="access-district" name="distrito" maxlength="80" autocomplete="address-level2" placeholder="Ej. Trujillo">
-    <label for="access-role">Tu vínculo con la salud <span>(opcional)</span></label><select id="access-role"><option value="CIU">Ciudadano</option><option value="POSTA">Profesional de Salud</option><option value="AGC">Gestor</option></select>
-    <label class="access-consent"><input id="access-sync" type="checkbox"><span>Sincronizar mi perfil y actividad con administración (hasta 7 participantes, 30 días). Al marcar acepto guardar nombre, correo, rol, territorio opcional y visitas a módulos. No se guardan consultas ni mensajes del chat.</span></label><p id="access-status" role="status"></p>
+    <details id="access-demo"><summary>Modo de prueba del concurso</summary><label for="access-email">Correo verificado o de prueba</label><input id="access-email" name="email" type="email" maxlength="254" autocomplete="email" placeholder="equipo1@example.test"><p>El modo de prueba solo admite example.test. Un Gmail real se conecta con el botón de Google.</p></details>
+    <label for="access-role">¿Cómo usarás VITARA?</label><select id="access-role"><option value="CIU">Ciudadano</option><option value="POSTA">Personal de posta o salud</option><option value="AGC">Gestor</option></select>
+    <label class="access-consent"><input id="access-sync" type="checkbox"><span>Sincronizar mi perfil y actividad con administración (hasta 7 participantes, 30 días). Al marcar acepto guardar alias, correo, perfil elegido y visitas a módulos. No se guardan consultas ni mensajes del chat.</span></label><p id="access-status" role="status"></p>
     <button type="submit">Entrar al ecosistema <span>↗</span></button></form>
-    <p class="access__privacy" id="access-privacy">En el concurso usa un alias ficticio y un correo de prueba example.test, nunca datos personales de estudiantes. Puedes entrar sin sincronizar. Para participar, añade un correo y marca el consentimiento. El correo no se verifica; este registro no otorga acceso institucional. No escribas DNI ni datos clínicos. Puedes eliminar el registro desde Participación.</p>
+    <p class="access__privacy" id="access-privacy">Con Google se verifica tu cuenta, no tu profesión. No accedemos a tus mensajes de Gmail. Solo se sincronizan perfil y actividad si das tu consentimiento. Explorar como visitante no verifica identidad ni otorga acceso administrativo. No escribas DNI ni datos clínicos.</p>
     <div class="access__card-foot"><span class="live-dot"></span> Información con fuente. Atención con propósito.</div>
   </div>
   <footer class="access__footer"><span>DISEÑADO PARA CONECTAR, CREADO PARA CUIDAR.</span><span>ODS 03 · 09 · 10</span></footer>
@@ -186,7 +186,7 @@
       <div class="viewport" id="viewport" tabindex="-1">
         <!-- ============ INICIO ============ -->
         <section class="view is-active" id="view-inicio" data-view="inicio" aria-labelledby="home-title">
-          <div class="home"><div class="welcome-bar"><div><p class="overline">TU ECOSISTEMA DE SALUD</p><h2 id="welcome-name">Bienvenido a VITARA <span>✳</span></h2></div><div class="territory-pill"><svg class="i"><use href="#i-pin"/></svg> Perú</div></div>
+          <div class="home"><div class="welcome-bar"><div><p class="overline">TU ECOSISTEMA DE SALUD</p><h2 id="welcome-name">Bienvenido a VITARA</h2></div><div class="territory-pill"><svg class="i"><use href="#i-pin"/></svg> Perú</div></div>
             <div class="home-hero" id="home-hero">
               <div class="home-copy">
                 <p class="eyebrow"><span class="live-dot"></span> EL FUTURO DE LA SALUD ES CONECTAR</p>
@@ -222,10 +222,10 @@
                 <div class="stage" id="dna-stage">
                   <canvas id="dna-canvas" role="img" aria-label="Hélice de ADN tridimensional, giratoria. Usa las flechas para rotar y las teclas más y menos para acercar."></canvas>
                   <div class="stage__top">
-                    <span class="stage__badge"><svg class="i i--sm"><use href="#i-dna"/></svg> Medicamentos · guía sobre modelo ADN</span>
+                    <span class="stage__badge"><svg class="i i--sm"><use href="#i-dna"/></svg> ADN · ciencia que conecta</span>
                     <span class="stage__hint">Arrastra para girar · rueda para acercar</span>
                   </div>
-                  <div class="dna-targets" id="dna-targets" role="group" aria-label="Temas educativos sobre medicamentos">
+                  <div class="dna-targets" id="dna-targets" role="group" aria-label="Componentes del ADN y salud">
                     <!-- vitara-home.js -->
                   </div>
                   <div class="stage__controls">
@@ -243,10 +243,10 @@
                   <div class="stage-loader" id="dna-loader"><div class="spinner" aria-hidden="true"></div><span>Cargando hélice 3D…</span></div>
                   <div class="stage-fallback" id="dna-fallback" hidden>
                     <p><strong>No se pudo cargar el modelo 3D.</strong>
-La información sobre medicamentos sigue disponible en los botones laterales.</p>
+La información educativa sigue disponible en los botones laterales.</p>
                   </div>
                 </div>
-                <aside class="dna-panel" id="dna-panel" hidden aria-live="polite" aria-label="Información de medicamentos seleccionada">
+                <aside class="dna-panel" id="dna-panel" hidden aria-live="polite" aria-label="Información del componente seleccionado">
                   <!-- vitara-home.js -->
                 </aside>
               </div>
@@ -508,6 +508,7 @@ La información sobre medicamentos sigue disponible en los botones laterales.</p
                     <select id="sol-sede" name="sede"></select>
                   </div>
                 </div>
+                <div class="request-preparation"><span class="eyebrow">02 / PRECISA TU PREGUNTA</span><div class="field-row"><div class="field"><label for="sol-cantidad">Cantidad a consultar</label><input type="number" id="sol-cantidad" min="1" max="10000" step="1" placeholder="Sin especificar"></div><div class="field"><label for="sol-unidad">Unidad</label><select id="sol-unidad"><option value="unidades">Unidades</option><option value="cajas">Cajas</option><option value="blisteres">Blísteres</option><option value="frascos">Frascos</option><option value="equipos">Equipos</option><option value="atenciones">Atenciones</option></select></div></div><p class="field__hint">Cantidad de recurso para verificar, no dosis ni recomendación de consumo. Deja vacío si solo deseas información.</p><div class="field"><label for="sol-pregunta">¿Qué necesitas confirmar?</label><select id="sol-pregunta"><option value="disponibilidad">Disponibilidad del recurso</option><option value="horario">Horario y programación</option><option value="requisitos">Requisitos o referencia necesaria</option><option value="accesorios">Accesorios y consumibles compatibles</option></select></div><div class="field"><label for="sol-imagen">Referencia visual para el operador</label><select id="sol-imagen"><option value="">Sin referencia visual</option><option value="monitor">Monitor · ilustración IA</option><option value="infusion">Bomba de infusión · ilustración IA</option><option value="ultrasound">Ecógrafo · ilustración IA</option><option value="defibrillator">Desfibrilador · ilustración IA</option><option value="hospital">Atención / hospital · modelo 3D ilustrativo</option></select><p class="field__hint">Solo ayuda a reconocer el tipo de consulta. No es una foto del recurso solicitado ni acredita disponibilidad. No cargues datos clínicos o fotografías personales.</p></div></div>
                 <div class="field">
                   <label for="sol-alias">Alias (opcional)</label>
                   <input id="sol-alias" name="alias" type="text" maxlength="24" placeholder="Ej.: Vecina de Moche">
@@ -943,42 +944,19 @@ La información sobre medicamentos sigue disponible en los botones laterales.</p
     </aside>
     <div class="modal__body">
       <h3>Personaliza tu espacio</h3>
-      <p>Tres preguntas rápidas. Puedes cambiarlo después desde tu perfil.</p>
+      <p>Elige tu experiencia y tus preferencias de lectura. Puedes cambiarlas después.</p>
       <div class="field" style="margin-top:16px">
         <span class="field__label">1. ¿Cómo usarás VITARA?</span>
         <div class="pick-grid" id="onb-roles" role="group" aria-label="Elegir perfil">
           <button class="pick" type="button" data-rol="CIU" aria-pressed="true"><strong>Ciudadanía</strong><span>Busco atención para mí o mi familia</span></button>
-          <button class="pick" type="button" data-rol="AGC" aria-pressed="false"><strong>Agente comunitario</strong><span>Acompaño a otras personas</span></button>
-          <button class="pick" type="button" data-rol="POSTA" aria-pressed="false"><strong>Personal de sede</strong><span>Verifico stock y equipos</span></button>
+          <button class="pick" type="button" data-rol="AGC" aria-pressed="false"><strong>Gestión</strong><span>Comparo reportes y organizo consultas</span></button>
+          <button class="pick" type="button" data-rol="POSTA" aria-pressed="false"><strong>Personal de posta o salud</strong><span>Preparo consultas de recursos y equipos</span></button>
         </div>
       </div>
       <div class="field" style="margin-top:14px">
-        <span class="field__label">2. ¿Qué red o territorio te interesa?</span>
-        <select id="onb-distrito">
-          <option value="Trujillo">Trujillo</option>
-          <option value="Moche">Moche</option>
-          <option value="Chepén">Chepén</option>
-          <option value="Pacasmayo">Pacasmayo</option>
-          <option value="Ascope">Ascope</option>
-          <option value="Sánchez Carrión">Sánchez Carrión</option>
-          <option value="Otuzco">Otuzco</option>
-          <option value="Virú">Virú</option>
-          <option value="Bolívar">Bolívar</option>
-          <option value="Pataz">Pataz</option>
-          <option value="Santiago de Chuco">Santiago de Chuco</option>
-          <option value="Gran Chimú">Gran Chimú</option>
-          <option value="Julcán">Julcán</option>
-        </select>
-      </div>
-      <div class="field" style="margin-top:14px">
-        <span class="field__label">3. Preferencias de lectura</span>
+        <span class="field__label">2. Preferencias de lectura</span>
         <label class="check" style="margin-top:4px"><input type="checkbox" id="onb-texto"><span>Texto más grande</span></label>
         <label class="check" style="margin-top:7px"><input type="checkbox" id="onb-movimiento"><span>Reducir animaciones</span></label>
-      </div>
-      <div class="field" style="margin-top:14px">
-        <span class="field__label">4. Correo de contacto (opcional)</span>
-        <input id="onb-correo" type="email" placeholder="tu@correo.pe (opcional)" autocomplete="email">
-        <span class="field__hint">Para avisos y recordatorios. Puedes dejarlo vacío; nunca se usan datos clínicos.</span>
       </div>
       <div class="modal__actions">
         <button class="btn btn--ghost btn--sm" type="button" id="onb-skip">Explorar sin personalizar</button>
@@ -997,7 +975,7 @@ La información sobre medicamentos sigue disponible en los botones laterales.</p
 </noscript>
 <script src="./datos-reales-peru.js" defer></script>
 <script src="./vendor/vitara-three.js" defer></script>
-<script src="./vitara-home.js?v=conexiones-2" defer></script>
+<script src="./vitara-home.js?v=laboratorio-3" defer></script>
 <script src="./vitara-core.js" defer></script>
 <script src="./vitara-search.js" defer></script>
 <script src="./territorio-3d.js?v=3" defer></script>
@@ -1013,9 +991,10 @@ La información sobre medicamentos sigue disponible en los botones laterales.</p
 <script src="./movimiento.js" defer></script>
 <script src="./conexion.js?v=6" defer></script>
 <script src="./bienvenida-holografica.js?v=6" defer></script>
-<script src="./ecosistema.js?v=conexiones-2" defer></script>
+<script src="./ecosistema.js?v=guiado-3" defer></script>
 <script src="./experiencia.js?v=conexiones-2" defer></script>
 <script src="./descubrir.js?v=4" defer></script>
 <script src="./exploracion-mejoras.js?v=1" defer></script>
+<script src="./experiencia-guiada.js?v=1" defer></script>
 </body>
 </html>

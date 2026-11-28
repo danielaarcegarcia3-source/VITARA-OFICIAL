@@ -13,7 +13,7 @@ export async function startIsolatedServer(overrides = {}) {
   const reservation = http.createServer(); reservation.listen(0, '127.0.0.1'); await once(reservation, 'listening');
   const port = reservation.address().port; await new Promise(resolve => reservation.close(resolve));
   const env = { ...process.env, PORT: String(port), VITARA_DATA_DIR: dir };
-  for (const key of ['DATABASE_URL','RENDER','VITARA_PG_LOCAL_TEST','ADMIN_TOKEN','ADMIN_USUARIO','ADMIN_CLAVE','VITARA_SETUP_KEY','VITARA_REQUESTS_FILE','VITARA_AI_KEY','VITARA_AI_MODEL','VITARA_AI_ENDPOINT']) delete env[key];
+  for (const key of ['GOOGLE_CLIENT_ID','GOOGLE_CLIENT_SECRET','GOOGLE_REDIRECT_URI','DATABASE_URL','RENDER','VITARA_PG_LOCAL_TEST','ADMIN_TOKEN','ADMIN_USUARIO','ADMIN_CLAVE','VITARA_SETUP_KEY','VITARA_REQUESTS_FILE','VITARA_AI_KEY','VITARA_AI_MODEL','VITARA_AI_ENDPOINT']) delete env[key];
   Object.assign(env, overrides);
   const child = spawn(process.execPath, ['server.mjs'], { cwd: root, env, stdio: ['ignore','pipe','pipe'] });
   const dispose = async () => {

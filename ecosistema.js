@@ -7,34 +7,25 @@
   const access = $('#access'), app = $('#app'), form = $('#access-form');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let splashTimer;
-  const accessVideo = $('#access-video');
-  function syncAccessVideo() {
-    const shouldPlay = $('#splash').hidden && !access.hidden && !document.hidden && !reduced.matches && !V.A11Y.movimiento && accessVideo.dataset.userPaused !== 'true';
-    if (shouldPlay && accessVideo.dataset.source) {
-      if (!accessVideo.getAttribute('src')) accessVideo.src = accessVideo.dataset.source;
-      accessVideo.autoplay = true;
-      accessVideo.play().catch(() => {});
-    } else { accessVideo.autoplay = false; accessVideo.pause(); }
-  }
   function welcome() {
     $('#splash').hidden = true;
     $('#login-card').hidden = false;
     clearTimeout(splashTimer);
     const profile = V.store.get('g3.perfil', {});
-    $('#access-name').value = profile?.nombre || '';
-    $('#access-email').value = profile?.email || '';
-    $('#access-district').value = profile?.distrito || '';
+    $('#access-name').value = window.VitaraGoogleIdentity?.nombre || profile?.nombre || '';
+    $('#access-email').value = window.VitaraGoogleIdentity?.email || (/@example\.test$/i.test(profile?.email || '')?profile.email:'');
+
     $('#access-sync').checked = !!V.store.get('vitara.participant.token', '');
     $('#access-email').required = $('#access-sync').checked;
     $('#access-role').value = profile?.rol && ['CIU', 'POSTA', 'AGC'].includes(profile.rol) ? profile.rol : 'CIU';
     $('#access-name').focus({ preventScroll: true });
-    syncAccessVideo();
+
   }
   function refreshName() {
     const profile = V.store.get('g3.perfil', {});
     const title = $('#welcome-name');
     title.replaceChildren(document.createTextNode(`Bienvenido${profile?.nombre ? ', ' + profile.nombre : ' a VITARA'}`));
-    const star = document.createElement('span'); star.textContent = ' ✳'; title.append(star);
+
   }
   function enter() {
     access.hidden = true;
@@ -47,6 +38,7 @@
     $('#viewport').focus({ preventScroll: true });
   }
   $('#splash-skip').addEventListener('click', welcome);
+  window.addEventListener('vitara:google-ready',welcome);
   splashTimer = setTimeout(welcome, reduced.matches ? 250 : 9000);
   window.addEventListener('vitara:welcome-replay', () => {
     clearTimeout(splashTimer); $('#login-card').hidden = true; $('#splash').hidden = false;
@@ -60,7 +52,9 @@
     const name = input.value.trim().replace(/\s+/g, ' ');
     input.setCustomValidity(name.length < 2 ? 'Escribe al menos dos caracteres, no solo espacios.' : /^\d{8}$/.test(name) ? 'Usa un nombre de usuario, no un DNI.' : '');
     if (!form.reportValidity()) return;
-    const profile = { nombre: name, email: $('#access-email').value.trim(), distrito: $('#access-district').value.trim(), rol: $('#access-role').value };
+    const email=$('#access-email').value.trim();
+    if(email && !/@example\.test$/i.test(email) && email!==window.VitaraGoogleIdentity?.email){$('#access-status').textContent='Conecta esa cuenta con Google para verificarla. No se admite un Gmail escrito sin verificar.';return;}
+    const profile = { nombre: name, email, distrito: '', rol: $('#access-role').value };
     const submit = form.querySelector('[type="submit"]'); submit.disabled = true;
     $('#access-status').textContent = '';
     try {
@@ -74,11 +68,13 @@
   $('#access-name').addEventListener('input', event => event.target.setCustomValidity(''));
   window.addEventListener('vitara:logout', () => {
     const profile = V.store.get('g3.perfil', {}) || {};
-    delete profile.nombre;
+    delete profile.nombre;delete profile.email;delete profile.emailVerified;
+    $('#access-email').readOnly=false;
     V.store.set('g3.perfil', profile);
     app.inert = true;
     access.hidden = false;
     document.body.classList.add('access-locked');
+    fetch('/api/google/signout',{method:'POST'}).catch(()=>{});window.VitaraGoogleIdentity=null;
     $('#ambient-audio')?.pause();
     document.querySelectorAll('.popover').forEach(el => el.remove());
     welcome();
@@ -140,15 +136,5 @@
   audio.addEventListener('play', playerState); audio.addEventListener('pause', playerState);
   audio.addEventListener('error', () => { V.toast('El audio no está disponible o su formato no es compatible.', 'warn'); playerState(); });
 
-  fetch('./assets-manifest.json', { cache: 'no-cache' }).then(response => response.json()).then(manifest => {
-    // Original video uploaded in commit 49dbae0; no substituted media.
-    if (!manifest.media.loginVideo) return;
-    const video = $('#access-video'); video.dataset.source = manifest.media.loginVideo; video.hidden = false;
-    syncAccessVideo();
-    document.addEventListener('visibilitychange', syncAccessVideo);
-    reduced.addEventListener('change', syncAccessVideo);
-    new MutationObserver(syncAccessVideo).observe(document.documentElement, { attributes: true, attributeFilter: ['data-movimiento'] });
-    video.addEventListener('error', () => { video.hidden = true; });
-  }).catch(() => {});
   refreshName();
 })();

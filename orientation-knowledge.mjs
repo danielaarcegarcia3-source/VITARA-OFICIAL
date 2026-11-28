@@ -2,7 +2,7 @@
 const topics = [
   [
     /^(?!.*(?:replicacion|semiconservativ)).*(?:\badn\b|doble helice|nucleotid|genetica|bases nitrogenadas)/,
-    "El ADN almacena información genética en una secuencia de bases: adenina, timina, citosina y guanina. A se empareja con T y C con G. Dos cadenas, con un esqueleto de azúcar y fosfato, forman la doble hélice. En Inicio la hélice sirve de soporte visual para cinco temas de medicamentos: genéricos, disponibilidad, conservación, uso responsable y vencimiento. Esos puntos no son estructuras del ADN ni dianas farmacológicas.",
+    "El ADN almacena información genética en una secuencia de bases: adenina, timina, citosina y guanina. A se empareja con T y C con G. Dos cadenas, con un esqueleto de azúcar y fosfato, forman la doble hélice. En Inicio puedes explorar adenina, timina, citosina, guanina, desoxirribosa y fosfato en las mallas nombradas del modelo. Las fichas relacionan estructura, información genética y lectura responsable de medicamentos; no identifican dianas farmacológicas ni interpretan tu ADN.",
     "inicio",
   ],
   [

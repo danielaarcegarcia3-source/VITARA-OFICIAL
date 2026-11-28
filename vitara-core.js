@@ -54,8 +54,8 @@
   const ROLES = {
     VIS: { nombre: 'Visitante', letra: 'V' },
     CIU: { nombre: 'Ciudadanía', letra: 'C' },
-    AGC: { nombre: 'Agente comunitario', letra: 'A' },
-    POSTA: { nombre: 'Personal de sede', letra: 'P' },
+    AGC: { nombre: 'Gestión', letra: 'A' },
+    POSTA: { nombre: 'Personal de posta o salud', letra: 'P' },
     ADM: { nombre: 'Administrador', letra: 'A' }
   };
 

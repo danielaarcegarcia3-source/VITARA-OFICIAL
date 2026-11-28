@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+// Recorridos de regresión en modo expandido; la nueva navegación inicial se prueba aparte.
+test.beforeEach(async ({ page }) => { await page.addInitScript(() => localStorage.setItem('vitara.navigation.all', 'true')); });
 import { startIsolatedServer } from './helpers/server.mjs';
 let isolated, base;
 test.beforeAll(async()=>{isolated=await startIsolatedServer({ADMIN_USUARIO:'operador_prueba',ADMIN_CLAVE:'clave-solo-pruebas-aisladas'});base=isolated.base;});
@@ -6,12 +8,12 @@ test.afterAll(async()=>{await isolated?.dispose();});
 async function enter(page){await page.emulateMedia({reducedMotion:'reduce'});await page.goto(base);await page.evaluate(()=>document.querySelector('#splash-skip').click());await page.locator('#access-name').fill('Persona de prueba');}
 
 test('perfil consentido persistente, actividad real y eliminación',async({page,request})=>{
-  await enter(page);await page.locator('#access-email').fill('persona@example.test');await page.locator('#access-district').fill('Trujillo');await page.locator('#access-sync').check();await page.locator('#access-form [type=submit]').click();await expect(page.locator('#access')).toBeHidden();
+  await enter(page);await page.locator('#access-demo summary').click();await page.locator('#access-email').fill('persona@example.test');await page.locator('#access-sync').check();await page.locator('#access-form [type=submit]').click();await expect(page.locator('#access')).toBeHidden();
   await page.locator('[data-view-link=mapas]').click();
   await expect(page.locator('#mapa-svg-wrap canvas')).toHaveAttribute('data-regions','25', { timeout: 20000 });
   await page.locator('#participation-open').click();await expect(page.locator('#participation-details')).toContainText('persona@example.test');
   const token=await page.evaluate(()=>JSON.parse(localStorage.getItem('vitara.participant.token')));
-  const profile=await request.get(base+'/api/perfil',{headers:{Authorization:`Bearer ${token}`}});expect((await profile.json()).profile.distrito).toBe('Trujillo');
+  const profile=await request.get(base+'/api/perfil',{headers:{Authorization:`Bearer ${token}`}});expect((await profile.json()).profile.distrito).toBe('');
   page.once('dialog',dialog=>dialog.accept());await page.locator('#participation-delete').click();await expect(page.locator('#access')).toBeVisible();expect((await request.get(base+'/api/perfil',{headers:{Authorization:`Bearer ${token}`}})).status()).toBe(401);
 });
 

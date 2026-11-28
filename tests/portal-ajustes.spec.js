@@ -1,4 +1,6 @@
 import { test, expect } from "@playwright/test";
+// Recorridos de regresión en modo expandido; la nueva navegación inicial se prueba aparte.
+test.beforeEach(async ({ page }) => { await page.addInitScript(() => localStorage.setItem('vitara.navigation.all', 'true')); });
 import { startIsolatedServer } from "./helpers/server.mjs";
 let server, base;
 test.beforeAll(async () => {
@@ -17,7 +19,7 @@ async function enter(page) {
   await expect(page.locator("#access")).toBeHidden();
 }
 
-test("identidad nacional, base apenas cálida y cinco temas de medicamentos sobre ADN", async ({
+test("identidad nacional, base apenas cálida y seis componentes de ADN relacionados con salud", async ({
   page,
 }) => {
   await page.goto(base);
@@ -33,22 +35,16 @@ test("identidad nacional, base apenas cálida y cinco temas de medicamentos sobr
       .locator(".viewport")
       .evaluate((e) => getComputedStyle(e).backgroundColor),
   ).toBe("rgb(250, 248, 243)");
-  await expect(page.locator(".dna-target")).toHaveCount(5);
-  const titles = [
-    "El nombre que importa",
-    "Consultar no es encontrar stock",
-    "Conservar también es cuidar",
-    "Sin automedicación",
-    "Revisa antes de utilizar",
-  ];
-  for (let i = 0; i < 5; i++) {
+  await expect(page.locator(".dna-target")).toHaveCount(6);
+  const titles = ["Adenina:","Timina:","Citosina:","Guanina:","Desoxirribosa:","Fosfato:"];
+  for (let i = 0; i < 6; i++) {
     await page
       .locator(".dna-target")
       .nth(i)
       .evaluate((e) => e.click());
     await expect(page.locator("#dna-panel h3")).toContainText(titles[i]);
     await expect(page.locator("#dna-panel")).toContainText(
-      "El ADN es un soporte visual",
+      "Punto anclado a un vértice",
     );
     await page.locator("#dna-panel-close").click();
   }

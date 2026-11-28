@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { createGoogleAuth } from './google-auth.mjs';
 import { localKnowledge } from './orientation-knowledge.mjs';
 
 const VIEWS = new Set(['inicio','buscar','tablero','mapas','planos','equipos','solicitudes','canales','comunidad','fuentes','tecnologia']);
@@ -17,6 +18,7 @@ async function readJSON(req) {
   try { const value = JSON.parse(text || '{}'); if (!value || typeof value !== 'object' || Array.isArray(value)) throw error(400, 'Objeto JSON requerido.'); return value; } catch { throw error(400, 'JSON inválido.'); }
 }
 export function createServices({ root, onParticipationChange = () => {}, persistence = null }) {
+  const google = createGoogleAuth();
   const dir = path.resolve(process.env.VITARA_DATA_DIR || path.join(root, 'data'));
   if (!persistence) fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
   const file = path.join(dir, 'participacion.json');
@@ -65,10 +67,11 @@ export function createServices({ root, onParticipationChange = () => {}, persist
     const token = bearer(req); const profile = state.profiles.find(p => equal(p.tokenHash, hash(token)) && Date.parse(p.tokenExpires) > Date.now());
     if (!profile) throw error(401, 'El acceso de este dispositivo expiró o no existe.'); return profile;
   }
-  function publicProfile(p) { const { tokenHash, tokenExpires, ...safe } = p; return safe; }
+  function publicProfile(p) { const { tokenHash, tokenExpires, googleSub, ...safe } = p; return safe; }
   const aiConfigured = () => !!(process.env.VITARA_AI_ENDPOINT && process.env.VITARA_AI_MODEL && process.env.VITARA_AI_KEY);
   function reply(res, status, data) { res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }); res.end(JSON.stringify(data)); }
   async function handle(req, res, pathname) {
+    if (await google.handle(req,res,new URL(req.url,'http://vitara.local'))) return true;
     const routes = ['/api/admin/estado','/api/admin/configurar','/api/auth/login','/api/auth/logout','/api/admin/usuarios','/api/perfiles','/api/perfil','/api/perfil/interacciones','/api/orientacion','/api/orientacion/estado'];
     if (!routes.includes(pathname) && !pathname.startsWith('/api/admin/usuarios/')) return false;
     try {
@@ -112,14 +115,17 @@ export function createServices({ root, onParticipationChange = () => {}, persist
       }
       if (pathname === '/api/perfiles' && req.method === 'POST') {
         rate(req, 'profile', 20); await prune(); const body = await readJSON(req);
-        const nombre = clean(body.nombre), email = clean(body.email, 254).toLowerCase(), distrito = clean(body.distrito, 80), rol = String(body.rol || 'CIU');
+        const nombre = clean(body.nombre), email = clean(body.email, 254).toLowerCase(), distrito = '', rol = String(body.rol || 'CIU');
         if (nombre.length < 2 || /^\d{8}$/.test(nombre) || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !['CIU','POSTA','AGC'].includes(rol)) throw error(400, 'Revisa nombre, correo y rol. No uses tu DNI como nombre.');
+        const googleIdentity=google.readIdentity(req);const emailVerified=!!(googleIdentity && googleIdentity.email===email);
+        if(!emailVerified && !/^[^\s@]+@example\.test$/i.test(email))throw error(403,'Para sincronizar una cuenta real, conéctala con Google. Escribir un correo no verifica que exista. Para la prueba local utiliza example.test.');
         if (body.consent !== true) throw error(400, 'Necesitamos tu consentimiento para guardar el perfil y compartir la actividad con administración.');
         let previous = null; try { previous = profileFor(req); } catch { /* Registration does not impersonate an existing email. */ }
-        if (state.profiles.some(p => p.email === email && p.id !== previous?.id)) throw error(409, 'Este correo ya está registrado. Usa el dispositivo original o pide al administrador que libere el registro. No verificamos identidad por correo.');
+        if(emailVerified && !previous)previous=state.profiles.find(p=>p.email===email);
+        if (state.profiles.some(p => p.email === email && p.id !== previous?.id)) throw error(409, 'Este correo ya está registrado. Usa el dispositivo original o pide al administrador que libere el registro. Un correo escrito no prueba identidad; conecta la cuenta real con Google.');
         if (!previous && state.profiles.length >= MAX) throw error(409, 'Las 7 plazas de participación están ocupadas. El administrador puede liberar una plaza. Puedes continuar sin sincronizar tus datos.');
-        const token = previous ? bearer(req) : crypto.randomBytes(32).toString('base64url'); const now = new Date().toISOString();
-        const profile = { id: previous?.id || crypto.randomUUID(), nombre, email, distrito, rol, consentVersion: '2026-11-participacion-v1', consentAt: previous?.consentAt || now, createdAt: previous?.createdAt || now, updatedAt: now, lastSeen: now, interactions: previous?.interactions || [], tokenHash: hash(token), tokenExpires: new Date(Date.now() + RETENTION).toISOString() };
+        const token = previous && !emailVerified ? bearer(req) : crypto.randomBytes(32).toString('base64url'); const now = new Date().toISOString();
+        const profile = { id: previous?.id || crypto.randomUUID(), nombre, email, distrito, rol, emailVerified, identityProvider:emailVerified?'google':'demo', googleSub:emailVerified?googleIdentity.sub:null, consentVersion: '2026-11-participacion-v1', consentAt: previous?.consentAt || now, createdAt: previous?.createdAt || now, updatedAt: now, lastSeen: now, interactions: previous?.interactions || [], tokenHash: hash(token), tokenExpires: new Date(Date.now() + RETENTION).toISOString() };
         await save({ ...state, profiles: [...state.profiles.filter(p => p.id !== profile.id), profile] });
         reply(res, previous ? 200 : 201, { ok: true, token, profile: publicProfile(profile) }); return true;
       }

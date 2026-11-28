@@ -1,5 +1,5 @@
 /**
- * vitara-home.js — hélice de ADN 3D, temas de acceso y uso responsable de medicamentos.
+ * vitara-home.js — hélice de ADN 3D, exploración de componentes reales del modelo y su relación educativa con medicamentos.
  * Usa exclusivamente el GLB real; conserva información accesible si WebGL falla.
  */
 (function () {
@@ -9,84 +9,106 @@
 
   const TARGETS = [
     {
-      id: "generico",
+      id: "adenine",
       n: "01",
-      label: "Genérico y principio activo",
-      title: "El nombre que importa",
+      label: "Adenina · A",
+      title: "Adenina: una de las cuatro bases",
       mechanism:
-        "La denominación común internacional (DCI) identifica el principio activo. Al comparar medicamentos, revisa también concentración, forma farmacéutica y presentación: compartir un nombre no basta.",
+        "La adenina es una base nitrogenada del ADN. En la doble hélice se empareja con la timina. La secuencia de bases participa en el almacenamiento de información genética.",
       clinical:
-        "Consulta a un profesional antes de sustituir un tratamiento. El catálogo ofrece referencias, no recomendaciones individuales.",
-      link: "Comparar referencias",
+        "Algunos cambios en la secuencia pueden influir en cómo el organismo responde a ciertos medicamentos. Esta forma 3D no identifica variantes ni permite elegir un tratamiento.",
+      color: "#ff9f78",
       view: "buscar",
-      query: "paracetamol",
-      source:
-        "Orientación educativa sobre medicamentos · verifica siempre el producto y la fuente oficial.",
-      note: "El ADN es un soporte visual: este punto trata de medicamentos, no identifica una parte de la molécula ni una diana farmacológica.",
-    },
-    {
-      id: "disponibilidad",
-      n: "02",
-      label: "Disponibilidad y verificación",
-      title: "Consultar no es encontrar stock",
-      mechanism:
-        "Una cifra regional de disponibilidad no confirma existencias en una farmacia concreta. Revisa la fuente y el corte, y confirma con el establecimiento antes de desplazarte.",
-      clinical:
-        "Si necesitas aclarar un recurso, puedes enviar una solicitud de verificación al operador de la demostración. No se envía automáticamente a una sede.",
-      link: "Pedir verificación",
-      view: "solicitudes",
       query: "",
+      link: "Explorar medicamentos",
       source:
-        "Orientación educativa sobre medicamentos · verifica siempre el producto y la fuente oficial.",
-      note: "El ADN es un soporte visual: este punto trata de medicamentos, no identifica una parte de la molécula ni una diana farmacológica.",
+        "NHGRI · conceptos de ADN y farmacogenómica. Clasificación visual según los nombres de componentes del modelo original.",
+      note: "Punto anclado a un vértice de una malla identificada por su nombre en el archivo. Colores educativos, no identificación atómica certificada, diagnóstico ni recomendación terapéutica.",
     },
     {
-      id: "conservacion",
-      n: "03",
-      label: "Conservación segura",
-      title: "Conservar también es cuidar",
+      id: "thymine",
+      n: "02",
+      label: "Timina · T",
+      title: "Timina: la pareja de la adenina",
       mechanism:
-        "Sigue las condiciones del envase y del fabricante. Protege los medicamentos según su indicación de temperatura, luz y humedad, y mantenlos fuera del alcance de niños.",
+        "La timina es una base del ADN y forma pares con la adenina. Un nucleótido no es solo una base: también contiene desoxirribosa y fosfato.",
       clinical:
-        "No todos necesitan refrigeración. Las condiciones de productos de cadena de frío deben verificarse específicamente; no se deducen de este modelo.",
-      link: "Revisar fuentes",
+        "El principio activo de un medicamento no se deduce de una base del ADN. Para consultar medicamentos, utiliza nombre, concentración y forma farmacéutica, no los colores de esta molécula.",
+      color: "#f3d46f",
+      view: "buscar",
+      query: "",
+      link: "Explorar medicamentos",
+      source:
+        "NHGRI · conceptos de ADN y farmacogenómica. Clasificación visual según los nombres de componentes del modelo original.",
+      note: "Punto anclado a un vértice de una malla identificada por su nombre en el archivo. Colores educativos, no identificación atómica certificada, diagnóstico ni recomendación terapéutica.",
+    },
+    {
+      id: "cytosine",
+      n: "03",
+      label: "Citosina · C",
+      title: "Citosina: complementariedad con guanina",
+      mechanism:
+        "La citosina es una base nitrogenada que se empareja con la guanina. El emparejamiento complementario contribuye a la organización de la doble hélice.",
+      clinical:
+        "La genética es solo uno de los factores que pueden influir en la respuesta a medicamentos. No todos los medicamentos actúan sobre el ADN y este modelo no representa una diana farmacológica.",
+      color: "#74bbff",
+      view: "buscar",
+      query: "",
+      link: "Explorar medicamentos",
+      source:
+        "NHGRI · conceptos de ADN y farmacogenómica. Clasificación visual según los nombres de componentes del modelo original.",
+      note: "Punto anclado a un vértice de una malla identificada por su nombre en el archivo. Colores educativos, no identificación atómica certificada, diagnóstico ni recomendación terapéutica.",
+    },
+    {
+      id: "guanine",
+      n: "04",
+      label: "Guanina · G",
+      title: "Guanina: información en secuencia",
+      mechanism:
+        "La guanina se empareja con la citosina. Es el orden de las bases, y no una base aislada, lo que permite codificar información genética.",
+      clinical:
+        "Una prueba farmacogenética requiere indicación e interpretación profesional cuando corresponde. El visor no analiza tu ADN ni sustituye una evaluación clínica.",
+      color: "#b6a0ff",
+      view: "buscar",
+      query: "",
+      link: "Explorar medicamentos",
+      source:
+        "NHGRI · conceptos de ADN y farmacogenómica. Clasificación visual según los nombres de componentes del modelo original.",
+      note: "Punto anclado a un vértice de una malla identificada por su nombre en el archivo. Colores educativos, no identificación atómica certificada, diagnóstico ni recomendación terapéutica.",
+    },
+    {
+      id: "sugar",
+      n: "05",
+      label: "Desoxirribosa",
+      title: "Desoxirribosa: el azúcar del ADN",
+      mechanism:
+        "La desoxirribosa es un azúcar de cinco carbonos. Junto con el fosfato forma el esqueleto de cada cadena y se une a una base para formar parte de un nucleótido.",
+      clinical:
+        "Comprender la estructura ayuda a distinguir información científica de una promesa comercial. Una representación de ADN no demuestra que un producto sea eficaz o seguro.",
+      color: "#6fe0bf",
       view: "fuentes",
       query: "",
+      link: "Revisar fuentes",
       source:
-        "Orientación educativa sobre medicamentos · verifica siempre el producto y la fuente oficial.",
-      note: "El ADN es un soporte visual: este punto trata de medicamentos, no identifica una parte de la molécula ni una diana farmacológica.",
+        "NHGRI · conceptos de ADN y farmacogenómica. Clasificación visual según los nombres de componentes del modelo original.",
+      note: "Punto anclado a un vértice de una malla identificada por su nombre en el archivo. Colores educativos, no identificación atómica certificada, diagnóstico ni recomendación terapéutica.",
     },
     {
-      id: "uso-seguro",
-      n: "04",
-      label: "Uso responsable",
-      title: "Sin automedicación ni dosis por chat",
+      id: "phosphate",
+      n: "06",
+      label: "Fosfato",
+      title: "Fosfato: continuidad de la cadena",
       mechanism:
-        "Un medicamento puede tener contraindicaciones e interacciones. No compartas recetas ni utilices antibióticos para cualquier malestar: una evaluación profesional debe decidir cuándo corresponden.",
+        "Los grupos fosfato enlazan azúcares consecutivos mediante enlaces fosfodiéster. Azúcar, fosfato y base constituyen las partes de un nucleótido.",
       clinical:
-        "VITARA no prescribe, calcula dosis ni sustituye una consulta. Para orientación general revisa los canales oficiales.",
-      link: "Buscar orientación",
-      view: "canales",
+        "El acceso seguro a medicamentos necesita información trazable: fuente, fecha y confirmación de disponibilidad. La estructura molecular no informa sobre existencias en una farmacia.",
+      color: "#f59fce",
+      view: "fuentes",
       query: "",
+      link: "Revisar fuentes",
       source:
-        "Orientación educativa sobre medicamentos · verifica siempre el producto y la fuente oficial.",
-      note: "El ADN es un soporte visual: este punto trata de medicamentos, no identifica una parte de la molécula ni una diana farmacológica.",
-    },
-    {
-      id: "vencimiento",
-      n: "05",
-      label: "Vencimiento y trazabilidad",
-      title: "Revisa antes de utilizar",
-      mechanism:
-        "Comprueba fecha de vencimiento, envase íntegro, nombre, concentración e instrucciones. Compra o recibe medicamentos por canales autorizados.",
-      clinical:
-        "Si observas un producto sospechoso, no lo uses y consulta al químico farmacéutico o al canal oficial de DIGEMID. Los precios del catálogo no acreditan autenticidad ni existencias.",
-      link: "Explorar el catálogo",
-      view: "buscar",
-      query: "",
-      source:
-        "Orientación educativa sobre medicamentos · verifica siempre el producto y la fuente oficial.",
-      note: "El ADN es un soporte visual: este punto trata de medicamentos, no identifica una parte de la molécula ni una diana farmacológica.",
+        "NHGRI · conceptos de ADN y farmacogenómica. Clasificación visual según los nombres de componentes del modelo original.",
+      note: "Punto anclado a un vértice de una malla identificada por su nombre en el archivo. Colores educativos, no identificación atómica certificada, diagnóstico ni recomendación terapéutica.",
     },
   ];
 
@@ -125,13 +147,13 @@
       );
     panel.innerHTML = `
       <div class="dna-panel__head">
-        <div><p class="dna-panel__n">MEDICAMENTOS / ${t.n} · guía educativa</p><h3>${t.title}</h3></div>
-        <button class="dna-panel__close" type="button" id="dna-panel-close" aria-label="Cerrar información de medicamentos"><svg class="i i--sm"><use href="#i-close"/></svg></button>
+        <div><p class="dna-panel__n">ADN / ${t.n} · estructura y salud</p><h3>${t.title}</h3></div>
+        <button class="dna-panel__close" type="button" id="dna-panel-close" aria-label="Cerrar información del componente"><svg class="i i--sm"><use href="#i-close"/></svg></button>
       </div>
       <div class="dna-panel__body">
         <div><p class="dna-panel__k">Qué conviene saber</p><p>${t.mechanism}</p></div>
-        <div><p class="dna-panel__k">Antes de tomar una decisión</p><p>${t.clinical}</p></div>
-        <div class="dna-panel__actions"><button class="btn btn--primary btn--sm" type="button" data-dna-go="${t.view}" data-dna-query="${t.query}">${t.link} ↗</button></div><p class="source">${t.source} <a href="https://www.digemid.minsa.gob.pe/" target="_blank" rel="noopener noreferrer">DIGEMID · portal oficial ↗</a></p>
+        <div><p class="dna-panel__k">Relación con medicamentos y acceso</p><p>${t.clinical}</p></div>
+        <div class="dna-panel__actions"><button class="btn btn--primary btn--sm" type="button" data-dna-go="${t.view}" data-dna-query="${t.query}">${t.link} ↗</button></div><p class="source">${t.source} <a href="https://www.genome.gov/es" target="_blank" rel="noopener noreferrer">NHGRI · información genética ↗</a></p>
         <p class="dna-panel__note">${t.note}</p>
       </div>`;
     panel.hidden = false;
@@ -149,7 +171,11 @@
     // En pantallas estrechas, bajamos suavemente hasta el panel.
     if (window.matchMedia("(max-width: 1180px)").matches) {
       setTimeout(
-        () => panel.scrollIntoView({ block: "nearest", behavior: "smooth" }),
+        () =>
+          panel.scrollIntoView({
+            block: "nearest",
+            behavior: motionReduced() ? "instant" : "smooth",
+          }),
         60,
       );
     }
@@ -173,7 +199,7 @@
     cont.innerHTML = TARGETS.map(
       (t) => `
       <button class="dna-target" type="button" aria-label="${t.label}" title="${t.label}" data-target="${t.id}" aria-pressed="false" aria-controls="dna-panel">
-        <span class="dna-target__n">${t.n}</span><span>${t.label}</span><span class="dna-target__dot" aria-hidden="true"></span>
+        <span class="dna-target__n" style="--pin-color:${t.color}">${t.n}</span><span>${t.label}</span><span class="dna-target__dot" aria-hidden="true"></span>
       </button>`,
     ).join("");
     cont.addEventListener("click", (e) => {
@@ -184,52 +210,74 @@
     });
   }
 
-  function materialPorNombre(nombre) {
-    const n = nombre.toLowerCase();
-    const base = { roughness: 0.38, metalness: 0.03, emissiveIntensity: 0.05 };
-    if (n.includes("hydrogen") || n.includes("bond") || n.includes("hidr"))
-      return new THREE.MeshStandardMaterial({
-        color: 0xbfd8cb,
-        roughness: 0.5,
-        metalness: 0,
-        transparent: true,
-        opacity: 0.55,
-      });
-    if (n.includes("adenine"))
-      return new THREE.MeshStandardMaterial({
-        color: 0xf09a8b,
-        emissive: 0x3a120e,
-        ...base,
-      });
-    if (n.includes("thymine"))
-      return new THREE.MeshStandardMaterial({
-        color: 0xf0c46a,
-        emissive: 0x3b2a08,
-        ...base,
-      });
-    if (n.includes("guanine"))
-      return new THREE.MeshStandardMaterial({
-        color: 0x7ac9a9,
-        emissive: 0x0c2a20,
-        ...base,
-      });
-    if (n.includes("cytosine"))
-      return new THREE.MeshStandardMaterial({
-        color: 0x86b7e8,
-        emissive: 0x0b1e33,
-        ...base,
-      });
-    if (n.includes("phosphate") || n.includes("pentose") || n.includes("sugar"))
-      return new THREE.MeshStandardMaterial({
-        color: 0xe3eee8,
-        roughness: 0.55,
-        metalness: 0.02,
-      });
+  function motionReduced() {
+    return (
+      matchMedia("(prefers-reduced-motion:reduce)").matches ||
+      document.documentElement.dataset.movimiento === "reducido"
+    );
+  }
+  function component(mesh) {
+    let node = mesh;
+    while (node) {
+      const name = node.name.toLowerCase();
+      if (name.startsWith("deoxyribose_sugar")) return "sugar";
+      for (const key of [
+        "adenine",
+        "thymine",
+        "cytosine",
+        "guanine",
+        "phosphate",
+      ])
+        if (name.startsWith(key + "_")) return key;
+      if (name.startsWith("hydrogen_bonds")) return "bonds";
+      node = node.parent;
+    }
+    return "other";
+  }
+  function materialPorComponente(key) {
+    const topic = TARGETS.find((t) => t.id === key);
     return new THREE.MeshStandardMaterial({
-      color: 0xc9dad2,
-      roughness: 0.5,
-      metalness: 0.03,
+      color: topic?.color || "#9ebec9",
+      roughness: 0.32,
+      metalness: 0.08,
+      emissive: topic?.color || "#23424b",
+      emissiveIntensity: topic?.color?.length ? 0.12 : 0.03,
+      transparent: key === "bonds",
+      opacity: key === "bonds" ? 0.55 : 1,
     });
+  }
+  function anchors() {
+    state.anchors = TARGETS.map((topic, index) => {
+      let best = null,
+        score = Infinity;
+      const desiredY = 2.7 - index * 0.93;
+      state.model.updateMatrixWorld(true);
+      for (const mesh of state.meshes.filter(
+        (m) => m.userData.component === topic.id,
+      )) {
+        const positions = mesh.geometry.attributes.position;
+        for (
+          let i = 0;
+          i < positions.count;
+          i += Math.max(1, Math.floor(positions.count / 1500))
+        ) {
+          const local = new THREE.Vector3().fromBufferAttribute(positions, i);
+          const world = mesh.localToWorld(local.clone());
+          const value =
+            Math.abs(world.y - desiredY) +
+            Math.abs(world.x) * 0.04 -
+            world.z * 0.015;
+          if (value < score) {
+            score = value;
+            best = { mesh, local };
+          }
+        }
+      }
+      return best;
+    });
+    $("#dna-canvas").dataset.anchored = String(
+      state.anchors.filter(Boolean).length,
+    );
   }
 
   function iluminar() {
@@ -309,7 +357,8 @@
         if (p.name) nombres.push(p.name);
         p = p.parent;
       }
-      m.material = materialPorNombre(nombres.join(" "));
+      m.userData.component = component(m);
+      m.material = materialPorComponente(m.userData.component);
       m.geometry.computeBoundingBox();
       const c = new THREE.Vector3();
       m.geometry.boundingBox.getCenter(c);
@@ -383,6 +432,7 @@
           state.modelEscala = contenedor.scale.x;
           contenedor.scale.setScalar(state.modelEscala * 0.9);
           prepararDesdoblamiento(contenedor);
+          anchors();
           const caja = new THREE.Box3().setFromObject(contenedor);
           const tam = caja.getSize(new THREE.Vector3());
           const radio = Math.max(tam.x, tam.z) * 0.5 + 0.2;
@@ -432,7 +482,12 @@
           rotY: 0.15,
           zoom: 1,
           autoRotate: true,
+          rotateSpeed: 1.15,
         });
+        canvas.dataset.cargado = "1";
+        state.orbit.controls.rotateSpeed = 1.15;
+        state.orbit.controls.minPolarAngle = 0.02;
+        state.orbit.controls.maxPolarAngle = Math.PI - 0.02;
       };
       cargar();
 
@@ -471,7 +526,7 @@
               c.userData.hebra = c.position.x >= 0 ? 1 : -1;
           });
         }
-        const intensidadHover = state.hover ? 0.34 : 0;
+        const intensidadHover = state.hover ? 0.16 : 0;
         if (state.rim) {
           const objetivoLuz = state.hover ? 46 : 32;
           state.rim.intensity += (objetivoLuz - state.rim.intensity) * 0.06;
@@ -485,7 +540,7 @@
           if (!reduced) state.particles.rotation.y -= 0.0007;
           const mat = state.particles.material;
           const base = typeof mat.opacity === "number" ? mat.opacity : 0.55;
-          mat.opacity += (base + intensidadHover - mat.opacity) * 0.06;
+          mat.opacity += (0.4 + intensidadHover - mat.opacity) * 0.06;
         }
         if (state.rings.length) {
           state.rings.forEach((r, i) => {
@@ -507,16 +562,36 @@
               (objetivoEscala - escalaActual) * (reduced ? 1 : 0.07),
           );
         }
+        if (
+          state.ready &&
+          state.tilt &&
+          state.orbit.controls.autoRotate &&
+          !reduced &&
+          !state.hover &&
+          !document.hidden &&
+          !document.body.classList.contains("access-locked")
+        ) {
+          const offset = camera.position
+            .clone()
+            .sub(state.orbit.controls.target);
+          const spherical = new THREE.Spherical().setFromVector3(offset);
+          spherical.phi = Math.PI / 2 + Math.sin(t * 0.25) * 0.45;
+          camera.position
+            .copy(state.orbit.controls.target)
+            .add(offset.setFromSpherical(spherical));
+          state.orbit.controls.update();
+        }
         if (state.ready) {
           pivot.updateMatrixWorld(true);
           document.querySelectorAll(".dna-target").forEach((button, index) => {
-            const angle = index * 1.8;
-            const point = new THREE.Vector3(
-              Math.cos(angle) * 1.2,
-              3.1 - index * 1.55,
-              Math.sin(angle) * 1.2,
-            );
-            point.applyMatrix4(pivot.matrixWorld).project(camera);
+            const anchor = state.anchors?.[index];
+            if (!anchor || !anchor.mesh.visible) {
+              button.style.visibility = "hidden";
+              return;
+            }
+            const point = anchor.mesh
+              .localToWorld(anchor.local.clone())
+              .project(camera);
             button.style.left = `${(point.x * 0.5 + 0.5) * 100}%`;
             button.style.top = `${(-point.y * 0.5 + 0.5) * 100}%`;
             button.style.visibility =
@@ -572,9 +647,153 @@
     controles();
   }
 
+  function extendedControls() {
+    const stage = $("#dna-stage"),
+      visual = $(".home-visual");
+    let returnFocus = null,
+      previousOverflow = "";
+    const tools = document.createElement("div");
+    tools.className = "dna-lab-tools";
+    tools.innerHTML =
+      '<button type="button" id="dna-fullscreen" aria-pressed="false">Ampliar pantalla ⛶</button><button type="button" id="dna-tilt" aria-pressed="false">Órbita vertical</button><button type="button" id="dna-labels" aria-pressed="true">Puntos visibles</button><label>Explorar por capa<select id="dna-layer"><option value="all">Molécula completa</option><option value="bases">Bases A · T · C · G</option><option value="backbone">Azúcar y fosfato</option></select></label>';
+    stage.append(tools);
+    const hint = document.createElement("p");
+    hint.className = "dna-learning-hint";
+    hint.innerHTML =
+      "<strong>Selecciona un número o toca un componente.</strong> Arrastra horizontal o verticalmente para girar. Usa + y − para acercarte. Los colores distinguen componentes, no medicamentos.";
+    visual.before(hint);
+    function expanded(on) {
+      visual.classList.toggle("dna-expanded", on);
+      tools
+        .querySelector("#dna-fullscreen")
+        .setAttribute("aria-pressed", String(on));
+      tools.querySelector("#dna-fullscreen").textContent = on
+        ? "Cerrar ampliación ×"
+        : "Ampliar pantalla ⛶";
+      if (on) {
+        previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        visual.setAttribute("role", "dialog");
+        visual.setAttribute("aria-modal", "true");
+        visual.setAttribute("aria-label", "Laboratorio ADN ampliado");
+        returnFocus = document.activeElement;
+        tools.querySelector("#dna-fullscreen").focus();
+      } else {
+        document.body.style.overflow = previousOverflow;
+        visual.removeAttribute("role");
+        visual.removeAttribute("aria-modal");
+        visual.removeAttribute("aria-label");
+        returnFocus?.focus();
+      }
+      window.dispatchEvent(new Event("resize"));
+    }
+    tools
+      .querySelector("#dna-fullscreen")
+      .addEventListener("click", async () => {
+        if (visual.classList.contains("dna-expanded")) {
+          if (document.fullscreenElement)
+            await document.exitFullscreen().catch(() => {});
+          expanded(false);
+        } else {
+          expanded(true);
+          await visual.requestFullscreen?.().catch(() => {});
+        }
+      });
+    document.addEventListener("fullscreenchange", () => {
+      if (
+        !document.fullscreenElement &&
+        visual.classList.contains("dna-expanded")
+      )
+        expanded(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && visual.classList.contains("dna-expanded")) {
+        if (document.fullscreenElement)
+          document.exitFullscreen().catch(() => {});
+        expanded(false);
+      }
+      if (event.key === "Tab" && visual.classList.contains("dna-expanded")) {
+        const focusable = [
+          ...visual.querySelectorAll("button,select,a[href],canvas[tabindex]"),
+        ].filter(
+          (el) =>
+            el.getClientRects().length &&
+            getComputedStyle(el).visibility !== "hidden",
+        );
+        if (!focusable.length) return;
+        const first = focusable[0],
+          last = focusable.at(-1);
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    });
+    tools.querySelector("#dna-tilt").addEventListener("click", (event) => {
+      state.tilt = !state.tilt;
+      event.currentTarget.setAttribute("aria-pressed", String(state.tilt));
+    });
+    tools.querySelector("#dna-labels").addEventListener("click", (event) => {
+      const on = event.currentTarget.getAttribute("aria-pressed") !== "true";
+      event.currentTarget.setAttribute("aria-pressed", String(on));
+      $("#dna-targets").hidden = !on;
+    });
+    tools.querySelector("#dna-layer").addEventListener("change", (event) => {
+      const layer = event.target.value;
+      state.meshes.forEach((mesh) => {
+        mesh.visible =
+          layer === "all" ||
+          (layer === "bases"
+            ? ["adenine", "thymine", "cytosine", "guanine"].includes(
+                mesh.userData.component,
+              )
+            : ["sugar", "phosphate"].includes(mesh.userData.component));
+      });
+    });
+    let pointer;
+    const canvas = $("#dna-canvas");
+    canvas.addEventListener("pointerdown", (event) => {
+      pointer = [event.clientX, event.clientY];
+    });
+    canvas.addEventListener("pointerup", (event) => {
+      if (
+        !pointer ||
+        Math.hypot(event.clientX - pointer[0], event.clientY - pointer[1]) >
+          6 ||
+        !state.ready
+      )
+        return;
+      const box = canvas.getBoundingClientRect();
+      const ray = new THREE.Raycaster();
+      ray.setFromCamera(
+        new THREE.Vector2(
+          ((event.clientX - box.left) / box.width) * 2 - 1,
+          (-(event.clientY - box.top) / box.height) * 2 + 1,
+        ),
+        state.camera,
+      );
+      const hit = ray.intersectObjects(
+        state.meshes.filter((mesh) => mesh.visible),
+        false,
+      )[0];
+      if (hit && TARGETS.some((t) => t.id === hit.object.userData.component))
+        actualizarPanel(hit.object.userData.component);
+    });
+  }
   function iniciar() {
     renderTargets();
     iniciarEscena();
+    extendedControls();
+    // Libera el contexto al abandonar la página, sin romper la restauración bfcache.
+    window.addEventListener('pagehide',event=>{
+      if(event.persisted)return;
+      cancelAnimationFrame(state.raf);state.resizeObserver?.disconnect();state.orbit?.dispose();
+      if(state.scene)window.VitaraGLB?.dispose(state.scene);
+      state.renderer?.dispose();state.renderer?.forceContextLoss();
+    },{once:true});
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && state.selected) cerrarPanel();
     });

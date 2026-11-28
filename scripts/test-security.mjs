@@ -78,7 +78,7 @@ try {
   const tickets = await Promise.all(Array.from({length:7},(_,i)=>api('/api/solicitudes','POST',{item:`Recurso de prueba ${i+1}`,alias:`Equipo prueba ${i+1}`,sede:'Sede de demostración',idempotencyKey:crypto.randomUUID()})));
   for (const ticket of tickets) check(ticket.status,201,'solicitud concurrente persistida');
   check(new Set(tickets.map(r=>r.data.solicitud.codigo)).size,7,'códigos únicos');
-  const key = crypto.randomUUID(); const fields = {item:'Reintento de prueba',alias:'Equipo prueba',idempotencyKey:key};
+  const key = crypto.randomUUID(); const fields = {cantidad:4,unidad:'equipos',pregunta:'accesorios',imagenRecurso:'monitor',item:'Reintento de prueba',alias:'Equipo prueba',idempotencyKey:key};
   const first = await api('/api/solicitudes','POST',fields); const second = await api('/api/solicitudes','POST',fields);
   check(first.status,201,'primer envío'); check(second.status,200,'reintento idempotente'); check(second.data.solicitud.codigo,first.data.solicitud.codigo,'mismo código solo con clave privada de reintento');
   const independent = await api('/api/solicitudes','POST',{...fields,idempotencyKey:crypto.randomUUID()}); check(independent.status,201,'mismo texto no revela código de otro visitante');
@@ -107,6 +107,7 @@ try {
   check((await api('/api/admin/usuarios','GET',undefined,fresh)).data.users.length,5,'perfiles persistentes tras reinicio');
   check((await api('/api/solicitudes','GET',undefined,fresh)).data.total,9,'solicitudes persistentes tras reinicio');
   check((await api('/api/solicitudes?codigo='+code)).data.solicitud.estado,'respondido','respuesta persistente tras reinicio');
+  const resource=(await api('/api/solicitudes?codigo='+code)).data.solicitud;check(resource.cantidad,4,'cantidad tras backup/restauración y reinicio');check(resource.unidad,'equipos','unidad persistente');check(resource.pregunta,'accesorios','pregunta persistente');check(resource.imagenRecurso,'monitor','referencia visual controlada persistente');
   check((await api('/api/auth/logout','POST',{},fresh)).status,200,'logout');
   check((await api('/api/admin/usuarios','GET',undefined,fresh)).status,401,'token invalidado');
   const attempts = []; for (let i=0;i<11;i++) attempts.push((await api('/api/auth/login','POST',{usuario:'incorrecto',contrasena:'incorrecta'})).status);

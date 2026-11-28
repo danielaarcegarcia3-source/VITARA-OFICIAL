@@ -64,7 +64,7 @@ try {
   check((await api('/api/perfil','GET',undefined,token)).data.profile.interactions.length,3,'sin pérdidas');
   const tickets = await Promise.all(Array.from({length:7},(_,i)=>api('/api/solicitudes','POST',{item:`Recurso ensayo ${i}`,alias:'Equipo ensayo',idempotencyKey:crypto.randomUUID()})));
   for (const ticket of tickets) check(ticket.status,201,'siete solicitudes concurrentes');
-  const fields={item:'Recurso reintento',idempotencyKey:crypto.randomUUID()};
+  const fields={cantidad:4,unidad:'equipos',pregunta:'accesorios',imagenRecurso:'monitor',item:'Recurso reintento',idempotencyKey:crypto.randomUUID()};
   const ticket=await api('/api/solicitudes','POST',fields); check(ticket.status,201,'creación'); const code=ticket.data.solicitud.codigo;
   const retry=await api('/api/solicitudes','POST',fields); check(retry.status,200,'idempotencia'); check(retry.data.solicitud.codigo,code,'mismo código');
   check((await api('/api/solicitudes/'+code,'PATCH',{estado:'respondido',respuesta:'Respuesta de ensayo.'},admin)).status,200,'respuesta');
@@ -77,6 +77,7 @@ try {
   check((await api('/api/admin/usuarios','GET',undefined,fresh)).data.users.length,7,'perfiles tras reinicio');
   check((await api('/api/perfil','GET',undefined,token)).data.profile.interactions.length,3,'actividad tras reinicio');
   check((await api('/api/solicitudes?codigo='+code)).data.solicitud.respuesta,'Respuesta de ensayo.','solicitud tras reinicio');
+  const resource=(await api('/api/solicitudes?codigo='+code)).data.solicitud;check(resource.cantidad,4,'cantidad tras backup/restauración y reinicio');check(resource.unidad,'equipos','unidad persistente');check(resource.pregunta,'accesorios','pregunta persistente');check(resource.imagenRecurso,'monitor','referencia visual controlada persistente');
   check((await api('/api/perfil','DELETE',undefined,token)).status,200,'eliminación propia');
   check((await api('/api/admin/usuarios/'+profiles[1].data.profile.id,'DELETE',undefined,fresh)).status,200,'eliminación administrativa');
   check((await api('/api/admin/usuarios','GET',undefined,fresh)).data.users.length,5,'dos eliminaciones guardadas');

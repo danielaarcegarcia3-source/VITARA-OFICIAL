@@ -35,17 +35,10 @@
     if (!ov) return;
     const rol = (perfil && perfil.rol) || 'CIU';
     $$('#onb-roles [data-rol]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.rol === rol)));
-    const dist = $('#onb-distrito');
-    if (dist && perfil && perfil.distrito) {
-      const opt = Array.from(dist.options).find((o) => o.value === perfil.distrito);
-      if (opt) dist.value = opt.value;
-    }
     const tx = $('#onb-texto');
     const mv = $('#onb-movimiento');
     if (tx) tx.checked = !!V.A11Y.texto;
     if (mv) mv.checked = !!V.A11Y.movimiento;
-    const ce = $('#onb-correo');
-    if (ce) ce.value = (perfil && perfil.contacto && perfil.contacto.correo) || '';
     ov.hidden = false;
     setTimeout(() => $('#onb-roles [aria-pressed="true"]')?.focus({ preventScroll: true }), 80);
   }
@@ -65,14 +58,15 @@
         ...perfil,
         nombre: perfil?.nombre || '',
         rol: (rolBtn && rolBtn.dataset.rol) || 'CIU',
-        distrito: $('#onb-distrito')?.value || null,
-        contacto: { correo: $('#onb-correo')?.value?.trim() || null },
+        distrito: null,
         creado: (perfil && perfil.creado) || new Date().toISOString()
       };
       V.setA11y('texto', !!$('#onb-texto')?.checked);
       V.setA11y('movimiento', !!$('#onb-movimiento')?.checked);
     }
+    delete perfil.contacto;
     store.set(PERFIL_KEY, perfil);
+    window.dispatchEvent(new Event('vitara:profile'));
     aplicarPerfil();
     cerrarOnboarding();
     toast(saltar ? 'Puedes personalizar tu perfil cuando quieras.' : 'Perfil guardado en este dispositivo.');
@@ -145,9 +139,9 @@
     el.setAttribute('aria-label', 'Tu perfil y preferencias');
     el.innerHTML = `<div class="popover__head"><strong>${esc(info.nombre)}</strong><button class="icon-btn" type="button" data-cerrar-pop aria-label="Cerrar" style="width:26px;height:26px">${icon('close', 'i--sm')}</button></div>
       <div class="popover__body" style="padding:14px">
-        <dl class="kv"><dt>Nombre</dt><dd>${esc(perfil?.nombre || 'Sin definir')}</dd><dt>Perfil</dt><dd>${esc(info.nombre)}</dd><dt>Territorio</dt><dd>${esc((perfil && perfil.distrito) || 'Sin definir')}</dd><dt>Datos</dt><dd>Solo en este dispositivo</dd></dl>
+        <dl class="kv"><dt>Nombre</dt><dd>${esc(perfil?.nombre || 'Sin definir')}</dd><dt>Perfil</dt><dd>${esc(info.nombre)}</dd><dt>Datos</dt><dd>Solo en este dispositivo</dd></dl>
         <div class="inspector-actions" style="margin-top:12px">
-          <button class="btn btn--soft btn--sm" type="button" data-perfil-edit>${icon('settings', 'i--sm')} Cambiar perfil y territorio</button>
+          <button class="btn btn--soft btn--sm" type="button" data-perfil-edit>${icon('settings', 'i--sm')} Cambiar experiencia y lectura</button>
           <button class="btn btn--ghost btn--sm" type="button" data-perfil-a11y>${icon('accessibility', 'i--sm')} Accesibilidad</button>
           <button class="btn btn--ghost btn--sm" type="button" data-session-logout>Cerrar sesión local</button>
           <button class="btn btn--danger btn--sm" type="button" data-perfil-reset>${icon('close', 'i--sm')} Borrar datos locales</button>
@@ -385,7 +379,7 @@
     });
 
     bindOnboarding();
-    window.addEventListener('vitara:session', () => { perfil = store.get(PERFIL_KEY, null); aplicarPerfil(); });
+    for(const event of ['vitara:session','vitara:profile'])window.addEventListener(event, () => { perfil = store.get(PERFIL_KEY, null); aplicarPerfil(); });
     conectar();
 
     window.addEventListener('vitara:go', (e) => {

@@ -1,3 +1,5 @@
+> **Acceso Gmail:** configuración privada y prueba real pendiente en [GOOGLE-ACCESO.md](GOOGLE-ACCESO.md). El modo visitante no se bloquea si Google no está configurado.
+
 # VITARA · Conexión y participación
 
 ## Actualizar esta revisión del portal en Render
@@ -58,10 +60,10 @@ Una vez creado el administrador, el alta se cierra y la contraseña queda proteg
 ## Datos y capacidad
 
 - Hasta **7 perfiles simultáneamente almacenados**, sin registros de ejemplo. El octavo registro recibe un mensaje de capacidad; puede continuar sin sincronizar. Administración puede eliminar perfiles para liberar plazas.
-- Formulario: nombre, correo para la sincronización, rol y territorio opcional. No se solicitan DNI, edad, teléfono, diagnósticos ni historia clínica.
-- Consentimiento explícito, desmarcado inicialmente. Sin él se permite explorar sin enviar el perfil. No se realiza verificación de correo; no representa una identidad institucional validada.
+- Formulario: alias, cuenta Gmail verificada (o correo de prueba example.test) y experiencia elegida. No se recoge distrito. No se solicitan DNI, edad, teléfono, diagnósticos ni historia clínica.
+- Consentimiento explícito, desmarcado inicialmente. Sin él se permite explorar sin enviar el perfil. Las cuentas Gmail reales requieren verificación de Google según [GOOGLE-ACCESO.md](GOOGLE-ACCESO.md); los correos de prueba y perfiles históricos no se verifican. No representa una identidad institucional validada.
 - Perfil y actividad en `data/participacion.json`, escritura atómica, permisos de archivo 0600. La carpeta está excluida de Git y bloqueada por HTTP. `VITARA_DATA_DIR` permite situarla en un volumen privado persistente. No usar múltiples procesos sobre el mismo archivo: para una producción escalable se requiere una base de datos transaccional.
-- Solo administración autenticada recibe la lista de nombres y correos. Cada dispositivo conserva una clave aleatoria para consultar y eliminar su propio perfil. No es recuperación de cuenta por correo: si se pierde esa clave, administración debe liberar el registro. Proteger el dispositivo; no compartir ni exportar la clave.
+- Solo administración autenticada recibe la lista de nombres y correos. Cada dispositivo conserva una clave aleatoria para consultar y eliminar su propio perfil. Una cuenta Gmail verificada puede volver a conectar con Google para recuperar su perfil y rotar la clave. En perfiles de prueba o históricos sin verificar, si se pierde la clave, administración debe liberar el registro. Proteger el dispositivo; no compartir ni exportar la clave.
 - El panel recibe avisos SSE sin datos personales y consulta los registros con autorización, con respaldo cada 15 segundos: módulos visitados, modelos abiertos, mapa, tema y uso del chat (solo modo local/IA). No guarda texto de búsquedas ni mensajes del chat. Máximo 200 interacciones por perfil. Una señal cada minuto permite indicar presencia reciente; no equivale a personas únicas ni a concurrencia certificada.
 - Purga de perfiles sin actividad durante 30 días, al arrancar y cada hora; además se comprueba al listar/registrar. Sesiones y límites de peticiones viven solo en memoria.
 - `Participación` permite revisar el perfil y eliminarlo del servidor y del dispositivo. Cerrar sesión NO elimina el registro remoto. El borrado local de Privacidad NO borra el servidor y advierte sobre la pérdida de clave.

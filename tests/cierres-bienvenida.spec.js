@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+// Recorridos de regresión en modo expandido; la nueva navegación inicial se prueba aparte.
+test.beforeEach(async ({ page }) => { await page.addInitScript(() => localStorage.setItem('vitara.navigation.all', 'true')); });
 async function enter(page){await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');await page.evaluate(()=>document.querySelector('#splash-skip').click());await page.locator('#access-name').fill('Prueba de cierres');await page.locator('#access-form [type=submit]').click();}
 
 test('cierres reales: inspector, buscador, pestañas, notificaciones y diálogos',async({page})=>{
@@ -6,7 +8,7 @@ test('cierres reales: inspector, buscador, pestañas, notificaciones y diálogos
   await page.locator('#tabs-add').click();await expect(page.locator('#palette-overlay')).toBeVisible();await page.locator('#palette-close').click();await expect(page.locator('#palette-overlay')).toBeHidden();
   await page.locator('[data-view-link=fuentes]').click();await page.locator('[data-close=fuentes]').click();await expect(page.locator('[data-tab=fuentes]')).toHaveCount(0);await expect(page.locator('#view-inicio')).toBeVisible();
   await page.locator('#btn-notif').click();await page.locator('[data-cerrar-pop]').click();await expect(page.locator('.popover')).toHaveCount(0);
-  await page.locator('#btn-profile').click();await page.locator('[data-perfil-edit]').click();await page.locator('#onb-correo').fill('no-guardar@example.test');const before=await page.evaluate(()=>localStorage.getItem('g3.perfil'));await page.locator('#onb-close').click();await expect(page.locator('#onboarding-overlay')).toBeHidden();expect(await page.evaluate(()=>localStorage.getItem('g3.perfil'))).toBe(before);
+  await page.locator('#btn-profile').click();await page.locator('[data-perfil-edit]').click();await page.locator('#onb-texto').check();const before=await page.evaluate(()=>localStorage.getItem('g3.perfil'));await page.locator('#onb-close').click();await expect(page.locator('#onboarding-overlay')).toBeHidden();expect(await page.evaluate(()=>localStorage.getItem('g3.perfil'))).toBe(before);
   await page.locator('#participation-open').click();await expect(page.locator('.participation-dialog')).toBeVisible();await page.locator('.participation-dialog .dialog-close').click();await expect(page.locator('.participation-dialog')).toBeHidden();
   await page.locator('#chat-open').click();await page.locator('#chat-close').click();await expect(page.locator('#orientation-chat')).toBeHidden();
   await page.locator('[data-view-link=tecnologia]').click();await page.locator('[data-device-open=monitor]').first().click();await page.locator('.device-dialog-close').click();await expect(page.locator('.device-dialog')).toBeHidden();
