@@ -7,7 +7,7 @@
  * 2. Cero pérdida de paquetes y cero duplicados (idempotencia SHA-256).
  * 3. Tiempo de respuesta en tiempo real (SSE) < 100 ms.
  * 4. Protección estricta de privacidad (rechazo de DNIs de 8 dígitos).
- * 5. Persistencia y recuperación ante reinicio (data/solicitudes.json).
+ * 5. Persistencia y recuperación ante reinicio (solicitudes.json).
  */
 
 import http from 'node:http';
@@ -17,12 +17,13 @@ import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const ROOT_DIR = path.resolve(__dirname, '..');
+const ROOT_DIR = __dirname;
 
 const PORT = 3000;
 const HOST = '127.0.0.1';
 const BASE_URL = `http://${HOST}:${PORT}`;
-const ADMIN_TOKEN = 'Salud2026!';
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
+if (!ADMIN_TOKEN) throw new Error('Esta suite modifica solicitudes. Úsala solo en una copia de pruebas con ADMIN_TOKEN configurado tanto en servidor como en el proceso de pruebas.');
 
 // Helper para peticiones HTTP
 function httpRequest(options, postData = null) {
@@ -229,8 +230,8 @@ async function ejecutarSuiteDePruebas() {
     }
 
     // 7. Prueba de Persistencia en Disco y Procedimiento de Respaldo (Consignas 8 y 18.46)
-    console.log('\n💾 Verificando almacenamiento persistente en data/solicitudes.json y Backup...');
-    const dataFilePath = path.join(ROOT_DIR, 'data', 'solicitudes.json');
+    console.log('\n💾 Verificando almacenamiento persistente en solicitudes.json y Backup...');
+    const dataFilePath = path.join(ROOT_DIR, 'solicitudes.json');
     const existeArchivo = fs.existsSync(dataFilePath);
     const contenidoEnDisco = JSON.parse(fs.readFileSync(dataFilePath, 'utf8'));
     const ticketEncontrado = contenidoEnDisco.find(s => s.codigo === codigoAResponder);

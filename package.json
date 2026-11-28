@@ -4,16 +4,28 @@
   "description": "Ecosistema digital para ODS 3 y 9 - Club Tech-Masters 2026",
   "type": "module",
   "scripts": {
-    "start": "node backend/server.mjs",
-    "dev": "node backend/server.mjs",
-    "test": "node tests/probar-concurrencia.mjs"
+    "start": "node server.mjs",
+    "dev": "node server.mjs",
+    "test": "playwright test",
+    "test:concurrency": "node scripts/test-security.mjs",
+    "build:3d": "esbuild src/engine3d.js --bundle --minify --format=iife --outfile=vendor/vitara-three.js",
+    "build": "npm run build:3d && node scripts/build-static.mjs",
+    "test:assets": "node scripts/check-assets.mjs",
+    "test:services": "node scripts/test-services.mjs",
+    "test:security": "node scripts/test-security.mjs",
+    "test:firewall": "node scripts/test-security.mjs",
+    "test:postgres": "node scripts/test-postgres.mjs"
   },
   "dependencies": {
-    "firebase": "^10.0.0",
-    "three": "^0.158.0",
-    "firebase-admin": "^11.0.0"
+    "pg": "^8.23.1",
+    "three": "^0.158.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "esbuild": "^0.28.2",
     "sirv-cli": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

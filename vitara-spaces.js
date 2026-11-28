@@ -22,20 +22,25 @@
   const VISORES = {
     hospital: {
       canvas: 'hospital-canvas', overlay: 'hospital-overlay', load: 'load-hospital',
-      url: 'assets/3d/low_poly_hospital.glb', size: 7.4, cam: [5.2, 3.6, 8.4],
+      key: 'hospital', url: './low_poly_hospital.glb', size: 7.4, cam: [5.2, 3.6, 8.4],
       titulo: 'Hospital de baja poligonización', mb: '395 KB'
     },
     or: {
       canvas: 'or-canvas', overlay: 'or-overlay', load: 'load-or',
-      url: 'assets/3d/hospital_operating_room.glb', size: 6.2, cam: [4.4, 2.8, 7.2],
-      titulo: 'Sala de operaciones', mb: '30 MB'
+      key: 'operatingRoom', url: './hospital_operating_room.glb', size: 6.2, cam: [4.93, 3.14, 8.06],
+      titulo: 'Sala de operaciones', mb: '30.7 MB'
     },
     vr: {
       canvas: 'vr-canvas', overlay: 'vr-overlay', load: 'load-vr',
-      url: 'assets/3d/modelodehosipitalvisitaVR3D.glb', size: 6.2, cam: [4.4, 2.8, 7.2],
-      titulo: 'Charité · sala de operaciones', mb: '46 MB'
+      key: 'hospitalRoom', url: './modelodehosipitalvisitaVR3D.glb', size: 6.2, cam: [3.6, 2.3, 5.8],
+      titulo: 'Quirófano Charité · recorrido educativo', mb: '46.6 MB'
     }
   };
+
+  document.querySelectorAll('.viewer3d').forEach(viewer => {
+    const wrapper = document.createElement('div'); wrapper.className = 'scene-block';
+    viewer.before(wrapper); wrapper.append(viewer);
+  });
 
   function mensajeOverlay(overlay, html) {
     if (!overlay) return;
@@ -49,19 +54,34 @@
     const btn = document.getElementById(cfg.load);
     if (!canvas || !overlay) return;
     if (canvas.dataset.cargado === '1') return;
+    if (canvas.dataset.cargando === '1') return;
+    canvas.dataset.cargando = '1';
+    try {
+      const manifest = await fetch('./assets-manifest.json', { cache: 'no-cache' }).then(r => r.json());
+      cfg.url = manifest.models[cfg.key]?.url || cfg.url;
+    } catch { /* Use the known existing model when the manifest cannot be read. */ }
+    if (!cfg.url) {
+      canvas.dataset.cargando = '';
+      mensajeOverlay(overlay, `<h3>Modelo pendiente de incorporar</h3><p>El archivo de ${esc(cfg.titulo)} no existe en este repositorio. Añade el modelo con sus texturas a 3d-models/ y registra su ruta en assets-manifest.json. El plano y las fichas siguen disponibles.</p>`);
+      return;
+    }
 
     if (!window.THREE || !window.VitaraGLB) {
+      canvas.dataset.cargando = '';
       mensajeOverlay(overlay, `<div class="empty__ico">${icon('alert', 'i--xl')}</div><h3>No se pudo iniciar el visor</h3><p>La librería 3D no está disponible en este navegador. Los datos y planos siguen funcionando.</p>`);
       return;
     }
     if (btn) { btn.disabled = true; }
-    mensajeOverlay(overlay, `<div class="spinner" aria-hidden="true"></div><h3>Cargando ${esc(cfg.titulo)}</h3><p>${esc(cfg.mb)} desde el servidor local. En la red Wi-Fi del evento puede tardar unos segundos.</p>`);
+    mensajeOverlay(overlay, `<div class="spinner" aria-hidden="true"></div><h3>Cargando ${esc(cfg.titulo)}</h3><p>${esc(cfg.mb)} · conservamos geometría y texturas originales.</p><span class="model-load-progress" role="status">Iniciando descarga…</span>`);
 
     let renderer = null;
+    let annotations = null;
     try {
       renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
       renderer.setClearColor(0x000000, 0);
 
       const scene = new THREE.Scene();
@@ -80,33 +100,31 @@
       rim.position.set(-3, 2, 5);
       scene.add(rim);
 
-      const { group } = await window.VitaraGLB.load(cfg.url);
-      // Encuadre por dimensión máxima, sin alterar el eje vertical del edificio.
-      let caja = new THREE.Box3().setFromObject(group);
-      const centro = caja.getCenter(new THREE.Vector3());
-      group.position.sub(centro);
-      caja = new THREE.Box3().setFromObject(group);
-      const tam = caja.getSize(new THREE.Vector3());
-      const max = Math.max(tam.x, tam.y, tam.z) || 1;
-      group.scale.multiplyScalar(cfg.size / max);
-      caja = new THREE.Box3().setFromObject(group);
-      group.position.y -= caja.min.y;
-      scene.add(group);
-
-      // Sombra de contacto: disco suave que asienta el modelo en el suelo.
-      const sombra = new THREE.Mesh(
-        new THREE.CircleGeometry(cfg.size * 0.52, 48),
-        new THREE.MeshBasicMaterial({ color: 0x0B7A62, transparent: true, opacity: 0.08, depthWrite: false })
-      );
-      sombra.rotation.x = -Math.PI / 2;
-      sombra.position.y = 0.015;
-      scene.add(sombra);
-
-      const orbit = window.VitaraGLB.orbit(group, canvas, { camera, autoRotate: true, rotY: 0.35, zoom: 1 });
+      let result;
+      try { result = await window.VitaraGLB.load(cfg.url, event => {
+        const progress = overlay.querySelector('.model-load-progress');
+        if (progress) { progress.textContent = event.total ? `${Math.round(event.loaded / event.total * 100)} % · ${(event.loaded / 1000000).toFixed(1)} MB` : `${(event.loaded / 1000000).toFixed(1)} MB descargados`; }
+      }); }
+      catch (error) {
+        if (cfg.key !== 'hospital') throw error;
+        result = await window.VitaraGLB.load('./scene.gltf');
+      }
+      const { group } = result;
+      const fitted = window.VitaraGLB.fitToHeight(group, cfg.size, { orientar: false });
+      scene.add(fitted);
+      scene.add(new THREE.AmbientLight(0xffffff, 0.65));
+      const orbit = window.VitaraGLB.orbit(fitted, canvas, { camera, autoRotate: false });
+      annotations = window.VitaraHotspots.attach({ container: canvas.parentElement, model: fitted, camera, orbit, type: cfg.canvas.split('-')[0] });
+      let visible = true;
+      const visibility = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; });
+      visibility.observe(canvas);
+      let dirty = true;
+      orbit.controls.addEventListener('change', () => { dirty = true; });
       const cont = canvas.parentElement;
       const ajustar = () => {
         const w = cont.clientWidth, h = cont.clientHeight;
         if (!w || !h) return;
+        dirty = true;
         renderer.setSize(w, h, false);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
@@ -114,16 +132,17 @@
       ajustar();
       const ro = new ResizeObserver(ajustar);
       ro.observe(cont);
-      const objetivoEscala = cfg.size / max;
-      let escalaActual = 0.86;
-      const animar = () => {
+      let lastFrame = 0;
+      const animar = (time = 0) => {
         requestAnimationFrame(animar);
-        const siguiente = escalaActual + (objetivoEscala - escalaActual) * 0.09;
-        group.scale.setScalar(siguiente);
-        renderer.render(scene, camera);
+        if (!visible || document.hidden || !canvas.getClientRects().length || document.body.classList.contains('access-locked') || time - lastFrame < 33) return;
+        lastFrame = time;
+        const moving = annotations.update();
+        if (dirty || moving) { renderer.render(scene, camera); dirty = false; }
       };
       animar();
 
+      canvas.dataset.cargando = '';
       canvas.dataset.cargado = '1';
       canvas.parentElement?.classList.add('is-listo');
       overlay.hidden = true;
@@ -132,10 +151,17 @@
       const rs = document.getElementById(cfg.canvas.replace('canvas', 'reset'));
       zi?.addEventListener('click', () => orbit.zoom(1.12));
       zo?.addEventListener('click', () => orbit.zoom(0.9));
-      rs?.addEventListener('click', () => orbit.reencuadrar());
+      rs?.addEventListener('click', () => { annotations.close(); orbit.reencuadrar(); });
+      const rotate = document.createElement('button'); rotate.type = 'button'; rotate.className = 'stage-btn';
+      rotate.innerHTML = icon('rotate', 'i--sm'); rotate.setAttribute('aria-label', 'Activar rotación automática'); rotate.setAttribute('aria-pressed', 'false');
+      rotate.addEventListener('click', () => { const active = rotate.getAttribute('aria-pressed') !== 'true'; rotate.setAttribute('aria-pressed', String(active)); orbit.setAutoRotate(active); });
+      canvas.parentElement.querySelector('.viewer3d__tools').prepend(rotate);
+      document.dispatchEvent(new CustomEvent('vitara:model-ready', { detail: { id: cfg.canvas } }));
       toast(`${cfg.titulo} cargado. Arrastra para girar y usa la rueda para acercar.`);
     } catch (err) {
       console.error('[VITARA] No se pudo cargar el modelo', cfg.url, err);
+      canvas.dataset.cargando = '';
+      annotations?.dispose();
       try { renderer?.dispose(); } catch (_) {}
       mensajeOverlay(overlay, `<div class="empty__ico">${icon('alert', 'i--xl')}</div>
         <h3>No se pudo cargar el modelo</h3>

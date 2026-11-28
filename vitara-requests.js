@@ -10,6 +10,7 @@
   /* ================= SOLICITUDES ================= */
   const RECENT_KEY = 'g3.solicitudes';
   let formBind = false;
+  let pendingRequest = null;
 
   function sedes() {
     return (D.ipress || []).slice().sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
@@ -91,7 +92,16 @@
       toast('El filtro de privacidad bloquea números de 8 dígitos. Quita cualquier documento del texto.', 'warn', 7000);
       return;
     }
-    const payload = { item, categoria, sede, alias, esAcompanamiento };
+    const cantidad=$('#sol-cantidad').value===''?null:Number($('#sol-cantidad').value);const unidad=$('#sol-unidad').value;const pregunta=$('#sol-pregunta').value;
+    if(cantidad!=null && (!Number.isInteger(cantidad)||cantidad<1||cantidad>10000)){toast('Usa una cantidad entera entre 1 y 10000, no una dosis.','warn');return;}
+    const fields = { item, categoria, sede, alias, esAcompanamiento, cantidad, unidad, pregunta, imagenRecurso:$('#sol-imagen').value || null };
+    const signature = JSON.stringify(fields);
+    if (!pendingRequest || pendingRequest.signature !== signature) {
+      const bytes = new Uint8Array(16); crypto.getRandomValues(bytes);
+      const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+      pendingRequest = { signature, key: `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20)}` };
+    }
+    const payload = { ...fields, idempotencyKey: pendingRequest.key };
     if (btn) { btn.disabled = true; btn.dataset.txt = btn.innerHTML; btn.innerHTML = 'Enviando…'; }
     try {
       const res = await fetch('/api/solicitudes', {
@@ -100,13 +110,14 @@
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) throw new Error(data.error || 'El servidor rechazó la solicitud.');
       const s = data.solicitud;
+      pendingRequest = null;
       codeBox(s);
       guardarReciente(s);
       renderRecientes();
       V.addNotif(`Solicitud ${s.codigo} recibida. La sede puede responderla desde el panel institucional.`);
       toast(data.duplicadoPrevenido ? 'Esa solicitud ya existía. Recuperamos el mismo código.' : 'Solicitud registrada. Guarda tu código.');
       $('#sol-item').value = '';
-      $('#sol-alias').value = '';
+      $('#sol-alias').value = '';$('#sol-cantidad').value='';
     } catch (err) {
       const cont = $('#solicitud-resultado');
       if (cont) cont.innerHTML = `<div class="privacy-inline" style="background:var(--v-rose-soft);border-color:#F5D2DA"><svg class="i i--sm" style="color:var(--v-rose)" aria-hidden="true"><use href="#i-alert"/></svg><p style="color:#7C2B3D"><strong>No se pudo registrar la solicitud.</strong> ${esc(err.message)} Verifica que el servidor local esté activo (<span class="mono">npm start</span>) e inténtalo otra vez. No mostramos un código falso.</p></div>`;
@@ -144,7 +155,7 @@
     const rr = respuestaTexto(s);
     cont.innerHTML = `<article class="ticket">
       <div class="ticket__top">
-        <div><p class="ticket__code">${esc(s.codigo)}</p><p class="ticket__item">${esc(s.item)}</p>
+        <div><p class="ticket__code">${esc(s.codigo)}</p><p class="ticket__item">${esc(s.item)}</p><p>${s.cantidad!=null?esc(s.cantidad)+' '+esc(s.unidad):'Cantidad no especificada'} · ${esc(s.pregunta || 'disponibilidad')}</p>
           <p class="ticket__meta">${esc(s.sede || 'Sede no indicada')} · ${esc(V.fecha(s.fecha))} ${esc(V.hora(s.fecha))}</p></div>
         ${V.estadoTag(s.estado)}
       </div>
@@ -248,7 +259,7 @@
       titulo: 'Para jóvenes',
       intro: 'Información directa para decidir sin mitos y sin exponer tus datos personales en línea.',
       cards: [
-        ['Salud mental', 'La Línea 113, opción 3, brinda soporte emocional y prevención del suicidio. Es gratuita y confidencial.', ['canales', 'Abrir canales']],
+        ['Salud mental', 'La Línea 113, opción 5, brinda orientación en salud mental y psicología. Es gratuita y confidencial.', ['canales', 'Abrir canales']],
         ['Derecho a genéricos', 'La Ley 32033 refuerza la entrega de medicamentos genéricos. Puedes preguntar por el precio del genérico en la farmacia.', ['buscar', 'Comparar precios', 'atorvastatina']],
         ['Teleconsulta', 'Teleatiendo permite solicitar una consulta remota con un profesional del MINSA. No reemplaza una emergencia.', ['canales', 'Ver Teleatiendo']],
         ['Emergencias', 'Si hay riesgo de vida, llama al SAMU 106. No esperes a que la aplicación responda.', ['canales', 'Llamar al 106']]

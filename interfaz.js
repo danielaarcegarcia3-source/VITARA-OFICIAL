@@ -1100,19 +1100,9 @@
     });
 
     $('#btn-confirmar-adm')?.addEventListener('click', () => {
-      const pass = $('#input-clave-adm')?.value.trim();
-      const errElem = $('#error-clave-adm');
-      if (pass === 'Salud2026!') {
-        sessionStorage.setItem('adminTokenG3', 'Salud2026!');
-        modal.hidden = true;
-        modal.style.display = 'none';
-        window.location.href = 'admin.html';
-      } else {
-        if (errElem) {
-          errElem.textContent = 'Contraseña incorrecta. Utilice las credenciales oficiales (Salud2026!)';
-          errElem.style.display = 'block';
-        }
-      }
+      // La autenticación se comprueba exclusivamente en el servidor.
+      sessionStorage.removeItem('adminTokenG3');
+      window.location.href = 'admin.html';
     });
   }
 

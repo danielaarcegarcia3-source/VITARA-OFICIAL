@@ -1499,10 +1499,10 @@
   ],
   "images": [
     {
-      "uri": "textures/Colore_baseColor.png"
+      "uri": "Colore_baseColor.png"
     },
     {
-      "uri": "textures/Names_and_details_baseColor.png"
+      "uri": "Names_and_details_baseColor.png"
     }
   ],
   "materials": [

@@ -17,6 +17,7 @@
     { id: 'mapas', label: 'Mapas', icon: 'i-map' },
     { id: 'planos', label: 'Planos y medidas', icon: 'i-layers' },
     { id: 'equipos', label: 'Equipamiento', icon: 'i-box' },
+    { id: 'tecnologia', label: 'Dispositivos y proveedores', icon: 'i-pulse' },
     { id: 'solicitudes', label: 'Solicitudes', icon: 'i-message' },
     { id: 'canales', label: 'Canales de ayuda', icon: 'i-phone' },
     { id: 'comunidad', label: 'Salud para todos', icon: 'i-people' },
@@ -53,8 +54,8 @@
   const ROLES = {
     VIS: { nombre: 'Visitante', letra: 'V' },
     CIU: { nombre: 'Ciudadanía', letra: 'C' },
-    AGC: { nombre: 'Agente comunitario', letra: 'A' },
-    POSTA: { nombre: 'Personal de sede', letra: 'P' },
+    AGC: { nombre: 'Gestión', letra: 'A' },
+    POSTA: { nombre: 'Personal de posta o salud', letra: 'P' },
     ADM: { nombre: 'Administrador', letra: 'A' }
   };
 
@@ -222,11 +223,13 @@
   }
 
   /* ---------- inspector ---------- */
+  let inspectorTrigger = null;
   function abrirInspector(titulo, html) {
     const panel = $('#inspector');
     const ws = $('#workspace');
     const body = $('#inspector-body');
     if (!panel || !ws || !body) return;
+    if (panel.hidden) inspectorTrigger = document.activeElement;
     body.innerHTML = html;
     panel.querySelector('.inspector__head strong').textContent = titulo || 'Inspector';
     panel.hidden = false;
@@ -246,8 +249,12 @@
     const panel = $('#inspector');
     const ws = $('#workspace');
     if (!panel || !ws) return;
+    const restore = panel.contains(document.activeElement);
     ws.classList.remove('is-split');
     panel.hidden = true;
+    panel.removeAttribute('aria-modal');
+    panel.removeAttribute('role');
+    if (restore) (inspectorTrigger?.isConnected ? inspectorTrigger : $('#tabs-split'))?.focus({ preventScroll: true });
     state.split = false;
     $('#tabs-split')?.setAttribute('aria-pressed', 'false');
   }

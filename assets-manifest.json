@@ -1,0 +1,122 @@
+{
+  "base": "./",
+  "identity": {
+    "logo": "logo VITARA.jpeg",
+    "regionalMap": "MAPADELALIBERTAD3D.png",
+    "nationalMap": "mapadelperu3d.png",
+    "googleSignInMark": "assets/identity/google-g.svg"
+  },
+  "models": {
+    "dna": {
+      "url": "adn.glb",
+      "purpose": "Hero molecular interactivo",
+      "embeddedTextures": [
+        "Adenine_Pentose_Guanine_Thymine_cytosine_Diff_baseColor.jpeg",
+        "Adenine_Pentose_Guanine_Thymine_cytosine_Diff_specularf0.png",
+        "Double_helical_DNA_Hydrogen_Bonds_DIff_normal.jpeg"
+      ],
+      "textureVerification": "SHA-256 de los bloques embebidos coincide con las imágenes sueltas"
+    },
+    "hospital": {
+      "url": "low_poly_hospital.glb",
+      "purpose": "Arquitectura sanitaria exterior",
+      "embeddedTextures": [
+        "Colore_baseColor.png",
+        "Names_and_details_baseColor.png"
+      ]
+    },
+    "hospitalSource": {
+      "url": "scene.gltf",
+      "purpose": "Fuente glTF alternativa del mismo hospital",
+      "dependencies": [
+        "scene.bin",
+        "Colore_baseColor.png",
+        "Names_and_details_baseColor.png"
+      ]
+    },
+    "hospitalRoom": {
+      "url": "modelodehosipitalvisitaVR3D.glb",
+      "title": "Charité · recorrido de quirófano",
+      "bytes": 46555604,
+      "author": "ChrisRE (https://sketchfab.com/ChrisRE)",
+      "license": "CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)",
+      "source": "https://sketchfab.com/3d-models/charite-university-hospital-operating-room-9ec46c4d615a4581a235eebfb162f574",
+      "embeddedTextures": [
+        "Mitte_OP_Tex3_baseColor.jpeg",
+        "Mitte_OP_Tex2_baseColor.jpeg",
+        "Mitte_OP_Tex1_baseColor.jpeg",
+        "Mitte_OP_Tex4_baseColor.jpeg"
+      ],
+      "status": "available"
+    },
+    "operatingRoom": {
+      "url": "hospital_operating_room.glb",
+      "title": "Quirófano · modelo arquitectónico",
+      "bytes": 30706944,
+      "author": "Chenchanchong (https://sketchfab.com/Chenchanchong)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/hospital-operating-room-a27400a73f4a43fbb1dda30031cb91c2",
+      "embeddedTextures": [
+        "Mat3d66-594498-10-904_normal.jpeg",
+        "Mat3d66-594498-12-334_normal.jpeg",
+        "Mat3d66-594498-20-934_normal.jpeg",
+        "reflector_metallicRoughness.png",
+        "Mat3d66-594498-30-554_normal.jpeg",
+        "Mat3d66-594498-45-44_normal.jpeg",
+        "Mat3d66-594498-47-548_baseColor.jpeg",
+        "Mat3d66-594498-81-761_baseColor.jpeg",
+        "Mat3d66-594498-83-600_baseColor.jpeg",
+        "Mat3d66-594498-84-627_baseColor.jpeg",
+        "Mat3d66-594498-85-59_baseColor.jpeg",
+        "Mat3d66-594498-85-59_normal.jpeg",
+        "Mat3d66-594498-86-449_baseColor.jpeg",
+        "Standard_12_baseColor.jpeg",
+        "Material_70_normal.jpeg",
+        "Standard_12.001_baseColor.jpeg"
+      ],
+      "status": "available"
+    }
+  },
+  "illustrations": {
+    "care": "imagenmanosysalud.jpg",
+    "triage": "manomedicadeco.png",
+    "pharmacy": [
+      "pastillasbotedeco.png",
+      "pastillasdeco.png",
+      "pastillasdeco2.png"
+    ],
+    "supplies": "suerodeco.png",
+    "medicalDevices": [
+      "assets/devices/monitor.png",
+      "assets/devices/ultrasound.png",
+      "assets/devices/infusion.png",
+      "assets/devices/defibrillator.png"
+    ],
+    "welcomeReference": "assets/welcome/globo-referencia.png",
+    "medicationFraming": "assets/illustrations/medicamentos-encuadrado.png"
+  },
+  "media": {
+    "loginVideo": "VIDEOBANNER.mp4",
+    "loginVideoExpected": "VIDEOBANNER.mp4",
+    "searchVideo": "videobannerBUSCADOR.mp4",
+    "careVideo": "videoparabanner.mp4",
+    "welcomeAnimation": "GIF BANNER.gif",
+    "ambientAudio": "MUSICADEFONDO.mp4"
+  },
+  "unassignedTextures": [],
+  "notes": "Activos nuevos recuperados de origin/main, commit 49dbae0. El archivo visitaVR es un quirófano Charité, no una habitación de hospitalización. Las texturas listadas como embebidas coinciden byte por byte con sus originales sueltos.",
+  "territories": {
+    "peru": {
+      "url": "assets/geo/peru_departamental_simple.geojson",
+      "features": 25,
+      "nameProperty": "NOMBDEP",
+      "sha256": "3d34d5450a1b1f059eebdf7386e5b5d071a5063bf3679fcbbbc5314493791290"
+    },
+    "laLibertad": {
+      "url": "assets/geo/la-libertad-provincias.geojson",
+      "features": 12,
+      "nameProperty": "NOMBPROV",
+      "sha256": "8ddcdb72bfcdbcb7fd2cfb9c5d2ef7de386a414eda0afd12d7ee2044507bd1f4"
+    }
+  }
+}

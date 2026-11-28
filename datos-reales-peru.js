@@ -1366,13 +1366,15 @@
       telefono: "113",
       urlDirecta: "tel:113",
       descripcion: "Orientación médica gratuita desde cualquier teléfono fijo o celular en todo el territorio nacional.",
+      // Menú oficial consultado el 27/11/2026, gob.pe/555-recibir-orientacion-en-salud-linea-113-salud.
       opciones: [
-        { op: "1", nombre: "Dengue y enfermedades metaxénicas", detalle: "Signos de alarma, hidratación y centros de diagnóstico rápido." },
-        { op: "2", nombre: "Medicina General y Urgencias", detalle: "Orientación clínica preliminar por médicos colegiados." },
-        { op: "3", nombre: "Salud Mental y Psicología", detalle: "Soporte emocional, manejo de crisis y prevención del suicidio." },
-        { op: "4", nombre: "Obstetricia y Nutrición", detalle: "Salud sexual reproductiva, control prenatal y alimentación infantil." },
-        { op: "5", nombre: "Seguro Integral de Salud (SIS)", detalle: "Verificación de afiliación activa y cobertura del plan de salud." },
-        { op: "6", nombre: "Inmunizaciones y Vacunas", detalle: "Esquema regular de vacunación y puntos de aplicación." }
+        { op: "1", nombre: "Dengue, influenza y enfermedades por lluvias", detalle: "Orientación sobre estas enfermedades." },
+        { op: "2", nombre: "Teleconsulta por Hospital Digital", detalle: "Consulta los requisitos y disponibilidad con el canal oficial." },
+        { op: "3", nombre: "Profesionales de salud", detalle: "Subopciones de medicina, obstetricia, nutrición y enfermería." },
+        { op: "4", nombre: "Seguro Integral de Salud (SIS)", detalle: "Consultas sobre el SIS." },
+        { op: "5", nombre: "Salud mental y psicología", detalle: "Orientación y acompañamiento profesional." },
+        { op: "6", nombre: "Campañas, trámites y servicios", detalle: "Información sobre otros servicios del MINSA." },
+        { op: "7", nombre: "SUSALUD", detalle: "Orientación sobre derechos en salud." }
       ]
     },
     {

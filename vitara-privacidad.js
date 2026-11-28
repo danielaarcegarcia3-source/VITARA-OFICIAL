@@ -24,7 +24,7 @@
     try {
       for (let i = 0; i < localStorage.length; i++) {
         const k = localStorage.key(i);
-        if (k && k.indexOf(PREFIJO) === 0) out.push(k);
+        if (k && (k.indexOf(PREFIJO) === 0 || k.startsWith('vitara.'))) out.push(k);
       }
     } catch { /* almacenamiento no disponible */ }
     return out;
@@ -107,7 +107,7 @@
 
   function exportar() {
     const datos = {};
-    for (const k of clavesLocales()) {
+    for (const k of clavesLocales().filter(k => k !== 'vitara.participant.token')) {
       try { datos[k] = JSON.parse(localStorage.getItem(k)); }
       catch { datos[k] = localStorage.getItem(k); }
     }
@@ -150,7 +150,7 @@
   }
 
   function borrarConConfirmacion() {
-    if (!window.confirm('¿Borrar el perfil, las preferencias, los códigos de seguimiento y el historial local de este dispositivo? Esta acción no se puede deshacer.')) return;
+    if (!window.confirm('¿Borrar los datos LOCALES de este dispositivo? Esto NO elimina tu perfil del servidor. Para eliminarlo usa primero Participación; si borras ahora la clave local necesitarás ayuda del administrador. Esta acción no se puede deshacer.')) return;
     const n = borrarDatosLocales();
     toast(n ? `Se borraron ${n} registros locales. Recargando…` : 'No había datos locales que borrar. Recargando…');
     setTimeout(() => location.reload(), 500);
